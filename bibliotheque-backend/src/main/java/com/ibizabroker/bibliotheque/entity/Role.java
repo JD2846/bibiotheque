@@ -1,18 +1,19 @@
 package com.ibizabroker.bibliotheque.entity;
 
+import jakarta.persistence.*;
 import lombok.Data;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 @Data
 @Entity
+@Table(name = "role")
 public class Role {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "role_seq", sequenceName = "role_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_seq")
+    @Column(name = "role_id")
     private Integer roleId;
+
+    @Column(name = "role_name")
     private String roleName;
 }

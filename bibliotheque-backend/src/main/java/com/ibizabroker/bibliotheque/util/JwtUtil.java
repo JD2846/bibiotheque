@@ -2,10 +2,12 @@ package com.ibizabroker.bibliotheque.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,9 +16,14 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    private static final String SECRET_KEY = "learn_programming_yourself";
+    // Clé d'au moins 32 octets obligatoire pour l'API Keys.hmacShaKeyFor() de JJWT 0.12.x
+    private static final String SECRET_KEY = "learn_programming_yourself_spring_boot_3_jwt_secret_key";
 
     private static final int TOKEN_VALIDITY = 3600 * 5;
+
+    private SecretKey getSigningKey() {
+        return Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
+    }
 
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
@@ -28,7 +35,11 @@ public class JwtUtil {
     }
 
     private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+        return Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
@@ -50,11 +61,11 @@ public class JwtUtil {
         Map<String, Object> claims = new HashMap<>();
 
         return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + TOKEN_VALIDITY * 1000))
-                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                .claims(claims)
+                .subject(userDetails.getUsername())
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + TOKEN_VALIDITY * 1000))
+                .signWith(getSigningKey(), Jwts.SIG.HS256)
                 .compact();
     }
 }

@@ -1,0 +1,84 @@
+# ============================================================
+# docker-compose.yml — Bibliothèque (Spring Boot 3 + Angular 17 + PostgreSQL 16)
+# Lancement : docker compose up -d
+# ============================================================
+services:
+
+  # ---------- Base de données PostgreSQL 16 ----------
+  postgres:
+    image: postgres:16
+    container_name: bibliotheque-postgres
+    environment:
+      POSTGRES_DB: bibliotheque
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5434:5432"   # ← CHANGEMENT : 5432 → 5433 (pour éviter conflit)
+    volumes:
+      # Données persistantes
+      - postgres_data:/var/lib/postgresql/data
+      # Script d'initialisation exécuté au premier démarrage
+      - ./init-scripts:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d bibliotheque"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - bibliotheque-network
+    restart: unless-stopped
+
+  # ---------- Backend Spring Boot (Java 17) ----------
+  backend:
+    build: ./bibliotheque-backend
+    container_name: bibliotheque-backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # Active application-docker.properties (URL jdbc:postgresql://postgres:5432/bibliotheque)
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    networks:
+      - bibliotheque-network
+    restart: unless-stopped
+
+  # ---------- Frontend Angular (Nginx) ----------
+  frontend:
+    build: ./bibliotheque-frontend
+    container_name: bibliotheque-frontend
+    depends_on:
+      - backend
+    ports:
+      - "4200:80"
+    networks:
+      - bibliotheque-network
+    restart: unless-stopped
+
+  # ---------- Adminer (gestion de la base) ----------
+  adminer:
+    image: adminer:latest
+    container_name: bibliotheque-adminer
+    depends_on:
+      - postgres
+    ports:
+      - "8090:8080"   # ← CHANGEMENT : 8081 → 8090
+    networks:
+      - bibliotheque-network
+    restart: unless-stopped
+
+# ---------- Volumes persistants ----------
+volumes:
+  postgres_data:
+
+# ---------- Réseau interne ----------
+networks:
+  bibliotheque-network:
+    driver: bridge

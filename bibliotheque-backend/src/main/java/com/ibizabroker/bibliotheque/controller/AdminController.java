@@ -3,6 +3,8 @@ package com.ibizabroker.bibliotheque.controller;
 import com.ibizabroker.bibliotheque.dao.UsersRepository;
 import com.ibizabroker.bibliotheque.entity.Users;
 import com.ibizabroker.bibliotheque.exceptions.NotFoundException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,6 +16,7 @@ import java.util.List;
 @CrossOrigin("http://localhost:4200/")
 @RestController
 @RequestMapping("/admin")
+@Tag(name = "Administration", description = "Gestion des utilisateurs par l'administrateur")
 public class AdminController {
 
     @Autowired
@@ -23,7 +26,7 @@ public class AdminController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/users")
-//    @PreAuthorize("hasRole('Admin')")
+    @Operation(summary = "Créer un utilisateur", description = "Crée un nouvel utilisateur. Le mot de passe est automatiquement chiffré.")
     public Users addUserByAdmin(@RequestBody Users user) {
 //        Role role = new Role();
 ////        role.setRoleName(UserConstant.DEFAULT_ROLE);
@@ -40,12 +43,14 @@ public class AdminController {
 
     @GetMapping("/users")
     @PreAuthorize("hasRole('Admin')")
+    @Operation(summary = "Lister tous les utilisateurs", description = "Retourne la liste de tous les utilisateurs. Rôle Admin requis.")
     public List<Users> getAllUsers() {
         return usersRepository.findAll();
     }
 
     @PreAuthorize("hasRole('Admin')")
     @GetMapping("/users/{id}")
+    @Operation(summary = "Consulter un utilisateur par ID", description = "Retourne les détails d'un utilisateur. Rôle Admin requis.")
     public ResponseEntity<Users> getUserById(@PathVariable Integer id) {
         Users user = usersRepository.findById(id).orElseThrow(() -> new NotFoundException("User with id "+ id +" does not exist."));
         return ResponseEntity.ok(user);
@@ -53,6 +58,7 @@ public class AdminController {
 
     @PreAuthorize("hasRole('Admin')")
     @PutMapping("/users/{id}")
+    @Operation(summary = "Modifier un utilisateur", description = "Met à jour les informations d'un utilisateur. Rôle Admin requis.")
     public ResponseEntity<Users> updateUser(@PathVariable Integer id, @RequestBody Users userDetails) {
         Users user = usersRepository.findById(id).orElseThrow(() -> new NotFoundException("User with id "+ id +" does not exist."));
 
