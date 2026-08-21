@@ -6,36 +6,24 @@
 -- ============================================================
 
 -- ------------------------------------------------------------
--- 1. Type ENUM pour les statuts de réservation
---    Valeurs : EN_ATTENTE, DISPONIBLE, ANNULEE, EXPIREE, HONOREE
--- ------------------------------------------------------------
-DO $$
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'reservation_status') THEN
-        CREATE TYPE reservation_status AS ENUM (
-            'EN_ATTENTE',
-            'DISPONIBLE',
-            'ANNULEE',
-            'EXPIREE',
-            'HONOREE'
-        );
-    END IF;
-END
-$$;
-
--- ------------------------------------------------------------
--- 2. Séquence
+-- 1. Séquence
 -- ------------------------------------------------------------
 CREATE SEQUENCE IF NOT EXISTS reservation_seq START WITH 100 INCREMENT BY 1;
 
 -- ------------------------------------------------------------
--- 3. Table reservation
+-- 2. Table reservation
+--    status en VARCHAR (et non un ENUM Postgres natif) car Hibernate
+--    envoie les valeurs @Enumerated(EnumType.STRING) sous forme de
+--    character varying : un type ENUM natif ferait échouer toutes
+--    les comparaisons ("operator does not exist: reservation_status
+--    = character varying").
 -- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS reservation (
     reservation_id INTEGER              PRIMARY KEY DEFAULT nextval('reservation_seq'),
     book_id        INTEGER              NOT NULL REFERENCES books (book_id) ON DELETE CASCADE,
     user_id        INTEGER              NOT NULL REFERENCES users (user_id) ON DELETE CASCADE,
-    status         reservation_status   NOT NULL DEFAULT 'EN_ATTENTE',
+    status         VARCHAR(20)          NOT NULL DEFAULT 'EN_ATTENTE'
+                        CHECK (status IN ('EN_ATTENTE', 'DISPONIBLE', 'ANNULEE', 'EXPIREE', 'HONOREE')),
     date_reservation TIMESTAMP          NOT NULL DEFAULT CURRENT_TIMESTAMP,
     date_expiration  TIMESTAMP          NOT NULL,
     created_at     TIMESTAMP            DEFAULT CURRENT_TIMESTAMP
