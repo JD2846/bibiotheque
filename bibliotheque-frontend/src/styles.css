@@ -1,2 +1,638 @@
-/* You can add global styles to this file, and also import other style files */
-@import "~bootstrap/dist/css/bootstrap.min.css"
+@import "~bootstrap/dist/css/bootstrap.min.css";
+
+/* ============================================================
+   1. DESIGN TOKENS (Variables CSS)
+============================================================ */
+:root {
+    /* Couleurs principales */
+    --primary: #2c3e50;          /* Bleu foncé - Navigation */
+    --primary-light: #34495e;     /* Bleu moyen - Hover */
+    --secondary: #3498db;         /* Bleu clair - Boutons */
+    --secondary-hover: #2980b9;   /* Bleu plus foncé - Boutons hover */
+    --accent: #1abc9c;            /* Turquoise - Accents */
+    --success: #27ae60;           /* Vert - Statut disponible */
+    --warning: #f39c12;           /* Orange - Statut en attente */
+    --danger: #e74c3c;            /* Rouge - Statut expiré, suppression */
+    --info: #3498db;              /* Bleu - Informations */
+
+    /* Couleurs de fond */
+    --bg-body: #f8f9fa;           /* Fond général */
+    --bg-card: #ffffff;           /* Fond des cartes */
+    --bg-muted: #eef3f7;          /* Fond atténué */
+    --bg-dark: #2c3e50;           /* Fond sombre */
+
+    /* Couleurs de texte */
+    --text-primary: #243342;      /* Texte principal */
+    --text-secondary: #62717d;    /* Texte secondaire */
+    --text-light: #ffffff;        /* Texte clair */
+
+    /* Bordures */
+    --border: #dfe7ee;
+
+    /* Ombres */
+    --shadow-sm: 0 2px 4px rgba(16, 24, 40, 0.06);
+    --shadow-md: 0 8px 20px rgba(16, 24, 40, 0.1);
+    --shadow-lg: 0 16px 40px rgba(16, 24, 40, 0.14);
+
+    /* Rayons */
+    --border-radius: 8px;
+    --border-radius-lg: 12px;
+
+    /* Espacements harmonieux */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --spacing-xxl: 48px;
+
+    /* Typographie */
+    --font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ============================================================
+   2. RESET & BASE
+============================================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    background: var(--bg-body);
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+a {
+    color: var(--secondary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--secondary-hover);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary);
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: var(--spacing-md);
+}
+
+h1 { font-size: 2rem; }
+h2 { font-size: 1.65rem; }
+h3 { font-size: 1.35rem; }
+h4 { font-size: 1.2rem; }
+h5 { font-size: 1.1rem; }
+h6 { font-size: 1rem; }
+
+p {
+    margin-bottom: var(--spacing-md);
+}
+
+/* ============================================================
+   3. CONTENEURS & EN-TÊTES DE PAGE
+============================================================ */
+.container,
+.page-shell {
+    margin-inline: auto;
+    max-width: 1180px;
+    padding: var(--spacing-md);
+    width: 100%;
+}
+
+.page-header {
+    border-bottom: 1px solid var(--border);
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+}
+
+.page-title {
+    align-items: center;
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
+}
+
+.page-title .icon,
+.page-title i {
+    color: var(--secondary);
+}
+
+.page-subtitle {
+    color: var(--text-secondary);
+    margin-bottom: 0;
+}
+
+/* ============================================================
+   4. CARTES
+============================================================ */
+.card,
+.form-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover,
+.form-card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.card-header {
+    background: transparent;
+    border-bottom: 1px solid var(--border);
+    font-weight: 700;
+    margin: calc(var(--spacing-lg) * -1) calc(var(--spacing-lg) * -1) var(--spacing-lg);
+    padding: var(--spacing-md) var(--spacing-lg);
+}
+
+/* ============================================================
+   5. BOUTONS
+============================================================ */
+.btn {
+    align-items: center;
+    border-radius: var(--border-radius);
+    display: inline-flex;
+    font-weight: 600;
+    gap: var(--spacing-xs);
+    justify-content: center;
+    min-height: 44px;
+    min-width: 44px;
+    padding: var(--spacing-sm) var(--spacing-md);
+    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.btn:hover {
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-1px);
+}
+
+.btn-primary,
+.btn-info {
+    background: var(--secondary);
+    border-color: var(--secondary);
+    color: var(--text-light);
+}
+
+.btn-primary:hover,
+.btn-info:hover {
+    background: var(--secondary-hover);
+    border-color: var(--secondary-hover);
+    color: var(--text-light);
+}
+
+.btn-success {
+    background: var(--success);
+    border-color: var(--success);
+    color: var(--text-light);
+}
+
+.btn-success:hover {
+    background: #219a52;
+    border-color: #219a52;
+    color: var(--text-light);
+}
+
+.btn-danger {
+    background: var(--danger);
+    border-color: var(--danger);
+    color: var(--text-light);
+}
+
+.btn-danger:hover {
+    background: #c0392b;
+    border-color: #c0392b;
+    color: var(--text-light);
+}
+
+.btn-warning {
+    background: var(--warning);
+    border-color: var(--warning);
+    color: #1f2933;
+}
+
+.btn-warning:hover {
+    background: #d68910;
+    border-color: #d68910;
+    color: #1f2933;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--secondary);
+    color: var(--secondary);
+}
+
+.btn-outline:hover {
+    background: var(--secondary);
+    color: var(--text-light);
+}
+
+.btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+    transform: none;
+}
+
+/* ============================================================
+   6. FORMULAIRES
+============================================================ */
+.form-label {
+    color: var(--text-primary);
+    font-weight: 650;
+    margin-bottom: var(--spacing-xs);
+}
+
+.form-control,
+.form-select {
+    border: 1px solid var(--border);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    min-height: 44px;
+    padding: var(--spacing-sm) var(--spacing-md);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.2);
+    outline: none;
+}
+
+.form-control.is-invalid,
+.form-select.is-invalid {
+    border-color: var(--danger);
+}
+
+.invalid-feedback {
+    color: var(--danger);
+    font-size: 0.85rem;
+    margin-top: var(--spacing-xs);
+}
+
+/* ============================================================
+   7. TABLEAUX
+============================================================ */
+.table-container {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table {
+    margin-bottom: 0;
+    min-width: 720px;
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.table th {
+    background: var(--primary);
+    color: var(--text-light);
+    font-weight: 700;
+    padding: var(--spacing-sm) var(--spacing-md);
+    text-align: left;
+    white-space: nowrap;
+}
+
+.table td {
+    padding: var(--spacing-sm) var(--spacing-md);
+    vertical-align: middle;
+    border-bottom: 1px solid var(--border);
+}
+
+.table tbody tr:hover {
+    background: rgba(52, 152, 219, 0.05);
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+    --bs-table-accent-bg: rgba(52, 152, 219, 0.04);
+}
+
+/* ============================================================
+   8. BADGES
+============================================================ */
+.badge {
+    border-radius: 999px;
+    font-weight: 700;
+    min-height: 24px;
+    padding: 0.35rem 0.6rem;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+}
+
+.bg-success,
+.badge-success { background: var(--success) !important; color: var(--text-light); }
+.bg-warning,
+.badge-warning { background: var(--warning) !important; color: #1f2933; }
+.bg-danger,
+.badge-danger { background: var(--danger) !important; color: var(--text-light); }
+.bg-info,
+.badge-info { background: var(--info) !important; color: var(--text-light); }
+.bg-secondary,
+.badge-secondary { background: var(--text-secondary) !important; color: var(--text-light); }
+
+/* ============================================================
+   9. ALERTES
+============================================================ */
+.alert {
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    padding: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.alert i {
+    font-size: 1.1rem;
+}
+
+.alert-info {
+    background: #e8f4fc;
+    border: 1px solid #b8ddf4;
+    color: #174a70;
+}
+
+.alert-success {
+    background: #e7f6ee;
+    border: 1px solid #bfe8d0;
+    color: #155d35;
+}
+
+.alert-danger {
+    background: #fdecea;
+    border: 1px solid #f5c1ba;
+    color: #7d241c;
+}
+
+.alert-warning {
+    background: #fef5e7;
+    border: 1px solid #f8d9a0;
+    color: #8a5a00;
+}
+
+/* ============================================================
+   10. ÉTATS (chargement, vide, erreur)
+============================================================ */
+.state-box,
+.loading-state,
+.empty-state {
+    align-items: center;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: center;
+    min-height: 160px;
+    padding: var(--spacing-xl);
+    text-align: center;
+}
+
+.loading-state,
+.empty-state {
+    flex-direction: column;
+}
+
+.empty-state i,
+.empty-icon {
+    color: var(--text-secondary);
+    font-size: 3rem;
+    opacity: 0.6;
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Spinner */
+.spinner-border {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    border: 0.25rem solid var(--secondary);
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spinner 0.75s linear infinite;
+}
+
+.spinner-border-sm {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-width: 0.2rem;
+}
+
+@keyframes spinner {
+    to { transform: rotate(360deg); }
+}
+
+/* ============================================================
+   11. GROUPES D'ACTIONS & ICÔNES
+============================================================ */
+.action-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+}
+
+.icon {
+    display: inline-block;
+    font-style: normal;
+    line-height: 1;
+}
+
+/* ============================================================
+   12. UTILITAIRES
+============================================================ */
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-left { text-align: left; }
+
+.mt-1 { margin-top: var(--spacing-sm); }
+.mt-2 { margin-top: var(--spacing-md); }
+.mt-3 { margin-top: var(--spacing-lg); }
+.mt-4 { margin-top: var(--spacing-xl); }
+
+.mb-1 { margin-bottom: var(--spacing-sm); }
+.mb-2 { margin-bottom: var(--spacing-md); }
+.mb-3 { margin-bottom: var(--spacing-lg); }
+.mb-4 { margin-bottom: var(--spacing-xl); }
+
+.d-flex { display: flex; }
+.flex-column { flex-direction: column; }
+.justify-between { justify-content: space-between; }
+.align-center { align-items: center; }
+.gap-1 { gap: var(--spacing-sm); }
+.gap-2 { gap: var(--spacing-md); }
+.gap-3 { gap: var(--spacing-lg); }
+
+.w-100 { width: 100%; }
+
+/* ============================================================
+   13. TABLEAUX RESPONSIVES -> CARTES SUR MOBILE
+============================================================ */
+.responsive-table-card {
+    width: 100%;
+}
+
+@media (max-width: 767.98px) {
+    h1 { font-size: 1.6rem; }
+    h2 { font-size: 1.4rem; }
+    h3 { font-size: 1.2rem; }
+
+    .container,
+    .page-shell {
+        padding: var(--spacing-sm);
+    }
+
+    .card,
+    .form-card {
+        padding: var(--spacing-md);
+    }
+
+    .card-header {
+        margin: calc(var(--spacing-md) * -1) calc(var(--spacing-md) * -1) var(--spacing-md);
+        padding: var(--spacing-md);
+    }
+
+    .table-container {
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+        overflow: visible;
+    }
+
+    .responsive-table-card,
+    .responsive-table-card thead,
+    .responsive-table-card tbody,
+    .responsive-table-card th,
+    .responsive-table-card td,
+    .responsive-table-card tr {
+        display: block;
+    }
+
+    .responsive-table-card {
+        min-width: 0;
+    }
+
+    .responsive-table-card thead {
+        display: none;
+    }
+
+    .responsive-table-card tr {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-sm);
+        margin-bottom: var(--spacing-md);
+        overflow: hidden;
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+
+    .responsive-table-card td {
+        align-items: flex-start;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        gap: var(--spacing-md);
+        justify-content: space-between;
+        padding: var(--spacing-sm) 0;
+        text-align: right;
+    }
+
+    .responsive-table-card td:last-child {
+        border-bottom: 0;
+    }
+
+    .responsive-table-card td::before {
+        color: var(--text-secondary);
+        content: attr(data-label);
+        flex: 0 0 42%;
+        font-size: 0.78rem;
+        font-weight: 800;
+        text-align: left;
+        text-transform: uppercase;
+    }
+
+    .responsive-table-card td .action-group,
+    .responsive-table-card td .btn {
+        width: 100%;
+    }
+
+    .responsive-table-card td .action-group {
+        flex: 1;
+        justify-content: flex-end;
+    }
+}
+
+/* ============================================================
+   14. POINTS DE RUPTURE RESPONSIVES (Mobile-First)
+============================================================ */
+/* Smartphones (320px - 480px) */
+@media (max-width: 480px) {
+    html { font-size: 14px; }
+
+    .container,
+    .page-shell { padding: var(--spacing-sm); }
+
+    .card,
+    .form-card { padding: var(--spacing-md); }
+
+    .btn {
+        font-size: 0.9rem;
+        min-height: 42px;
+    }
+}
+
+/* Tablettes (481px - 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+    .container,
+    .page-shell { padding: var(--spacing-md); }
+}
+
+/* Petits écrans (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .container,
+    .page-shell { padding: var(--spacing-lg); }
+}
+
+/* Grands écrans (1025px - 1440px) */
+@media (min-width: 1025px) and (max-width: 1440px) {
+    .container,
+    .page-shell {
+        padding: var(--spacing-xl);
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+}
+
+/* Très grands écrans (1441px+) */
+@media (min-width: 1441px) {
+    .container,
+    .page-shell {
+        padding: var(--spacing-xxl);
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+}

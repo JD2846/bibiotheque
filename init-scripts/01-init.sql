@@ -60,9 +60,9 @@ CREATE TABLE IF NOT EXISTS borrow (
     borrow_id   INTEGER   PRIMARY KEY DEFAULT nextval('borrow_seq'),
     book_id     INTEGER   NOT NULL REFERENCES books (book_id) ON DELETE CASCADE,
     user_id     INTEGER   NOT NULL REFERENCES users (user_id) ON DELETE CASCADE,
-    borrow_date  DATE,
-    return_date DATE,
-    due_date    DATE,
+    issue_date  TIMESTAMP,
+    return_date TIMESTAMP,
+    due_date    TIMESTAMP,
     status VARCHAR(20) DEFAULT 'ACTIVE'
 );
 
@@ -98,15 +98,8 @@ INSERT INTO user_role (user_id, role_id) VALUES (1, 1)
 
 -- ------------------------------------------------------------
 -- 10. Données de test : livres
+--     (voir init-scripts/03-reservation-testdata.sql pour L1 à L5)
 -- ------------------------------------------------------------
-INSERT INTO books (book_id, book_name, book_author, book_genre, no_of_copies) VALUES
-    (1, 'The Lord of the Rings',        'J.R.R. Tolkien',  'Fantasy',   5),
-    (2, 'Pride and Prejudice',          'Jane Austen',     'Romance',   3),
-    (3, 'Clean Code',                   'Robert C. Martin','Software',  4),
-    (4, '1984',                         'George Orwell',   'Dystopia',  6),
-    (5, 'The Pragmatic Programmer',     'Andy Hunt',       'Software',  2),
-    (6, 'Harry Potter and the Philosopher''s Stone', 'J.K. Rowling', 'Fantasy', 8)
-ON CONFLICT (book_id) DO NOTHING;
 
 -- ------------------------------------------------------------
 -- 11. Mise à jour des séquences

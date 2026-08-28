@@ -1,0 +1,80 @@
+<div class="reservation-list">
+  <!-- État de chargement -->
+  <div *ngIf="loading" class="loading-state">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Chargement...</span>
+    </div>
+    <p class="loading-text">Chargement des réservations...</p>
+  </div>
+
+  <!-- État d'erreur -->
+  <div *ngIf="!loading && error" class="alert alert-danger error-state">
+    <div class="error-content">
+      <i class="fas fa-exclamation-triangle error-icon" aria-hidden="true"></i>
+      <div class="error-message">
+        <p class="error-text">{{ error }}</p>
+        <button class="btn btn-primary btn-sm" type="button" (click)="retry.emit()">
+          <i class="fas fa-redo" aria-hidden="true"></i> Réessayer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- État liste vide -->
+  <div *ngIf="!loading && !error && reservations.length === 0" class="empty-state">
+    <div class="empty-content">
+      <i class="fas fa-calendar-plus empty-icon" aria-hidden="true"></i>
+      <h3 class="empty-title">Aucune réservation</h3>
+      <p class="empty-text">Vous n'avez pas encore de réservations.</p>
+      <a class="btn btn-primary" routerLink="/books">
+        <i class="fas fa-book" aria-hidden="true"></i> Parcourir les livres
+      </a>
+    </div>
+  </div>
+
+  <!-- État données -->
+  <div *ngIf="!loading && !error && reservations.length > 0" class="table-container">
+    <table class="table table-striped responsive-table-card align-middle">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Livre</th>
+          <th>Adhérent</th>
+          <th>Statut</th>
+          <th>Date réservation</th>
+          <th>Date expiration</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let reservation of reservations; let i = index">
+          <td data-label="#">{{ i + 1 }}</td>
+          <td data-label="Livre">
+            <span class="book-title">{{ reservation.bookTitle || reservation.bookId }}</span>
+          </td>
+          <td data-label="Adhérent">{{ reservation.userName || reservation.userId }}</td>
+          <td data-label="Statut">
+            <span class="badge" [ngClass]="'badge-' + getStatusColor(reservation.status)">
+              {{ getStatusLabel(reservation.status) }}
+            </span>
+          </td>
+          <td data-label="Date réservation">{{ formatDate(reservation.reservationDate) }}</td>
+          <td data-label="Date expiration">{{ formatDate(reservation.expirationDate) }}</td>
+          <td data-label="Action">
+            <button
+              *ngIf="canCancel(reservation)"
+              class="btn btn-danger btn-sm btn-cancel"
+              type="button"
+              (click)="cancelReservation(reservation)"
+              title="Annuler la réservation">
+              <i class="fas fa-times" aria-hidden="true"></i> Annuler
+            </button>
+            <span *ngIf="!canCancel(reservation)" class="text-muted small">
+              <i class="fas fa-lock" aria-hidden="true"></i> Non annulable
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

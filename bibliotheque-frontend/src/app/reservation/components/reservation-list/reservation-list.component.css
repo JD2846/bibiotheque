@@ -1,0 +1,81 @@
+.reservation-list {
+  min-height: 200px;
+}
+
+/* État de chargement */
+.loading-text {
+  margin-top: var(--spacing-md);
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+/* État d'erreur */
+.error-state {
+  margin: var(--spacing-md) 0;
+}
+
+.error-content {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+}
+
+.error-icon {
+  font-size: 1.5rem;
+  color: var(--danger);
+  margin-top: 2px;
+}
+
+.error-text {
+  margin-bottom: var(--spacing-sm);
+}
+
+/* État vide */
+.empty-content {
+  text-align: center;
+  max-width: 400px;
+}
+
+.empty-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-xs);
+}
+
+.empty-text {
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Tableau */
+.book-title {
+  font-weight: 500;
+}
+
+/* Bouton annuler */
+.btn-cancel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+}
+
+/* Smartphones */
+@media (max-width: 480px) {
+  .empty-state {
+    padding: var(--spacing-xl) var(--spacing-md);
+    min-height: 200px;
+  }
+
+  .empty-icon {
+    font-size: 3rem;
+  }
+
+  .empty-title {
+    font-size: 1.1rem;
+  }
+
+  .table {
+    font-size: 0.8rem;
+  }
+}
