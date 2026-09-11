@@ -4,24 +4,28 @@
    1. DESIGN TOKENS (Variables CSS)
 ============================================================ */
 :root {
-    /* Couleurs principales — palette neutre + accent unique (indigo) */
-    --primary: #18181b;           /* Neutre quasi-noir - Navigation */
-    --primary-light: #27272a;     /* Neutre - Hover navigation */
-    --secondary: #4f46e5;         /* Indigo - seule couleur d'action */
-    --secondary-hover: #4338ca;   /* Indigo foncé - hover */
-    --accent: #4f46e5;            /* Alias : accent = couleur d'action unique */
-    --accent-light: #818cf8;      /* Variante claire de l'accent - lisible sur fond sombre */
-    --accent-soft: #eef2ff;       /* Fond doux pour halos/badges sur l'accent */
+    /* Couleurs principales — application moderne noir & blanc */
+    --primary: #0a0a0a;           /* Noir - fond de la sidebar */
+    --primary-light: #1c1c1e;     /* Noir plus clair - hover sidebar */
+    --secondary: #18181b;         /* Noir - seule couleur d'action (boutons) */
+    --secondary-hover: #313135;   /* Gris très foncé - hover des boutons */
+    --accent: #18181b;            /* Alias : accent = couleur d'action unique */
+    --accent-light: #a1a1aa;      /* Gris clair - icônes/liens sur fond sombre */
+    --accent-soft: #f4f4f5;       /* Fond doux neutre pour halos/badges */
     --success: #16a34a;           /* Vert - Statut disponible */
     --warning: #d97706;           /* Ambre - Statut en attente */
     --danger: #dc2626;            /* Rouge - Statut expiré, suppression */
-    --info: #4f46e5;              /* Informations (alignées sur l'accent) */
+    --info: #52525b;              /* Gris - Informations */
 
     /* Couleurs de fond */
     --bg-body: #fafafa;           /* Fond général */
     --bg-card: #ffffff;           /* Fond des cartes */
     --bg-muted: #f4f4f5;          /* Fond atténué */
-    --bg-dark: #18181b;           /* Fond sombre */
+    --bg-dark: #0a0a0a;           /* Fond sombre (sidebar) */
+
+    /* Layout sidebar */
+    --sidebar-width: 240px;
+    --sidebar-width-collapsed: 76px;
 
     /* Couleurs de texte */
     --text-primary: #18181b;      /* Texte principal */
@@ -277,7 +281,7 @@ p {
 .form-control:focus,
 .form-select:focus {
     border-color: var(--secondary);
-    box-shadow: 0 0 0 0.2rem rgba(79, 70, 229, 0.18);
+    box-shadow: 0 0 0 0.2rem rgba(24, 24, 27, 0.14);
     outline: none;
 }
 
@@ -328,7 +332,7 @@ p {
 }
 
 .table tbody tr:hover {
-    background: rgba(79, 70, 229, 0.045);
+    background: rgba(24, 24, 27, 0.035);
 }
 
 .table-striped > tbody > tr:nth-of-type(odd) > * {

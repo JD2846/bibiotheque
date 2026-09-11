@@ -1,6 +1,6 @@
 <app-header (menuToggle)="toggleSidebar()"></app-header>
-<div class="app-body">
-  <app-sidebar [isOpen]="sidebarOpen" (navigate)="closeSidebar()"></app-sidebar>
+<div class="app-body" [class.sidebar-collapsed]="sidebarCollapsed">
+  <app-sidebar [isOpen]="sidebarOpen" [collapsed]="sidebarCollapsed" (navigate)="closeSidebar()"></app-sidebar>
   <main class="app-main">
     <router-outlet></router-outlet>
   </main>

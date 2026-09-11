@@ -3,16 +3,16 @@
 }
 
 .app-sidebar {
-  background: var(--bg-card);
-  border-right: 1px solid var(--border);
+  background: var(--primary);
   bottom: 0;
   left: 0;
+  overflow-x: hidden;
   overflow-y: auto;
   position: fixed;
   top: var(--navbar-height, 56px);
   transform: translateX(-100%);
-  transition: transform 0.25s ease;
-  width: 240px;
+  transition: transform 0.25s ease, width 0.2s ease;
+  width: var(--sidebar-width, 240px);
   z-index: 1040;
 }
 
@@ -28,12 +28,13 @@
 }
 
 .sidebar-section-label {
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.4);
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   margin: var(--spacing-md) var(--spacing-sm) var(--spacing-xs);
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .sidebar-section-label:first-child {
@@ -43,7 +44,7 @@
 .sidebar-link {
   align-items: center;
   border-radius: var(--border-radius);
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.72);
   display: flex;
   font-size: 0.92rem;
   font-weight: 600;
@@ -51,6 +52,7 @@
   min-height: 42px;
   padding: var(--spacing-sm) var(--spacing-sm);
   transition: background-color 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
 }
 
 .sidebar-link i {
@@ -60,17 +62,17 @@
 }
 
 .sidebar-link:hover {
-  background: var(--bg-muted);
-  color: var(--text-primary);
+  background: var(--primary-light);
+  color: var(--text-light);
 }
 
 .sidebar-link.active {
-  background: var(--accent-soft);
-  color: var(--secondary);
+  background: var(--text-light);
+  color: var(--primary);
 }
 
 .sidebar-backdrop {
-  background: rgba(24, 24, 27, 0.45);
+  background: rgba(0, 0, 0, 0.5);
   border: 0;
   bottom: 0;
   cursor: pointer;
@@ -89,6 +91,30 @@
 
   .sidebar-backdrop {
     display: none;
+  }
+
+  /* Mode reduit : icones seules, sans les libelles */
+  .app-sidebar.collapsed {
+    width: var(--sidebar-width-collapsed, 76px);
+  }
+
+  .app-sidebar.collapsed .sidebar-section-label {
+    height: 0;
+    margin: var(--spacing-sm) 0;
+    overflow: hidden;
+  }
+
+  .app-sidebar.collapsed .sidebar-link {
+    justify-content: center;
+  }
+
+  .app-sidebar.collapsed .sidebar-link span {
+    display: none;
+  }
+
+  .app-sidebar.collapsed .sidebar-link i {
+    font-size: 1.15rem;
+    min-width: auto;
   }
 }
 

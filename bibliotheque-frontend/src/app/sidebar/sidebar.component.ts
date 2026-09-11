@@ -11,6 +11,7 @@ import { UserAuthService } from '../_service/user-auth.service';
 })
 export class SidebarComponent {
   @Input() isOpen = false;
+  @Input() collapsed = false;
   @Output() navigate = new EventEmitter<void>();
 
   constructor(private userAuthService: UserAuthService) { }
