@@ -29,9 +29,9 @@
   </div>
 
   <app-reservation-list
-    [reservations]="reservations"
-    [loading]="loading"
-    [error]="error"
+    [reservations]="(reservations$ | async) ?? []"
+    [loading]="(loading$ | async) ?? false"
+    [error]="(error$ | async) ?? ''"
     (retry)="retry()"
     (reservationCancelled)="onReservationCancelled($event)">
   </app-reservation-list>

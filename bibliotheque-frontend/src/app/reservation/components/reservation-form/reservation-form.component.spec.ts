@@ -4,6 +4,7 @@ import { ReservationFormComponent } from './reservation-form.component';
 import { ReservationService } from '../../services/reservation.service';
 import { BooksService } from '../../../books/services/books.service';
 import { UsersService } from '../../../users/services/users.service';
+import { UserAuthService } from '../../../_service/user-auth.service';
 import { Reservation } from '../../../_model/reservation.model';
 import { ReservationStatus } from '../../../_model/reservation-status.enum';
 import { Books } from '../../../_model/books';
@@ -14,6 +15,7 @@ describe('ReservationFormComponent', () => {
   let reservationService: jasmine.SpyObj<ReservationService>;
   let booksService: jasmine.SpyObj<BooksService>;
   let usersService: jasmine.SpyObj<UsersService>;
+  let userAuthService: jasmine.SpyObj<UserAuthService>;
 
   const mockBooks: Books[] = [{ bookId: 1, bookName: 'Test Book', bookAuthor: 'Author', bookGenre: 'Roman', noOfCopies: 0 }];
   const mockUsers: Users[] = [Object.assign(new Users(), { userId: 1, username: 'adherent', name: 'Adhérent' })];
@@ -22,15 +24,19 @@ describe('ReservationFormComponent', () => {
     reservationService = jasmine.createSpyObj('ReservationService', ['createReservation']);
     booksService = jasmine.createSpyObj('BooksService', ['getBooks']);
     usersService = jasmine.createSpyObj('UsersService', ['getUsers']);
+    userAuthService = jasmine.createSpyObj('UserAuthService', ['getRoles']);
 
     booksService.getBooks.and.returnValue(of(mockBooks));
     usersService.getUsers.and.returnValue(of(mockUsers));
+    // Role Admin (BIBLIOTHECAIRE) pour que le selecteur d'adherent soit charge/requis
+    userAuthService.getRoles.and.returnValue([{ roleName: 'Admin' }] as any);
 
     component = new ReservationFormComponent(
       new FormBuilder(),
       reservationService,
       booksService,
-      usersService
+      usersService,
+      userAuthService
     );
     component.ngOnInit();
   });

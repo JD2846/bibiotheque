@@ -1,13 +1,13 @@
-import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { finalize } from 'rxjs/operators';
 import { LoadingService } from '../../../_core/services/loading.service';
-import { Reservation, ReservationFilters } from '../../../_model/reservation.model';
+import { ReservationFilters } from '../../../_model/reservation.model';
 import { ReservationStatus, ReservationStatusList } from '../../../_model/reservation-status.enum';
 import { ReservationDataService } from '../../services/reservation-data.service';
 import { ReservationService } from '../../services/reservation.service';
 import { ReservationFormComponent } from '../reservation-form/reservation-form.component';
 import { FormsModule } from '@angular/forms';
+import { AsyncPipe } from '@angular/common';
 import { ReservationListComponent } from '../reservation-list/reservation-list.component';
 
 @Component({
@@ -15,16 +15,21 @@ import { ReservationListComponent } from '../reservation-list/reservation-list.c
     templateUrl: './reservation-container.component.html',
     styleUrls: ['./reservation-container.component.css'],
     changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [ReservationFormComponent, FormsModule, ReservationListComponent]
+    imports: [ReservationFormComponent, FormsModule, AsyncPipe, ReservationListComponent]
 })
-export class ReservationContainerComponent implements OnInit, OnDestroy {
-  reservations: Reservation[] = [];
-  loading = false;
-  error = '';
+export class ReservationContainerComponent implements OnInit {
   selectedStatus: ReservationStatus | 'TOUS' = 'TOUS';
   statusList = ReservationStatusList;
 
-  private readonly subscriptions = new Subscription();
+  // Expose directement les observables du service au template (AsyncPipe) :
+  // AsyncPipe declenche lui-meme un markForCheck() a chaque emission, ce qui
+  // evite de devoir recopier l'etat dans des champs de composant mis a jour
+  // via un subscribe() manuel (source d'un bug de rafraichissement observe
+  // ou le tableau restait bloque sur "Chargement..." tant qu'aucun autre
+  // evenement Angular ne survenait).
+  readonly reservations$ = this.reservationDataService.reservations$;
+  readonly loading$ = this.reservationDataService.loading$;
+  readonly error$ = this.reservationDataService.error$;
 
   constructor(
     private reservationService: ReservationService,
@@ -33,14 +38,7 @@ export class ReservationContainerComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.subscriptions.add(this.reservationDataService.reservations$.subscribe(reservations => this.reservations = reservations));
-    this.subscriptions.add(this.reservationDataService.loading$.subscribe(loading => this.loading = loading));
-    this.subscriptions.add(this.reservationDataService.error$.subscribe(error => this.error = error));
     this.loadReservations();
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
   }
 
   loadReservations(filters?: ReservationFilters): void {

@@ -5,6 +5,7 @@ import { Books } from '../../../_model/books';
 import { Users } from '../../../_model/users';
 import { BooksService } from '../../../books/services/books.service';
 import { UsersService } from '../../../users/services/users.service';
+import { UserAuthService } from '../../../_service/user-auth.service';
 import { ReservationService } from '../../services/reservation.service';
 
 @Component({
@@ -28,17 +29,32 @@ export class ReservationFormComponent implements OnInit {
     private formBuilder: FormBuilder,
     private reservationService: ReservationService,
     private booksService: BooksService,
-    private usersService: UsersService
+    private usersService: UsersService,
+    private userAuthService: UserAuthService
   ) {
     this.reservationForm = this.formBuilder.group({
       bookId: ['', Validators.required],
-      adherentId: ['', Validators.required]
+      adherentId: ['']
     });
+
+    // Seul un BIBLIOTHECAIRE choisit l'adherent : le backend impose de toute
+    // facon l'identite du token pour un ADHERENT (RS-04), inutile de lui
+    // demander de se choisir lui-meme dans une liste.
+    if (this.isBibliothecaire()) {
+      this.reservationForm.get('adherentId')?.addValidators(Validators.required);
+    }
   }
 
   ngOnInit(): void {
     this.loadBooks();
-    this.loadUsers();
+    if (this.isBibliothecaire()) {
+      this.loadUsers();
+    }
+  }
+
+  isBibliothecaire(): boolean {
+    const roles: any[] = this.userAuthService.getRoles() || [];
+    return roles.some(role => role?.roleName === 'Admin' || role === 'Admin');
   }
 
   submit(): void {

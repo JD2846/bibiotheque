@@ -1,5 +1,6 @@
 package com.ibizabroker.bibliotheque.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -13,10 +14,14 @@ import java.time.LocalDateTime;
 @Table(name = "reservation")
 public class Reservation {
 
+    // @JsonProperty aligne le JSON expose sur les noms attendus par le modele
+    // frontend (src/app/_model/reservation.model.ts) : id/reservationDate/
+    // expirationDate, sans renommer les champs/colonnes JPA cote backend.
     @Id
     @SequenceGenerator(name = "reservation_seq", sequenceName = "reservation_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reservation_seq")
     @Column(name = "reservation_id")
+    @JsonProperty("id")
     private Integer reservationId;
 
     @Column(name = "book_id")
@@ -31,11 +36,22 @@ public class Reservation {
 
     @Column(name = "date_reservation")
     @JsonSerialize(using = JsonDataSerializer.class)
+    @JsonProperty("reservationDate")
     private LocalDateTime dateReservation;
 
     @Column(name = "date_expiration")
     @JsonSerialize(using = JsonDataSerializer.class)
+    @JsonProperty("expirationDate")
     private LocalDateTime dateExpiration;
+
+    // Champs enrichis (non persistes) : titre du livre / nom de l'adherent,
+    // renseignes par ReservationServiceImpl pour eviter que le frontend
+    // n'affiche que des identifiants numeriques bruts.
+    @Transient
+    private String bookTitle;
+
+    @Transient
+    private String userName;
 
     // RG-04 : dateExpiration = dateReservation + 7 jours, calculée côté serveur
     @PrePersist

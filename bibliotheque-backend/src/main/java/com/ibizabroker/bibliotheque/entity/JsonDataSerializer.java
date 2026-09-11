@@ -14,8 +14,9 @@ public class JsonDataSerializer extends JsonSerializer<LocalDateTime> {
 
     @Override
     public void serialize(LocalDateTime date, JsonGenerator gen, SerializerProvider serializers) throws IOException {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        gen.writeString(date.format(formatter));
+        // Format ISO-8601 : parsable nativement par `new Date(...)` cote frontend
+        // (l'ancien format "dd-MM-yyyy" produisait un "Invalid Date" en JavaScript).
+        gen.writeString(date.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
     }
 
 }

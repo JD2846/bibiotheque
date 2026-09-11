@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReservationServiceImpl implements IReservationService {
@@ -83,7 +84,7 @@ public class ReservationServiceImpl implements IReservationService {
         reservation.setUserId(ownerId);
         reservation.setStatus(ReservationStatus.EN_ATTENTE);
 
-        return reservationRepository.save(reservation);
+        return enrich(reservationRepository.save(reservation));
     }
 
     @Override
@@ -92,14 +93,18 @@ public class ReservationServiceImpl implements IReservationService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Integer effectiveUserId = isBibliothecaire(auth) ? userId : getCurrentUser().getUserId();
 
+        List<Reservation> result;
         if (status != null && effectiveUserId != null) {
-            return reservationRepository.findByUserIdAndStatus(effectiveUserId, status);
+            result = reservationRepository.findByUserIdAndStatus(effectiveUserId, status);
         } else if (status != null) {
-            return reservationRepository.findByStatus(status);
+            result = reservationRepository.findByStatus(status);
         } else if (effectiveUserId != null) {
-            return reservationRepository.findByUserId(effectiveUserId);
+            result = reservationRepository.findByUserId(effectiveUserId);
+        } else {
+            result = reservationRepository.findAll();
         }
-        return reservationRepository.findAll();
+        result.forEach(this::enrich);
+        return result;
     }
 
     @Override
@@ -107,7 +112,7 @@ public class ReservationServiceImpl implements IReservationService {
         Reservation reservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Réservation non trouvée avec l'id: " + id));
         checkOwnership(reservation);
-        return reservation;
+        return enrich(reservation);
     }
 
     @Override
@@ -127,7 +132,19 @@ public class ReservationServiceImpl implements IReservationService {
         }
 
         reservation.setStatus(ReservationStatus.ANNULEE);
-        return reservationRepository.save(reservation);
+        return enrich(reservationRepository.save(reservation));
+    }
+
+    /**
+     * Renseigne bookTitle/userName (champs non persistes) pour que le frontend
+     * n'ait pas a afficher de simples identifiants numeriques.
+     */
+    private Reservation enrich(Reservation reservation) {
+        booksRepository.findById(reservation.getBookId())
+                .ifPresent(book -> reservation.setBookTitle(book.getBookName()));
+        usersRepository.findById(reservation.getUserId())
+                .ifPresent(user -> reservation.setUserName(user.getName()));
+        return reservation;
     }
 
     @Override

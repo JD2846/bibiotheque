@@ -5,8 +5,6 @@ import { Borrow } from '../../../_model/borrow';
 import { BooksService } from '../../../books/services/books.service';
 import { BorrowService } from '../../services/borrow.service';
 import { UserAuthService } from '../../../_service/user-auth.service';
-import { Users } from '../../../_model/users';
-import { UsersService } from '../../../users/services/users.service';
 
 @Component({
     selector: 'app-borrow-book',
@@ -17,7 +15,6 @@ import { UsersService } from '../../../users/services/users.service';
 export class BorrowBookComponent implements OnInit {
 
   books: Books[] = [];
-  users: Users[] = [];
   loading = false;
   error = '';
   success = '';
@@ -26,26 +23,17 @@ export class BorrowBookComponent implements OnInit {
     private booksService: BooksService,
     private userAuthService: UserAuthService,
     private borrowService: BorrowService,
-    private usersService: UsersService,
   ) { }
 
   userId = this.userAuthService.getUserId();
 
   ngOnInit(): void {
     this.getBooks();
-    this.getUsers();
   }
 
   private getBooks() {
     this.booksService.getBooks().subscribe({
       next: data => this.books = data,
-      error: error => this.error = error.message
-    });
-  }
-
-  private getUsers() {
-    this.usersService.getUsers().subscribe({
-      next: data => this.users = data,
       error: error => this.error = error.message
     });
   }

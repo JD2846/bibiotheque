@@ -38,8 +38,9 @@
     </div>
   }
 
-  <!-- État données -->
-  @if (!loading && !error && reservations.length > 0) {
+  <!-- État données : reste affiche meme si une action (ex: annulation) a echoue,
+       pour ne pas faire disparaitre toute la liste a cause d'une erreur ponctuelle -->
+  @if (!loading && reservations.length > 0) {
     <div class="table-container">
       <table class="table table-striped responsive-table-card align-middle">
         <thead>

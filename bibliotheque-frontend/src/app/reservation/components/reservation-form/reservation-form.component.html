@@ -32,29 +32,31 @@
         }
       </div>
 
-      <div class="form-group">
-        <label for="adherentId" class="form-label">
-          <i class="fas fa-user" aria-hidden="true"></i> Adhérent
-        </label>
-        <select
-          id="adherentId"
-          formControlName="adherentId"
-          class="form-control"
-          [class.is-invalid]="reservationForm.get('adherentId')?.invalid && reservationForm.get('adherentId')?.touched">
-          <option value="">-- Sélectionnez un adhérent --</option>
-          @for (user of users; track user) {
-            <option [value]="user.userId">
-              {{ user.name }} ({{ user.username }})
-            </option>
+      @if (isBibliothecaire()) {
+        <div class="form-group">
+          <label for="adherentId" class="form-label">
+            <i class="fas fa-user" aria-hidden="true"></i> Adhérent
+          </label>
+          <select
+            id="adherentId"
+            formControlName="adherentId"
+            class="form-control"
+            [class.is-invalid]="reservationForm.get('adherentId')?.invalid && reservationForm.get('adherentId')?.touched">
+            <option value="">-- Sélectionnez un adhérent --</option>
+            @for (user of users; track user) {
+              <option [value]="user.userId">
+                {{ user.name }} ({{ user.username }})
+              </option>
+            }
+          </select>
+          @if (reservationForm.get('adherentId')?.invalid && reservationForm.get('adherentId')?.touched) {
+            <div class="invalid-feedback">
+              <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+              L'adhérent est obligatoire.
+            </div>
           }
-        </select>
-        @if (reservationForm.get('adherentId')?.invalid && reservationForm.get('adherentId')?.touched) {
-          <div class="invalid-feedback">
-            <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
-            L'adhérent est obligatoire.
-          </div>
-        }
-      </div>
+        </div>
+      }
 
       <div class="form-actions">
         <button

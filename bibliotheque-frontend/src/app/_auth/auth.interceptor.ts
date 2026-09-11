@@ -24,10 +24,17 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
         catchError(
             (err:HttpErrorResponse) => {
+                // Un 401 signifie que le token est absent/invalide/expire : la session
+                // entiere n'est plus valide, direction connexion.
+                // Un 403 en revanche ne veut dire que "cette action precise vous est
+                // refusee" (ex: un ADHERENT qui n'a pas accede a un widget reserve au
+                // BIBLIOTHECAIRE) - rediriger toute la page vers /forbidden casserait
+                // des ecrans ou l'utilisateur a par ailleurs parfaitement le droit
+                // d'etre. On laisse chaque composant afficher son propre message
+                // d'erreur (deja gere via error.message partout dans l'app). Seul
+                // AuthGuard redirige vers /forbidden, au niveau route.
                 if(err.status === 401) {
                     this.router.navigate(['/login']);
-                } else if(err.status === 403) {
-                    this.router.navigate(['/forbidden']);
                 }
                 return throwError(() => err);
             }
