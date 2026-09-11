@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { Books } from '../../../_model/books';
@@ -11,6 +11,7 @@ import { ReservationService } from '../../services/reservation.service';
     selector: 'app-reservation-form',
     templateUrl: './reservation-form.component.html',
     styleUrls: ['./reservation-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ReservationFormComponent implements OnInit {

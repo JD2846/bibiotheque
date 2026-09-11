@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { LoadingService } from '../../../_core/services/loading.service';
@@ -11,6 +11,7 @@ import { ReservationService } from '../../services/reservation.service';
     selector: 'app-reservation-container',
     templateUrl: './reservation-container.component.html',
     styleUrls: ['./reservation-container.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ReservationContainerComponent implements OnInit, OnDestroy {

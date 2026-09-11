@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
 import { Reservation } from '../../../_model/reservation.model';
 import { ReservationStatus, ReservationStatusColors, ReservationStatusLabels } from '../../../_model/reservation-status.enum';
 
@@ -6,6 +6,7 @@ import { ReservationStatus, ReservationStatusColors, ReservationStatusLabels } f
     selector: 'app-reservation-list',
     templateUrl: './reservation-list.component.html',
     styleUrls: ['./reservation-list.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ReservationListComponent {

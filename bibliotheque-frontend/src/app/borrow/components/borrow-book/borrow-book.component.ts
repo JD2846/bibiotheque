@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { finalize } from 'rxjs/operators';
 import { Books } from '../../../_model/books';
 import { Borrow } from '../../../_model/borrow';
@@ -12,6 +12,7 @@ import { UsersService } from '../../../users/services/users.service';
     selector: 'app-borrow-book',
     templateUrl: './borrow-book.component.html',
     styleUrls: ['./borrow-book.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class BorrowBookComponent implements OnInit {

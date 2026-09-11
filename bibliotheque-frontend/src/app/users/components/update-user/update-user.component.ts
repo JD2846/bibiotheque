@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Users } from '../../../_model/users';
 import { UsersService } from '../../services/users.service';
@@ -7,6 +7,7 @@ import { UsersService } from '../../services/users.service';
     selector: 'app-update-user',
     templateUrl: './update-user.component.html',
     styleUrls: ['./update-user.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class UpdateUserComponent implements OnInit {

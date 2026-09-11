@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Books } from '../../../_model/books';
 import { Borrow } from '../../../_model/borrow';
@@ -11,6 +11,7 @@ import { UsersService } from '../../../users/services/users.service';
     selector: 'app-book-details',
     templateUrl: './book-details.component.html',
     styleUrls: ['./book-details.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class BookDetailsComponent implements OnInit {

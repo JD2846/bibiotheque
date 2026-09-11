@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 import { Books } from '../../../_model/books'
@@ -8,6 +8,7 @@ import { BooksService } from '../../services/books.service';
     selector: 'app-books-list',
     templateUrl: './books-list.component.html',
     styleUrls: ['./books-list.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class BooksListComponent implements OnInit {
