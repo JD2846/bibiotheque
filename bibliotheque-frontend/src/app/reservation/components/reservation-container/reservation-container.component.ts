@@ -6,13 +6,16 @@ import { Reservation, ReservationFilters } from '../../../_model/reservation.mod
 import { ReservationStatus, ReservationStatusList } from '../../../_model/reservation-status.enum';
 import { ReservationDataService } from '../../services/reservation-data.service';
 import { ReservationService } from '../../services/reservation.service';
+import { ReservationFormComponent } from '../reservation-form/reservation-form.component';
+import { FormsModule } from '@angular/forms';
+import { ReservationListComponent } from '../reservation-list/reservation-list.component';
 
 @Component({
     selector: 'app-reservation-container',
     templateUrl: './reservation-container.component.html',
     styleUrls: ['./reservation-container.component.css'],
     changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+    imports: [ReservationFormComponent, FormsModule, ReservationListComponent]
 })
 export class ReservationContainerComponent implements OnInit, OnDestroy {
   reservations: Reservation[] = [];

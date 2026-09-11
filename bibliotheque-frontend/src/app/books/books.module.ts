@@ -9,18 +9,16 @@ import { UpdateBookComponent } from './components/update-book/update-book.compon
 import { BooksRoutingModule } from './books-routing.module';
 
 @NgModule({
-  declarations: [
-    BooksListComponent,
-    BookDetailsComponent,
-    CreateBookComponent,
-    UpdateBookComponent
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    RouterModule,
-    BooksRoutingModule
-  ]
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterModule,
+        BooksRoutingModule,
+        BooksListComponent,
+        BookDetailsComponent,
+        CreateBookComponent,
+        UpdateBookComponent
+    ]
 })
 export class BooksModule { }

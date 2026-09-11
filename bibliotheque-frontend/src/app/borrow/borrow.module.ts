@@ -7,16 +7,14 @@ import { BorrowBookComponent } from './components/borrow-book/borrow-book.compon
 import { ReturnBookComponent } from './components/return-book/return-book.component';
 
 @NgModule({
-  declarations: [
-    BorrowBookComponent,
-    ReturnBookComponent
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    RouterModule,
-    BorrowRoutingModule
-  ]
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterModule,
+        BorrowRoutingModule,
+        BorrowBookComponent,
+        ReturnBookComponent
+    ]
 })
 export class BorrowModule { }

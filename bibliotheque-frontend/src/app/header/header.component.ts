@@ -1,13 +1,14 @@
 import { Component, HostListener, ChangeDetectionStrategy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { UserAuthService } from '../_service/user-auth.service';
+import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.css'],
     changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+    imports: [RouterLink, NgClass, RouterLinkActive]
 })
 export class HeaderComponent {
   isCollapsed = true;

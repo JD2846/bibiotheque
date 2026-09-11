@@ -1,14 +1,15 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Users } from '../../../_model/users';
 import { UsersService } from '../../services/users.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'app-update-user',
     templateUrl: './update-user.component.html',
     styleUrls: ['./update-user.component.css'],
     changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+    imports: [FormsModule, RouterLink]
 })
 export class UpdateUserComponent implements OnInit {
 

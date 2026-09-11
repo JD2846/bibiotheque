@@ -10,8 +10,7 @@ import { UserAuthService } from '../../../_service/user-auth.service';
     selector: 'app-return-book',
     templateUrl: './return-book.component.html',
     styleUrls: ['./return-book.component.css'],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.Eager
 })
 export class ReturnBookComponent implements OnInit {
 

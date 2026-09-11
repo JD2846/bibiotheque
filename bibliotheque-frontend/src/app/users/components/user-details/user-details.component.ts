@@ -11,8 +11,7 @@ import { UsersService } from '../../services/users.service';
     selector: 'app-user-details',
     templateUrl: './user-details.component.html',
     styleUrls: ['./user-details.component.css'],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.Eager
 })
 export class UserDetailsComponent implements OnInit {
 

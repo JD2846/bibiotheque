@@ -7,15 +7,13 @@ import { ReservationListComponent } from './components/reservation-list/reservat
 import { ReservationFormComponent } from './components/reservation-form/reservation-form.component';
 
 @NgModule({
-  declarations: [
-    ReservationContainerComponent,
-    ReservationListComponent,
-    ReservationFormComponent
-  ],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    ReservationRoutingModule
-  ]
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        ReservationRoutingModule,
+        ReservationContainerComponent,
+        ReservationListComponent,
+        ReservationFormComponent
+    ]
 })
 export class ReservationModule { }

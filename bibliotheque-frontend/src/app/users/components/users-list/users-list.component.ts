@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 import { Users } from '../../../_model/users';
 import { UsersService } from '../../services/users.service';
@@ -9,7 +9,7 @@ import { UsersService } from '../../services/users.service';
     templateUrl: './users-list.component.html',
     styleUrls: ['./users-list.component.css'],
     changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+    imports: [RouterLink]
 })
 export class UsersListComponent implements OnInit {
 

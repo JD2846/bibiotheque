@@ -1,15 +1,16 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Books } from '../../../_model/books';
 import { BooksService } from '../../services/books.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'app-update-book',
     templateUrl: './update-book.component.html',
     styleUrls: ['./update-book.component.css'],
     changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+    imports: [FormsModule, RouterLink]
 })
 export class UpdateBookComponent implements OnInit {
 

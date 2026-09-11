@@ -1,14 +1,15 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Books } from '../../../_model/books';
 import { BooksService } from '../../services/books.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'app-create-book',
     templateUrl: './create-book.component.html',
     styleUrls: ['./create-book.component.css'],
     changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+    imports: [FormsModule, RouterLink]
 })
 export class CreateBookComponent implements OnInit {
 

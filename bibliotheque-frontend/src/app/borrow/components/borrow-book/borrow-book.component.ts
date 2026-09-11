@@ -12,8 +12,7 @@ import { UsersService } from '../../../users/services/users.service';
     selector: 'app-borrow-book',
     templateUrl: './borrow-book.component.html',
     styleUrls: ['./borrow-book.component.css'],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.Eager
 })
 export class BorrowBookComponent implements OnInit {
 

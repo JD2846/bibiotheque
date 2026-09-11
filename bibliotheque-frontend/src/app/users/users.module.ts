@@ -9,18 +9,16 @@ import { UsersListComponent } from './components/users-list/users-list.component
 import { UsersRoutingModule } from './users-routing.module';
 
 @NgModule({
-  declarations: [
-    UsersListComponent,
-    UserDetailsComponent,
-    UpdateUserComponent,
-    RegistrationComponent
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    RouterModule,
-    UsersRoutingModule
-  ]
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterModule,
+        UsersRoutingModule,
+        UsersListComponent,
+        UserDetailsComponent,
+        UpdateUserComponent,
+        RegistrationComponent
+    ]
 })
 export class UsersModule { }
