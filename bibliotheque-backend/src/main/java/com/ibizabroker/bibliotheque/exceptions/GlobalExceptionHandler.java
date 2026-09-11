@@ -1,5 +1,8 @@
 package com.ibizabroker.bibliotheque.exceptions;
 
+import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -17,6 +20,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<String> handleNotFound(NotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -33,17 +38,20 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({BadCredentialsException.class, UsernameNotFoundException.class})
-    public ResponseEntity<String> handleInvalidCredentials(Exception e) {
+    public ResponseEntity<String> handleInvalidCredentials(Exception e, HttpServletRequest request) {
+        log.warn("Tentative de connexion refusee (401) sur {} : identifiants invalides", request.getRequestURI());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Nom d'utilisateur ou mot de passe incorrect.");
     }
 
     @ExceptionHandler(DisabledException.class)
-    public ResponseEntity<String> handleDisabledAccount(DisabledException e) {
+    public ResponseEntity<String> handleDisabledAccount(DisabledException e, HttpServletRequest request) {
+        log.warn("Tentative de connexion refusee (401) sur {} : compte desactive", request.getRequestURI());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Ce compte est desactive.");
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<String> handleAccessDenied(AccessDeniedException e) {
+    public ResponseEntity<String> handleAccessDenied(AccessDeniedException e, HttpServletRequest request) {
+        log.warn("Acces refuse (403) sur {} {} : {}", request.getMethod(), request.getRequestURI(), e.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Vous n'avez pas les droits necessaires pour effectuer cette action.");
     }
 }
