@@ -40,6 +40,9 @@
     --border-radius: 10px;
     --border-radius-lg: 14px;
 
+    /* Layout */
+    --navbar-height: 56px;
+
     /* Espacements harmonieux */
     --spacing-xs: 4px;
     --spacing-sm: 8px;

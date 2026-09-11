@@ -1,5 +1,5 @@
 .login-wrapper {
-  min-height: calc(100vh - 140px);
+  min-height: calc(100vh - var(--navbar-height, 56px));
   display: flex;
   align-items: center;
   justify-content: center;

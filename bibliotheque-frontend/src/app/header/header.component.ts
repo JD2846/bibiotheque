@@ -1,5 +1,5 @@
-import { Component, HostListener, ChangeDetectionStrategy } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, EventEmitter, HostListener, Output, ChangeDetectionStrategy } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { UserAuthService } from '../_service/user-auth.service';
 import { NgClass } from '@angular/common';
 
@@ -8,10 +8,11 @@ import { NgClass } from '@angular/common';
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.css'],
     changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [RouterLink, NgClass, RouterLinkActive]
+    imports: [RouterLink, NgClass]
 })
 export class HeaderComponent {
-  isCollapsed = true;
+  @Output() menuToggle = new EventEmitter<void>();
+
   isDropdownOpen = false;
 
   constructor(
@@ -19,13 +20,8 @@ export class HeaderComponent {
     private router: Router
   ) { }
 
-  toggleMenu(): void {
-    this.isCollapsed = !this.isCollapsed;
-  }
-
-  closeMenu(): void {
-    this.isCollapsed = true;
-    this.isDropdownOpen = false;
+  onMenuToggle(): void {
+    this.menuToggle.emit();
   }
 
   toggleDropdown(event: Event): void {
@@ -46,18 +42,18 @@ export class HeaderComponent {
     return !!this.userAuthService.isLoggedIn();
   }
 
-  isAdmin(): boolean {
-    const roles: any[] = this.userAuthService.getRoles() || [];
-    return roles.some(role => role?.roleName === 'Admin' || role === 'Admin');
-  }
-
   getUserName(): string {
     return this.userAuthService.getName() || 'Utilisateur';
   }
 
+  getUserInitial(): string {
+    const name = this.getUserName();
+    return name.charAt(0).toUpperCase();
+  }
+
   logout(): void {
     this.userAuthService.clear();
-    this.closeMenu();
+    this.isDropdownOpen = false;
     this.router.navigate(['/login']);
   }
 }

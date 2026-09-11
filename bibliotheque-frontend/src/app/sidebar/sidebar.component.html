@@ -1,0 +1,66 @@
+<aside class="app-sidebar" [class.open]="isOpen">
+  <nav class="sidebar-nav" aria-label="Navigation principale">
+    <ul class="sidebar-list">
+      <li class="sidebar-item">
+        <a class="sidebar-link" routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="onNavigate()">
+          <i class="fas fa-home" aria-hidden="true"></i>
+          <span>Accueil</span>
+        </a>
+      </li>
+
+      @if (isLoggedIn() && isAdmin()) {
+        <li class="sidebar-section-label">Administration</li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" routerLink="/books" routerLinkActive="active" (click)="onNavigate()">
+            <i class="fas fa-book" aria-hidden="true"></i>
+            <span>Livres</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" routerLink="/books/create" routerLinkActive="active" (click)="onNavigate()">
+            <i class="fas fa-plus" aria-hidden="true"></i>
+            <span>Ajouter un livre</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" routerLink="/users" routerLinkActive="active" (click)="onNavigate()">
+            <i class="fas fa-users" aria-hidden="true"></i>
+            <span>Utilisateurs</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" routerLink="/users/register" routerLinkActive="active" (click)="onNavigate()">
+            <i class="fas fa-user-plus" aria-hidden="true"></i>
+            <span>Inscription</span>
+          </a>
+        </li>
+      }
+
+      @if (isLoggedIn()) {
+        <li class="sidebar-section-label">Bibliothèque</li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" routerLink="/borrow" routerLinkActive="active" (click)="onNavigate()">
+            <i class="fas fa-hand-holding-heart" aria-hidden="true"></i>
+            <span>Emprunter</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" routerLink="/borrow/return" routerLinkActive="active" (click)="onNavigate()">
+            <i class="fas fa-undo-alt" aria-hidden="true"></i>
+            <span>Rendre</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" routerLink="/reservations" routerLinkActive="active" (click)="onNavigate()">
+            <i class="fas fa-calendar-check" aria-hidden="true"></i>
+            <span>Réservations</span>
+          </a>
+        </li>
+      }
+    </ul>
+  </nav>
+</aside>
+
+@if (isOpen) {
+  <button class="sidebar-backdrop" type="button" aria-label="Fermer le menu" (click)="onNavigate()"></button>
+}

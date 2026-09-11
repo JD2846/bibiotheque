@@ -1,103 +1,39 @@
-<nav class="navbar navbar-expand-lg navbar-dark app-navbar">
-  <div class="container">
-    <a class="navbar-brand" routerLink="/home">
-      <i class="fas fa-book-open brand-icon" aria-hidden="true"></i>
-      <span class="brand-text">Bibliothèque</span>
+<nav class="app-navbar">
+  <button
+    class="menu-toggle"
+    type="button"
+    (click)="onMenuToggle()"
+    aria-label="Ouvrir/fermer le menu de navigation">
+    <i class="fas fa-bars" aria-hidden="true"></i>
+  </button>
+
+  <a class="navbar-brand" routerLink="/home">
+    <i class="fas fa-book-open brand-icon" aria-hidden="true"></i>
+    <span class="brand-text">Bibliothèque</span>
+  </a>
+
+  <div class="navbar-spacer"></div>
+
+  @if (!isLoggedIn()) {
+    <a class="profile-link" routerLink="/login">
+      <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+      <span>Connexion</span>
     </a>
+  }
 
-    <button
-      class="navbar-toggler"
-      type="button"
-      (click)="toggleMenu()"
-      [attr.aria-expanded]="!isCollapsed"
-      aria-controls="navbarNav"
-      aria-label="Ouvrir le menu">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" [ngClass]="{ show: !isCollapsed }" id="navbarNav">
-      <ul class="navbar-nav me-auto">
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/home" routerLinkActive="active" (click)="closeMenu()">
-            <i class="fas fa-home" aria-hidden="true"></i>
-            <span>Accueil</span>
-          </a>
-        </li>
-
-        @if (isLoggedIn() && isAdmin()) {
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/books" routerLinkActive="active" (click)="closeMenu()">
-              <i class="fas fa-book" aria-hidden="true"></i>
-              <span>Livres</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/books/create" routerLinkActive="active" (click)="closeMenu()">
-              <i class="fas fa-plus" aria-hidden="true"></i>
-              <span>Ajouter</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/users" routerLinkActive="active" (click)="closeMenu()">
-              <i class="fas fa-users" aria-hidden="true"></i>
-              <span>Utilisateurs</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/users/register" routerLinkActive="active" (click)="closeMenu()">
-              <i class="fas fa-user-plus" aria-hidden="true"></i>
-              <span>Inscription</span>
-            </a>
-          </li>
-        }
-
-        @if (isLoggedIn()) {
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/borrow" routerLinkActive="active" (click)="closeMenu()">
-              <i class="fas fa-hand-holding-heart" aria-hidden="true"></i>
-              <span>Emprunter</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/borrow/return" routerLinkActive="active" (click)="closeMenu()">
-              <i class="fas fa-undo-alt" aria-hidden="true"></i>
-              <span>Rendre</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/reservations" routerLinkActive="active" (click)="closeMenu()">
-              <i class="fas fa-calendar-check" aria-hidden="true"></i>
-              <span>Réservations</span>
-            </a>
-          </li>
-        }
-      </ul>
-
-      <ul class="navbar-nav profile-nav">
-        @if (!isLoggedIn()) {
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/login" routerLinkActive="active" (click)="closeMenu()">
-              <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
-              <span>Connexion</span>
-            </a>
-          </li>
-        }
-
-        @if (isLoggedIn()) {
-          <li class="nav-item dropdown">
-            <button class="nav-link dropdown-toggle profile-button" type="button" (click)="toggleDropdown($event)">
-              <i class="fas fa-user-circle" aria-hidden="true"></i>
-              <span>{{ getUserName() }}</span>
-            </button>
-            <div class="dropdown-menu dropdown-menu-end" [ngClass]="{ show: isDropdownOpen }">
-              <button class="dropdown-item text-danger" type="button" (click)="logout()">
-                <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
-                <span>Déconnexion</span>
-              </button>
-            </div>
-          </li>
-        }
-      </ul>
+  @if (isLoggedIn()) {
+    <div class="dropdown profile-dropdown">
+      <button class="profile-button" type="button" (click)="toggleDropdown($event)">
+        <span class="profile-avatar">{{ getUserInitial() }}</span>
+        <span class="profile-name">{{ getUserName() }}</span>
+        <i class="fas fa-chevron-down profile-caret" aria-hidden="true"></i>
+      </button>
+      <div class="dropdown-menu dropdown-menu-end" [ngClass]="{ show: isDropdownOpen }">
+        <button class="dropdown-item text-danger" type="button" (click)="logout()">
+          <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+          <span>Déconnexion</span>
+        </button>
+      </div>
     </div>
-  </div>
+  }
 </nav>

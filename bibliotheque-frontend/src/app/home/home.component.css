@@ -2,7 +2,7 @@
   padding: var(--spacing-xxl) 0;
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
   color: var(--text-light);
-  min-height: calc(100vh - 140px);
+  min-height: calc(100vh - var(--navbar-height, 56px));
   display: flex;
   align-items: center;
 }
