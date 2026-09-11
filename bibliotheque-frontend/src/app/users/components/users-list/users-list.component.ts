@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 import { Users } from '../../../_model/users';
@@ -18,24 +18,18 @@ export class UsersListComponent implements OnInit {
   error = '';
 
   constructor(private usersService: UsersService,
-    private router: Router) { }
+    private router: Router,
+    private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.getUsers();
-    // this.users = [{
-    //   "userId": 1,
-    //   "name": "tarun",
-    //   "username": "tarungowda",
-    //   "role": "STUDENT",
-    //   "password": "sdklfjlakdsf"
-    // }]
   }
 
   getUsers() {
     this.loading = true;
     this.error = '';
     this.usersService.getUsers().pipe(
-      finalize(() => this.loading = false)
+      finalize(() => { this.loading = false; this.cdr.detectChanges(); })
     ).subscribe({
       next: data => this.users = data,
       error: error => this.error = error.message
@@ -53,7 +47,7 @@ export class UsersListComponent implements OnInit {
   deleteUser(userId: number) {
     this.usersService.deleteUser(userId).subscribe({
       next: () => this.getUsers(),
-      error: error => this.error = error.message
+      error: error => { this.error = error.message; this.cdr.detectChanges(); }
     });
   }
 

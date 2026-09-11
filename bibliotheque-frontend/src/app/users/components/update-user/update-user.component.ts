@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Users } from '../../../_model/users';
 import { UsersService } from '../../services/users.service';
@@ -17,12 +17,14 @@ export class UpdateUserComponent implements OnInit {
   user: Users = new Users();
   constructor(private usersService: UsersService,
     private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router,
+    private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.userId = this.route.snapshot.params['userId'];
     this.usersService.getUserById(this.userId).subscribe(data => {
       this.user = data;
+      this.cdr.detectChanges();
     })
   }
 

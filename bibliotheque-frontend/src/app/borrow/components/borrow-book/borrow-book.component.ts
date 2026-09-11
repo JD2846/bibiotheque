@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { finalize } from 'rxjs/operators';
 import { Books } from '../../../_model/books';
 import { Borrow } from '../../../_model/borrow';
@@ -23,6 +23,7 @@ export class BorrowBookComponent implements OnInit {
     private booksService: BooksService,
     private userAuthService: UserAuthService,
     private borrowService: BorrowService,
+    private cdr: ChangeDetectorRef,
   ) { }
 
   userId = this.userAuthService.getUserId();
@@ -33,8 +34,8 @@ export class BorrowBookComponent implements OnInit {
 
   private getBooks() {
     this.booksService.getBooks().subscribe({
-      next: data => this.books = data,
-      error: error => this.error = error.message
+      next: data => { this.books = data; this.cdr.detectChanges(); },
+      error: error => { this.error = error.message; this.cdr.detectChanges(); }
     });
   }
 
@@ -45,7 +46,7 @@ export class BorrowBookComponent implements OnInit {
     this.error = '';
     this.success = '';
     this.borrowService.borrowBook(bookId, this.userId).pipe(
-      finalize(() => this.loading = false)
+      finalize(() => { this.loading = false; this.cdr.detectChanges(); })
     ).subscribe({
       next: () => this.success = 'Livre emprunte avec succes.',
       error: error => this.error = error.message

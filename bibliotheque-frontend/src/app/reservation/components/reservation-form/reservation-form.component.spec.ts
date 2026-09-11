@@ -1,3 +1,4 @@
+import { ChangeDetectorRef } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { of, throwError } from 'rxjs';
 import { ReservationFormComponent } from './reservation-form.component';
@@ -36,7 +37,8 @@ describe('ReservationFormComponent', () => {
       reservationService,
       booksService,
       usersService,
-      userAuthService
+      userAuthService,
+      jasmine.createSpyObj('ChangeDetectorRef', ['detectChanges']) as ChangeDetectorRef
     );
     component.ngOnInit();
   });

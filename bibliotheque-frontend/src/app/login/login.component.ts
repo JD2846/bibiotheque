@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { NgForm, FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserAuthService } from '../_service/user-auth.service';
@@ -18,7 +18,8 @@ export class LoginComponent implements OnInit {
 
   constructor(private userService: UsersService,
     private userAuthSerivce: UserAuthService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
@@ -51,9 +52,11 @@ export class LoginComponent implements OnInit {
         this.errorMessage = error?.error?.message
           || error?.message
           || 'Identifiants invalides. Veuillez réessayer.';
+        this.cdr.detectChanges();
       },
       () => {
         this.loading = false;
+        this.cdr.detectChanges();
       }
     );
   }

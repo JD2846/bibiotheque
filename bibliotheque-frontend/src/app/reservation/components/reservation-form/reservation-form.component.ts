@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { Books } from '../../../_model/books';
@@ -30,7 +30,8 @@ export class ReservationFormComponent implements OnInit {
     private reservationService: ReservationService,
     private booksService: BooksService,
     private usersService: UsersService,
-    private userAuthService: UserAuthService
+    private userAuthService: UserAuthService,
+    private cdr: ChangeDetectorRef
   ) {
     this.reservationForm = this.formBuilder.group({
       bookId: ['', Validators.required],
@@ -67,7 +68,7 @@ export class ReservationFormComponent implements OnInit {
     this.serverError = '';
     this.successMessage = '';
     this.reservationService.createReservation(this.reservationForm.value).pipe(
-      finalize(() => this.loading = false)
+      finalize(() => { this.loading = false; this.cdr.detectChanges(); })
     ).subscribe({
       next: () => {
         this.reservationForm.reset();
@@ -80,15 +81,15 @@ export class ReservationFormComponent implements OnInit {
 
   private loadBooks(): void {
     this.booksService.getBooks().subscribe({
-      next: books => this.books = books,
-      error: error => this.serverError = error.message
+      next: books => { this.books = books; this.cdr.detectChanges(); },
+      error: error => { this.serverError = error.message; this.cdr.detectChanges(); }
     });
   }
 
   private loadUsers(): void {
     this.usersService.getUsers().subscribe({
-      next: users => this.users = users,
-      error: error => this.serverError = error.message
+      next: users => { this.users = users; this.cdr.detectChanges(); },
+      error: error => { this.serverError = error.message; this.cdr.detectChanges(); }
     });
   }
 }

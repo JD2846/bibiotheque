@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Books } from '../../../_model/books';
 import { Borrow } from '../../../_model/borrow';
@@ -23,26 +23,26 @@ export class UserDetailsComponent implements OnInit {
   constructor(private route: ActivatedRoute,
     private bookService: BooksService,
     private borrowService: BorrowService,
-    public userService: UsersService
+    public userService: UsersService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.params['userId'];
-    // console.log(this.id);
     this.user = new Users();
     this.userService.getUserById(this.id).subscribe( data => {
       this.user = data;
-      console.log(data);
+      this.cdr.detectChanges();
     })
 
     this.getBorrowedByUser(this.id);
-    
+
   }
 
   private getBorrowedByUser(userId: number) {
     this.borrowService.getBooksBorrowedByUser(userId).subscribe(data => {
       this.borrow = data;
-      console.log(data);
+      this.cdr.detectChanges();
     });
   }
 

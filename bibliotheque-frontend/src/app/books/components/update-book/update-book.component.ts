@@ -1,6 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Observable } from 'rxjs';
 import { Books } from '../../../_model/books';
 import { BooksService } from '../../services/books.service';
 import { FormsModule } from '@angular/forms';
@@ -18,12 +17,14 @@ export class UpdateBookComponent implements OnInit {
   book: Books = new Books();
   constructor(private booksService: BooksService,
     private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router,
+    private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.bookId = this.route.snapshot.params['bookId'];
     this.booksService.getBookById(this.bookId).subscribe(data => {
       this.book = data;
+      this.cdr.detectChanges();
     })
   }
 

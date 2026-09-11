@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 import { Books } from '../../../_model/books'
@@ -18,7 +18,8 @@ export class BooksListComponent implements OnInit {
   error = '';
 
   constructor(private booksService: BooksService,
-    private router: Router) { }
+    private router: Router,
+    private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.getBooks();
@@ -28,7 +29,7 @@ export class BooksListComponent implements OnInit {
     this.loading = true;
     this.error = '';
     this.booksService.getBooks().pipe(
-      finalize(() => this.loading = false)
+      finalize(() => { this.loading = false; this.cdr.detectChanges(); })
     ).subscribe({
       next: data => this.books = data,
       error: error => this.error = error.message
@@ -42,7 +43,7 @@ export class BooksListComponent implements OnInit {
   deleteBook(bookId: number) {
     this.booksService.deleteBook(bookId).subscribe({
       next: () => this.getBooks(),
-      error: error => this.error = error.message
+      error: error => { this.error = error.message; this.cdr.detectChanges(); }
     });
   }
 
