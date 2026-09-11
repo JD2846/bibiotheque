@@ -13,10 +13,16 @@
 }
 
 .forbidden-icon {
-  font-size: 3.5rem;
+  align-items: center;
+  background: #fee2e2;
+  border-radius: 999px;
   color: var(--danger);
-  opacity: 0.85;
-  margin-bottom: var(--spacing-sm);
+  display: flex;
+  font-size: 2rem;
+  height: 72px;
+  justify-content: center;
+  margin: 0 auto var(--spacing-md);
+  width: 72px;
 }
 
 .forbidden-title {

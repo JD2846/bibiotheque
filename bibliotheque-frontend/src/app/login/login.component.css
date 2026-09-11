@@ -4,6 +4,9 @@
   align-items: center;
   justify-content: center;
   padding: var(--spacing-md);
+  background:
+    radial-gradient(720px 420px at 15% 8%, var(--accent-soft), transparent 65%),
+    radial-gradient(560px 360px at 88% 92%, var(--accent-soft), transparent 60%);
 }
 
 .login-card {
@@ -12,7 +15,7 @@
   margin: 0 auto;
   padding: var(--spacing-xl);
   border: 1px solid var(--border);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-lg);
 }
 
 .login-header {
@@ -21,9 +24,16 @@
 }
 
 .login-logo {
-  font-size: 2.5rem;
+  align-items: center;
+  background: var(--accent-soft);
+  border-radius: 999px;
   color: var(--secondary);
-  margin-bottom: var(--spacing-sm);
+  display: flex;
+  font-size: 1.6rem;
+  height: 56px;
+  justify-content: center;
+  margin: 0 auto var(--spacing-md);
+  width: 56px;
 }
 
 .login-title {

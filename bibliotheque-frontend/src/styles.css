@@ -4,39 +4,41 @@
    1. DESIGN TOKENS (Variables CSS)
 ============================================================ */
 :root {
-    /* Couleurs principales */
-    --primary: #2c3e50;          /* Bleu foncé - Navigation */
-    --primary-light: #34495e;     /* Bleu moyen - Hover */
-    --secondary: #3498db;         /* Bleu clair - Boutons */
-    --secondary-hover: #2980b9;   /* Bleu plus foncé - Boutons hover */
-    --accent: #1abc9c;            /* Turquoise - Accents */
-    --success: #27ae60;           /* Vert - Statut disponible */
-    --warning: #f39c12;           /* Orange - Statut en attente */
-    --danger: #e74c3c;            /* Rouge - Statut expiré, suppression */
-    --info: #3498db;              /* Bleu - Informations */
+    /* Couleurs principales — palette neutre + accent unique (indigo) */
+    --primary: #18181b;           /* Neutre quasi-noir - Navigation */
+    --primary-light: #27272a;     /* Neutre - Hover navigation */
+    --secondary: #4f46e5;         /* Indigo - seule couleur d'action */
+    --secondary-hover: #4338ca;   /* Indigo foncé - hover */
+    --accent: #4f46e5;            /* Alias : accent = couleur d'action unique */
+    --accent-light: #818cf8;      /* Variante claire de l'accent - lisible sur fond sombre */
+    --accent-soft: #eef2ff;       /* Fond doux pour halos/badges sur l'accent */
+    --success: #16a34a;           /* Vert - Statut disponible */
+    --warning: #d97706;           /* Ambre - Statut en attente */
+    --danger: #dc2626;            /* Rouge - Statut expiré, suppression */
+    --info: #4f46e5;              /* Informations (alignées sur l'accent) */
 
     /* Couleurs de fond */
-    --bg-body: #f8f9fa;           /* Fond général */
+    --bg-body: #fafafa;           /* Fond général */
     --bg-card: #ffffff;           /* Fond des cartes */
-    --bg-muted: #eef3f7;          /* Fond atténué */
-    --bg-dark: #2c3e50;           /* Fond sombre */
+    --bg-muted: #f4f4f5;          /* Fond atténué */
+    --bg-dark: #18181b;           /* Fond sombre */
 
     /* Couleurs de texte */
-    --text-primary: #243342;      /* Texte principal */
-    --text-secondary: #62717d;    /* Texte secondaire */
+    --text-primary: #18181b;      /* Texte principal */
+    --text-secondary: #71717a;    /* Texte secondaire */
     --text-light: #ffffff;        /* Texte clair */
 
     /* Bordures */
-    --border: #dfe7ee;
+    --border: #e4e4e7;
 
-    /* Ombres */
-    --shadow-sm: 0 2px 4px rgba(16, 24, 40, 0.06);
-    --shadow-md: 0 8px 20px rgba(16, 24, 40, 0.1);
-    --shadow-lg: 0 16px 40px rgba(16, 24, 40, 0.14);
+    /* Ombres — douces et superposées, plus subtiles que des ombres uniques */
+    --shadow-sm: 0 1px 2px rgba(24, 24, 27, 0.04), 0 1px 3px rgba(24, 24, 27, 0.06);
+    --shadow-md: 0 4px 10px rgba(24, 24, 27, 0.06), 0 8px 24px rgba(24, 24, 27, 0.08);
+    --shadow-lg: 0 12px 28px rgba(24, 24, 27, 0.10), 0 20px 48px rgba(24, 24, 27, 0.12);
 
-    /* Rayons */
-    --border-radius: 8px;
-    --border-radius-lg: 12px;
+    /* Rayons — plus généreux pour un rendu plus doux */
+    --border-radius: 10px;
+    --border-radius-lg: 14px;
 
     /* Espacements harmonieux */
     --spacing-xs: 4px;
@@ -47,7 +49,7 @@
     --spacing-xxl: 48px;
 
     /* Typographie */
-    --font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
 }
 
 /* ============================================================
@@ -204,8 +206,8 @@ p {
 }
 
 .btn-success:hover {
-    background: #219a52;
-    border-color: #219a52;
+    background: #15803d;
+    border-color: #15803d;
     color: var(--text-light);
 }
 
@@ -216,8 +218,8 @@ p {
 }
 
 .btn-danger:hover {
-    background: #c0392b;
-    border-color: #c0392b;
+    background: #b91c1c;
+    border-color: #b91c1c;
     color: var(--text-light);
 }
 
@@ -228,8 +230,8 @@ p {
 }
 
 .btn-warning:hover {
-    background: #d68910;
-    border-color: #d68910;
+    background: #b45309;
+    border-color: #b45309;
     color: #1f2933;
 }
 
@@ -272,7 +274,7 @@ p {
 .form-control:focus,
 .form-select:focus {
     border-color: var(--secondary);
-    box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.2);
+    box-shadow: 0 0 0 0.2rem rgba(79, 70, 229, 0.18);
     outline: none;
 }
 
@@ -323,11 +325,11 @@ p {
 }
 
 .table tbody tr:hover {
-    background: rgba(52, 152, 219, 0.05);
+    background: rgba(79, 70, 229, 0.045);
 }
 
 .table-striped > tbody > tr:nth-of-type(odd) > * {
-    --bs-table-accent-bg: rgba(52, 152, 219, 0.04);
+    --bs-table-accent-bg: rgba(24, 24, 27, 0.025);
 }
 
 /* ============================================================
@@ -343,16 +345,18 @@ p {
     letter-spacing: 0.02em;
 }
 
+/* Badges en style "soft" (fond teinté + texte coloré) plutôt qu'aplat plein,
+   plus lisible et plus proche des conventions UI actuelles (statuts/chips). */
 .bg-success,
-.badge-success { background: var(--success) !important; color: var(--text-light); }
+.badge-success { background: #dcfce7 !important; color: #166534; }
 .bg-warning,
-.badge-warning { background: var(--warning) !important; color: #1f2933; }
+.badge-warning { background: #fef3c7 !important; color: #92400e; }
 .bg-danger,
-.badge-danger { background: var(--danger) !important; color: var(--text-light); }
+.badge-danger { background: #fee2e2 !important; color: #991b1b; }
 .bg-info,
-.badge-info { background: var(--info) !important; color: var(--text-light); }
+.badge-info { background: var(--accent-soft) !important; color: var(--secondary-hover); }
 .bg-secondary,
-.badge-secondary { background: var(--text-secondary) !important; color: var(--text-light); }
+.badge-secondary { background: var(--bg-muted) !important; color: var(--text-secondary); }
 
 /* ============================================================
    9. ALERTES
