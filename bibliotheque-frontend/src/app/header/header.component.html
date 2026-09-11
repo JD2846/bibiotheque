@@ -24,7 +24,7 @@
           </a>
         </li>
 
-        <ng-container *ngIf="isLoggedIn() && isAdmin()">
+        @if (isLoggedIn() && isAdmin()) {
           <li class="nav-item">
             <a class="nav-link" routerLink="/books" routerLinkActive="active" (click)="closeMenu()">
               <i class="fas fa-book" aria-hidden="true"></i>
@@ -49,9 +49,9 @@
               <span>Inscription</span>
             </a>
           </li>
-        </ng-container>
+        }
 
-        <ng-container *ngIf="isLoggedIn()">
+        @if (isLoggedIn()) {
           <li class="nav-item">
             <a class="nav-link" routerLink="/borrow" routerLinkActive="active" (click)="closeMenu()">
               <i class="fas fa-hand-holding-heart" aria-hidden="true"></i>
@@ -70,29 +70,33 @@
               <span>Réservations</span>
             </a>
           </li>
-        </ng-container>
+        }
       </ul>
 
       <ul class="navbar-nav profile-nav">
-        <li class="nav-item" *ngIf="!isLoggedIn()">
-          <a class="nav-link" routerLink="/login" routerLinkActive="active" (click)="closeMenu()">
-            <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
-            <span>Connexion</span>
-          </a>
-        </li>
+        @if (!isLoggedIn()) {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/login" routerLinkActive="active" (click)="closeMenu()">
+              <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+              <span>Connexion</span>
+            </a>
+          </li>
+        }
 
-        <li class="nav-item dropdown" *ngIf="isLoggedIn()">
-          <button class="nav-link dropdown-toggle profile-button" type="button" (click)="toggleDropdown($event)">
-            <i class="fas fa-user-circle" aria-hidden="true"></i>
-            <span>{{ getUserName() }}</span>
-          </button>
-          <div class="dropdown-menu dropdown-menu-end" [ngClass]="{ show: isDropdownOpen }">
-            <button class="dropdown-item text-danger" type="button" (click)="logout()">
-              <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
-              <span>Déconnexion</span>
+        @if (isLoggedIn()) {
+          <li class="nav-item dropdown">
+            <button class="nav-link dropdown-toggle profile-button" type="button" (click)="toggleDropdown($event)">
+              <i class="fas fa-user-circle" aria-hidden="true"></i>
+              <span>{{ getUserName() }}</span>
             </button>
-          </div>
-        </li>
+            <div class="dropdown-menu dropdown-menu-end" [ngClass]="{ show: isDropdownOpen }">
+              <button class="dropdown-item text-danger" type="button" (click)="logout()">
+                <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                <span>Déconnexion</span>
+              </button>
+            </div>
+          </li>
+        }
       </ul>
     </div>
   </div>

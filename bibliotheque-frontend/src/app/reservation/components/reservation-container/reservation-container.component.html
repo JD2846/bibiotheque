@@ -20,7 +20,9 @@
           class="form-select filter-select"
           [value]="selectedStatus"
           (change)="onStatusChange($any($event.target).value)">
-          <option *ngFor="let status of statusList" [value]="status">{{ status }}</option>
+          @for (status of statusList; track status) {
+            <option [value]="status">{{ status }}</option>
+          }
         </select>
       </div>
     </div>

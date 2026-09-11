@@ -21,10 +21,12 @@
           [class.is-invalid]="username.invalid && username.touched"
           id="loginUsername"
           placeholder="Entrez votre nom d'utilisateur">
-        <div *ngIf="username.invalid && username.touched" class="invalid-feedback">
-          <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
-          Le nom d'utilisateur est obligatoire.
-        </div>
+        @if (username.invalid && username.touched) {
+          <div class="invalid-feedback">
+            <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+            Le nom d'utilisateur est obligatoire.
+          </div>
+        }
       </div>
 
       <div class="form-group mb-3">
@@ -41,21 +43,31 @@
           [class.is-invalid]="password.invalid && password.touched"
           id="loginPassword"
           placeholder="Entrez votre mot de passe">
-        <div *ngIf="password.invalid && password.touched" class="invalid-feedback">
-          <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
-          Le mot de passe est obligatoire.
-        </div>
+        @if (password.invalid && password.touched) {
+          <div class="invalid-feedback">
+            <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+            Le mot de passe est obligatoire.
+          </div>
+        }
       </div>
 
-      <div *ngIf="errorMessage" class="alert alert-danger mb-3">
-        <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
-        {{ errorMessage }}
-      </div>
+      @if (errorMessage) {
+        <div class="alert alert-danger mb-3">
+          <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+          {{ errorMessage }}
+        </div>
+      }
 
       <button type="submit" class="btn btn-primary w-100 login-btn" [disabled]="loading">
-        <span *ngIf="loading" class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-        <span *ngIf="!loading"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Se connecter</span>
-        <span *ngIf="loading">Connexion...</span>
+        @if (loading) {
+          <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+        }
+        @if (!loading) {
+          <span><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Se connecter</span>
+        }
+        @if (loading) {
+          <span>Connexion...</span>
+        }
       </button>
     </form>
   </div>

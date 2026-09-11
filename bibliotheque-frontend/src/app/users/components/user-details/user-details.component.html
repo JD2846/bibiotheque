@@ -4,27 +4,33 @@
     <p class="page-subtitle">Suivi des emprunts de cet utilisateur.</p>
   </div>
 
-  <div *ngIf="!borrow || borrow.length === 0" class="empty-state">
-    <i class="fas fa-inbox empty-icon" aria-hidden="true"></i>
-    Aucun emprunt enregistré pour cet utilisateur.
-  </div>
+  @if (!borrow || borrow.length === 0) {
+    <div class="empty-state">
+      <i class="fas fa-inbox empty-icon" aria-hidden="true"></i>
+      Aucun emprunt enregistré pour cet utilisateur.
+    </div>
+  }
 
-  <div *ngIf="borrow && borrow.length > 0" class="table-container">
-    <table class="table table-striped responsive-table-card">
-      <thead>
-        <tr>
-          <th>ID Livre</th>
-          <th>Date emprunt</th>
-          <th>Date retour</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let borrower of borrow">
-          <td data-label="ID Livre">{{ borrower.bookId }}</td>
-          <td data-label="Date emprunt">{{ borrower.issueDate }}</td>
-          <td data-label="Date retour">{{ borrower.returnDate || 'Livre non rendu' }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  @if (borrow && borrow.length > 0) {
+    <div class="table-container">
+      <table class="table table-striped responsive-table-card">
+        <thead>
+          <tr>
+            <th>ID Livre</th>
+            <th>Date emprunt</th>
+            <th>Date retour</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (borrower of borrow; track borrower) {
+            <tr>
+              <td data-label="ID Livre">{{ borrower.bookId }}</td>
+              <td data-label="Date emprunt">{{ borrower.issueDate }}</td>
+              <td data-label="Date retour">{{ borrower.returnDate || 'Livre non rendu' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
 </main>
