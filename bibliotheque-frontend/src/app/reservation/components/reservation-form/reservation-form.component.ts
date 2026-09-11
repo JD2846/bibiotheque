@@ -8,9 +8,10 @@ import { UsersService } from '../../../users/services/users.service';
 import { ReservationService } from '../../services/reservation.service';
 
 @Component({
-  selector: 'app-reservation-form',
-  templateUrl: './reservation-form.component.html',
-  styleUrls: ['./reservation-form.component.css']
+    selector: 'app-reservation-form',
+    templateUrl: './reservation-form.component.html',
+    styleUrls: ['./reservation-form.component.css'],
+    standalone: false
 })
 export class ReservationFormComponent implements OnInit {
   @Output() reservationCreated = new EventEmitter<void>();

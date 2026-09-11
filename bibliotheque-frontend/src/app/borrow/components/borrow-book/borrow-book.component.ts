@@ -9,9 +9,10 @@ import { Users } from '../../../_model/users';
 import { UsersService } from '../../../users/services/users.service';
 
 @Component({
-  selector: 'app-borrow-book',
-  templateUrl: './borrow-book.component.html',
-  styleUrls: ['./borrow-book.component.css']
+    selector: 'app-borrow-book',
+    templateUrl: './borrow-book.component.html',
+    styleUrls: ['./borrow-book.component.css'],
+    standalone: false
 })
 export class BorrowBookComponent implements OnInit {
 

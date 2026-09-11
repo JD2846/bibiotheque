@@ -8,9 +8,10 @@ import { ReservationDataService } from '../../services/reservation-data.service'
 import { ReservationService } from '../../services/reservation.service';
 
 @Component({
-  selector: 'app-reservation-container',
-  templateUrl: './reservation-container.component.html',
-  styleUrls: ['./reservation-container.component.css']
+    selector: 'app-reservation-container',
+    templateUrl: './reservation-container.component.html',
+    styleUrls: ['./reservation-container.component.css'],
+    standalone: false
 })
 export class ReservationContainerComponent implements OnInit, OnDestroy {
   reservations: Reservation[] = [];

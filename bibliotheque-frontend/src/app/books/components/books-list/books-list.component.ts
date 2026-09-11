@@ -5,9 +5,10 @@ import { Books } from '../../../_model/books'
 import { BooksService } from '../../services/books.service';
 
 @Component({
-  selector: 'app-books-list',
-  templateUrl: './books-list.component.html',
-  styleUrls: ['./books-list.component.css']
+    selector: 'app-books-list',
+    templateUrl: './books-list.component.html',
+    styleUrls: ['./books-list.component.css'],
+    standalone: false
 })
 export class BooksListComponent implements OnInit {
 

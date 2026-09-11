@@ -3,9 +3,10 @@ import { Reservation } from '../../../_model/reservation.model';
 import { ReservationStatus, ReservationStatusColors, ReservationStatusLabels } from '../../../_model/reservation-status.enum';
 
 @Component({
-  selector: 'app-reservation-list',
-  templateUrl: './reservation-list.component.html',
-  styleUrls: ['./reservation-list.component.css']
+    selector: 'app-reservation-list',
+    templateUrl: './reservation-list.component.html',
+    styleUrls: ['./reservation-list.component.css'],
+    standalone: false
 })
 export class ReservationListComponent {
   @Input() reservations: Reservation[] = [];

@@ -7,9 +7,10 @@ import { BorrowService } from '../../services/borrow.service';
 import { UserAuthService } from '../../../_service/user-auth.service';
 
 @Component({
-  selector: 'app-return-book',
-  templateUrl: './return-book.component.html',
-  styleUrls: ['./return-book.component.css']
+    selector: 'app-return-book',
+    templateUrl: './return-book.component.html',
+    styleUrls: ['./return-book.component.css'],
+    standalone: false
 })
 export class ReturnBookComponent implements OnInit {
 

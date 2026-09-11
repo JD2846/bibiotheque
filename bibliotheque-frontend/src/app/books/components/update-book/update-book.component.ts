@@ -5,9 +5,10 @@ import { Books } from '../../../_model/books';
 import { BooksService } from '../../services/books.service';
 
 @Component({
-  selector: 'app-update-book',
-  templateUrl: './update-book.component.html',
-  styleUrls: ['./update-book.component.css']
+    selector: 'app-update-book',
+    templateUrl: './update-book.component.html',
+    styleUrls: ['./update-book.component.css'],
+    standalone: false
 })
 export class UpdateBookComponent implements OnInit {
 

@@ -66,10 +66,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "bibliotheque-frontend:build:production"
+              "buildTarget": "bibliotheque-frontend:build:production"
             },
             "development": {
-              "browserTarget": "bibliotheque-frontend:build:development"
+              "buildTarget": "bibliotheque-frontend:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -77,7 +77,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "bibliotheque-frontend:build"
+            "buildTarget": "bibliotheque-frontend:build"
           }
         },
         "test": {

@@ -4,9 +4,10 @@ import { Books } from '../../../_model/books';
 import { BooksService } from '../../services/books.service';
 
 @Component({
-  selector: 'app-create-book',
-  templateUrl: './create-book.component.html',
-  styleUrls: ['./create-book.component.css']
+    selector: 'app-create-book',
+    templateUrl: './create-book.component.html',
+    styleUrls: ['./create-book.component.css'],
+    standalone: false
 })
 export class CreateBookComponent implements OnInit {
 
