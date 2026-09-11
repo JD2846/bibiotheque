@@ -1,0 +1,41 @@
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Observable } from 'rxjs';
+import { Books } from '../../../_model/books';
+import { BooksService } from '../../services/books.service';
+import { FormsModule } from '@angular/forms';
+
+@Component({
+    selector: 'app-update-book',
+    templateUrl: './update-book.component.html',
+    styleUrls: ['./update-book.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [FormsModule, RouterLink]
+})
+export class UpdateBookComponent implements OnInit {
+
+  bookId: number;
+  book: Books = new Books();
+  constructor(private booksService: BooksService,
+    private route: ActivatedRoute,
+    private router: Router) { }
+
+  ngOnInit(): void {
+    this.bookId = this.route.snapshot.params['bookId'];
+    this.booksService.getBookById(this.bookId).subscribe(data => {
+      this.book = data;
+    })
+  }
+
+  onSubmit() {
+    this.booksService.updateBook(this.bookId, this.book).subscribe( data =>{
+        this.goToBooksList();
+    },
+    error => console.log(error));
+  }
+
+  goToBooksList() {
+    this.router.navigate(['/books']);
+  }
+
+}

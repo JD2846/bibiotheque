@@ -1,0 +1,38 @@
+<section class="reservation-page">
+  <div class="page-header">
+    <h2 class="page-title">
+      <i class="fas fa-calendar-check" aria-hidden="true"></i>
+      Gestion des réservations
+    </h2>
+    <p class="page-subtitle">Gérez les réservations de livres de la bibliothèque.</p>
+  </div>
+
+  <app-reservation-form (reservationCreated)="onReservationCreated()"></app-reservation-form>
+
+  <div class="filters-section">
+    <div class="filters-wrapper">
+      <div class="filter-group">
+        <label for="statusFilter" class="filter-label">
+          <i class="fas fa-filter" aria-hidden="true"></i> Statut
+        </label>
+        <select
+          id="statusFilter"
+          class="form-select filter-select"
+          [value]="selectedStatus"
+          (change)="onStatusChange($any($event.target).value)">
+          @for (status of statusList; track status) {
+            <option [value]="status">{{ status }}</option>
+          }
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <app-reservation-list
+    [reservations]="reservations"
+    [loading]="loading"
+    [error]="error"
+    (retry)="retry()"
+    (reservationCancelled)="onReservationCancelled($event)">
+  </app-reservation-list>
+</section>

@@ -1,32 +1,63 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, HostListener, ChangeDetectionStrategy } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { UserAuthService } from '../_service/user-auth.service';
-import { UsersService } from '../_service/users.service';
+import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+    selector: 'app-header',
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [RouterLink, NgClass, RouterLinkActive]
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
+  isCollapsed = true;
+  isDropdownOpen = false;
 
   constructor(
-    private userAuthService: UserAuthService, 
-    private router: Router,
-    public userService: UsersService,
+    private userAuthService: UserAuthService,
+    private router: Router
   ) { }
 
-  name = this.userAuthService.getName();
-  ngOnInit(): void {
+  toggleMenu(): void {
+    this.isCollapsed = !this.isCollapsed;
   }
 
-  public isLoggedIn() {
-    console.log(this.name);
-    return this.userAuthService.isLoggedIn();
+  closeMenu(): void {
+    this.isCollapsed = true;
+    this.isDropdownOpen = false;
   }
 
-  public logout() {
+  toggleDropdown(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.dropdown')) {
+      this.isDropdownOpen = false;
+    }
+  }
+
+  isLoggedIn(): boolean {
+    return !!this.userAuthService.isLoggedIn();
+  }
+
+  isAdmin(): boolean {
+    const roles: any[] = this.userAuthService.getRoles() || [];
+    return roles.some(role => role?.roleName === 'Admin' || role === 'Admin');
+  }
+
+  getUserName(): string {
+    return this.userAuthService.getName() || 'Utilisateur';
+  }
+
+  logout(): void {
     this.userAuthService.clear();
-    this.router.navigate(['/']);
+    this.closeMenu();
+    this.router.navigate(['/login']);
   }
 }

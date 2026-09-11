@@ -1,4 +1,115 @@
-.home {
-    margin-top: 200px;
-    font-size: 80px;
+.home-hero {
+  padding: var(--spacing-xxl) 0;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  color: var(--text-light);
+  min-height: calc(100vh - 140px);
+  display: flex;
+  align-items: center;
+}
+
+.hero-content {
+  max-width: 720px;
+  margin: 0 auto var(--spacing-xxl);
+}
+
+.hero-logo {
+  font-size: 3.5rem;
+  color: var(--accent-light);
+  margin-bottom: var(--spacing-md);
+}
+
+.hero-title {
+  color: var(--text-light);
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: var(--spacing-sm);
+}
+
+.hero-subtitle {
+  font-size: 1.15rem;
+  opacity: 0.9;
+  margin-bottom: var(--spacing-lg);
+}
+
+.hero-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero-actions .btn {
+  min-width: 180px;
+}
+
+.btn-outline {
+  color: var(--text-light);
+  border-color: var(--text-light);
+}
+
+.btn-outline:hover {
+  background: var(--text-light);
+  color: var(--primary);
+}
+
+/* Grille de fonctionnalités */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--spacing-lg);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  text-align: center;
+  padding: var(--spacing-xl) var(--spacing-lg);
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+
+.feature-icon {
+  font-size: 2.25rem;
+  color: var(--secondary);
+  margin-bottom: var(--spacing-md);
+}
+
+.feature-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: var(--spacing-xs);
+}
+
+.feature-text {
+  color: var(--text-secondary);
+  margin-bottom: 0;
+  font-size: 0.95rem;
+}
+
+/* Smartphones */
+@media (max-width: 480px) {
+  .home-hero {
+    padding: var(--spacing-xl) 0;
+  }
+
+  .hero-logo {
+    font-size: 2.75rem;
+  }
+
+  .hero-title {
+    font-size: 1.8rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+  }
 }

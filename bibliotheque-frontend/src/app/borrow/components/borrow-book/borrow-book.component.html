@@ -1,0 +1,58 @@
+<main class="page-shell">
+  <div class="page-header">
+    <h2 class="page-title"><i class="fas fa-hand-holding-heart" aria-hidden="true"></i> Emprunter un livre</h2>
+    <p class="page-subtitle">Choisissez un ouvrage disponible dans la bibliothèque.</p>
+  </div>
+
+  @if (loading) {
+    <div class="alert alert-info d-flex align-items-center gap-2">
+      <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+      Traitement de l'emprunt...
+    </div>
+  }
+  @if (error) {
+    <div class="alert alert-danger"><i class="fas fa-exclamation-circle" aria-hidden="true"></i> {{ error }}</div>
+  }
+  @if (success) {
+    <div class="alert alert-success"><i class="fas fa-check-circle" aria-hidden="true"></i> {{ success }}</div>
+  }
+  @if (!loading && !error && books.length === 0) {
+    <div class="empty-state">
+      <i class="fas fa-book empty-icon" aria-hidden="true"></i>
+      Aucun livre disponible.
+    </div>
+  }
+
+  @if (books.length > 0) {
+    <div class="table-container">
+      <table class="table table-striped responsive-table-card">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Auteur</th>
+            <th>Genre</th>
+            <th>Copies</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (book of books; track book) {
+            <tr>
+              <td data-label="ID">{{ book.bookId }}</td>
+              <td data-label="Nom">{{ book.bookName }}</td>
+              <td data-label="Auteur">{{ book.bookAuthor }}</td>
+              <td data-label="Genre">{{ book.bookGenre }}</td>
+              <td data-label="Copies"><span class="badge badge-info">{{ book.noOfCopies }}</span></td>
+              <td data-label="Action">
+                <button (click)="borrowBook(book.bookId)" class="btn btn-success btn-sm" [disabled]="loading">
+                  <i class="fas fa-hand-holding-heart" aria-hidden="true"></i> Emprunter
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</main>

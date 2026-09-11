@@ -1,0 +1,36 @@
+<main class="page-shell">
+  <div class="page-header">
+    <h2 class="page-title"><i class="fas fa-book" aria-hidden="true"></i> Historique de {{ book.bookName }}</h2>
+    <p class="page-subtitle">Suivi des emprunts liés à cet ouvrage.</p>
+  </div>
+
+  @if (!borrow || borrow.length === 0) {
+    <div class="empty-state">
+      <i class="fas fa-inbox empty-icon" aria-hidden="true"></i>
+      Aucun emprunt enregistré pour ce livre.
+    </div>
+  }
+
+  @if (borrow && borrow.length > 0) {
+    <div class="table-container">
+      <table class="table table-striped responsive-table-card">
+        <thead>
+          <tr>
+            <th>Utilisateur</th>
+            <th>Date emprunt</th>
+            <th>Date retour</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (borrower of borrow; track borrower) {
+            <tr>
+              <td data-label="Utilisateur">{{ borrower.userId }}</td>
+              <td data-label="Date emprunt">{{ borrower.issueDate }}</td>
+              <td data-label="Date retour">{{ borrower.returnDate || 'Livre non rendu' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</main>

@@ -1,20 +1,29 @@
 package com.ibizabroker.bibliotheque.entity;
 
+import jakarta.persistence.*;
 import lombok.Data;
 
-import javax.persistence.*;
-
-@Data
 @Entity
-@Table(name = "Books")
+@Data
+@Table(name = "books")
 public class Books {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "books_seq", sequenceName = "books_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "books_seq")
+    @Column(name = "book_id")
     Integer bookId;
+
+    @Column(name = "book_name")
     String bookName;
+
+    @Column(name = "book_author")
     String bookAuthor;
+
+    @Column(name = "book_genre")
     String bookGenre;
+
+    @Column(name = "no_of_copies")
     Integer noOfCopies;
 
     public void borrowBook() {

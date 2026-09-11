@@ -1,22 +1,21 @@
 package com.ibizabroker.bibliotheque.entity;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import org.springframework.stereotype.Component;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Component
-public class JsonDataSerializer extends JsonSerializer<Date> {
+public class JsonDataSerializer extends JsonSerializer<LocalDateTime> {
 
     @Override
-    public void serialize(Date date, JsonGenerator gen, SerializerProvider serializers) throws IOException {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        gen.writeString(simpleDateFormat.format(date));
+    public void serialize(LocalDateTime date, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        gen.writeString(date.format(formatter));
     }
 
 }

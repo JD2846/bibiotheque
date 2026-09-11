@@ -1,0 +1,122 @@
+.reservation-form {
+  margin-bottom: var(--spacing-lg);
+  border: 1px solid var(--border);
+}
+
+.reservation-form .card-header {
+  background: var(--bg-muted);
+  border-bottom: 1px solid var(--border);
+  padding: var(--spacing-md) var(--spacing-lg);
+}
+
+.card-title {
+  margin-bottom: 0;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.reservation-form .card-body {
+  padding: var(--spacing-lg);
+}
+
+/* Champs du formulaire */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: var(--spacing-md);
+  align-items: end;
+}
+
+.form-group {
+  margin-bottom: 0;
+}
+
+.form-group .form-label {
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.form-group .form-label i {
+  margin-right: var(--spacing-xs);
+  color: var(--secondary);
+}
+
+/* Actions */
+.form-actions {
+  display: flex;
+  align-items: center;
+  padding-bottom: 2px;
+}
+
+.btn-submit {
+  min-width: 130px;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-weight: 600;
+}
+
+.btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Alertes */
+.reservation-form .alert {
+  margin-top: var(--spacing-md);
+  margin-bottom: 0;
+}
+
+.reservation-form .alert i {
+  margin-right: var(--spacing-sm);
+}
+
+/* Smartphones */
+@media (max-width: 480px) {
+  .reservation-form .card-body {
+    padding: var(--spacing-md);
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+  }
+
+  .form-group {
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .form-actions {
+    padding-top: var(--spacing-sm);
+  }
+
+  .btn-submit {
+    width: 100%;
+    min-width: unset;
+  }
+}
+
+/* Tablettes */
+@media (min-width: 481px) and (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-sm);
+  }
+
+  .form-actions {
+    grid-column: 1 / -1;
+    padding-top: var(--spacing-sm);
+  }
+
+  .btn-submit {
+    width: 100%;
+  }
+}
+
+/* Petits écrans */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .form-row {
+    grid-template-columns: 1fr 1fr auto;
+    gap: var(--spacing-md);
+  }
+}
