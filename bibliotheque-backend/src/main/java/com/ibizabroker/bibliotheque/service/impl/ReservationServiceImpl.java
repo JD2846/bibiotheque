@@ -11,6 +11,8 @@ import com.ibizabroker.bibliotheque.entity.Users;
 import com.ibizabroker.bibliotheque.exceptions.ConflictException;
 import com.ibizabroker.bibliotheque.exceptions.NotFoundException;
 import com.ibizabroker.bibliotheque.service.IReservationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
@@ -22,6 +24,8 @@ import java.util.List;
 
 @Service
 public class ReservationServiceImpl implements IReservationService {
+
+    private static final Logger log = LoggerFactory.getLogger(ReservationServiceImpl.class);
 
     private static final List<ReservationStatus> ACTIVE_STATUSES =
             Arrays.asList(ReservationStatus.EN_ATTENTE, ReservationStatus.DISPONIBLE);
@@ -151,6 +155,8 @@ public class ReservationServiceImpl implements IReservationService {
         }
         Users currentUser = getCurrentUser();
         if (!currentUser.getUserId().equals(reservation.getUserId())) {
+            log.warn("RS-03 : acces refuse - l'utilisateur '{}' (id={}) a tente d'acceder a la reservation {} appartenant a l'utilisateur id={}",
+                    currentUser.getUsername(), currentUser.getUserId(), reservation.getReservationId(), reservation.getUserId());
             throw new AccessDeniedException("RS-03: Vous n'avez pas acces a cette reservation");
         }
     }
