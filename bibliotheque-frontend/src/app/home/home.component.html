@@ -75,26 +75,44 @@
       <div class="detail-stats">
         <div class="detail-card">
           <h3 class="detail-card-title"><i class="fas fa-calendar-check" aria-hidden="true"></i> Réservations par statut</h3>
-          <ul class="detail-list">
-            @for (item of reservationBreakdown; track item.label) {
-              <li class="detail-row">
-                <span class="badge" [ngClass]="item.colorClass">{{ item.label }}</span>
-                <span class="detail-count">{{ item.value }}</span>
-              </li>
-            }
-          </ul>
+          @if (reservationChartTotal === 0) {
+            <p class="chart-empty">Aucune réservation pour le moment.</p>
+          } @else {
+            <div class="donut-chart-wrapper">
+              <div class="donut-chart" [style.background]="reservationChartGradient">
+                <div class="donut-chart-hole">
+                  <span class="donut-chart-total">{{ reservationChartTotal }}</span>
+                  <span class="donut-chart-label">au total</span>
+                </div>
+              </div>
+              <ul class="chart-legend">
+                @for (item of reservationBreakdown; track item.label) {
+                  @if (item.value > 0) {
+                    <li class="legend-row">
+                      <span class="legend-dot" [style.background]="item.color"></span>
+                      <span class="legend-label">{{ item.label }}</span>
+                      <span class="legend-value">{{ item.value }}</span>
+                    </li>
+                  }
+                }
+              </ul>
+            </div>
+          }
         </div>
 
         <div class="detail-card">
           <h3 class="detail-card-title"><i class="fas fa-hand-holding-heart" aria-hidden="true"></i> Emprunts</h3>
-          <ul class="detail-list">
+          <div class="bar-chart">
             @for (item of borrowSummary; track item.label) {
-              <li class="detail-row">
-                <span class="badge" [ngClass]="item.colorClass">{{ item.label }}</span>
-                <span class="detail-count">{{ item.value }}</span>
-              </li>
+              <div class="bar-row">
+                <span class="bar-label">{{ item.label }}</span>
+                <div class="bar-track">
+                  <div class="bar-fill" [style.width.%]="barWidth(item.value)" [style.background]="item.color"></div>
+                </div>
+                <span class="bar-value">{{ item.value }}</span>
+              </div>
             }
-          </ul>
+          </div>
         </div>
       </div>
 

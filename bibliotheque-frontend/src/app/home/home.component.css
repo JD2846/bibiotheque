@@ -181,22 +181,139 @@
   color: var(--secondary);
 }
 
-.detail-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
-  list-style: none;
+.chart-empty {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  padding: var(--spacing-lg) 0;
+  text-align: center;
 }
 
-.detail-row {
+/* Donut chart (reservations par statut) - CSS pur via conic-gradient */
+.donut-chart-wrapper {
   align-items: center;
   display: flex;
-  justify-content: space-between;
+  gap: var(--spacing-lg);
 }
 
-.detail-count {
-  font-size: 1.1rem;
+.donut-chart {
+  border-radius: 50%;
+  flex-shrink: 0;
+  height: 140px;
+  position: relative;
+  width: 140px;
+}
+
+.donut-chart-hole {
+  align-items: center;
+  background: var(--bg-card);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  height: 88px;
+  justify-content: center;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 88px;
+}
+
+.donut-chart-total {
+  font-size: 1.4rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.donut-chart-label {
+  color: var(--text-secondary);
+  font-size: 0.68rem;
+}
+
+.chart-legend {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  list-style: none;
+  min-width: 0;
+}
+
+.legend-row {
+  align-items: center;
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.legend-dot {
+  border-radius: 50%;
+  flex-shrink: 0;
+  height: 10px;
+  width: 10px;
+}
+
+.legend-label {
+  color: var(--text-secondary);
+  flex: 1;
+  font-size: 0.85rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.legend-value {
+  font-size: 0.9rem;
   font-weight: 700;
+}
+
+/* Bar chart (emprunts) - CSS pur */
+.bar-chart {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding-top: var(--spacing-xs);
+}
+
+.bar-row {
+  align-items: center;
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.bar-label {
+  color: var(--text-secondary);
+  flex: 0 0 110px;
+  font-size: 0.85rem;
+}
+
+.bar-track {
+  background: var(--bg-muted);
+  border-radius: 999px;
+  flex: 1;
+  height: 12px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  border-radius: 999px;
+  height: 100%;
+  transition: width 0.4s ease;
+}
+
+.bar-value {
+  flex: 0 0 24px;
+  font-weight: 700;
+  text-align: right;
+}
+
+@media (max-width: 480px) {
+  .donut-chart-wrapper {
+    flex-direction: column;
+  }
+
+  .bar-label {
+    flex-basis: 90px;
+    font-size: 0.78rem;
+  }
 }
 
 .quick-actions-title {

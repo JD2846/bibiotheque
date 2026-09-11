@@ -22,7 +22,18 @@ interface BreakdownItem {
   label: string;
   value: number;
   colorClass: string;
+  color: string;
+  percent?: number;
 }
+
+// Couleurs "fortes" dediees aux graphiques (distinctes des tons "soft" des badges)
+const RESERVATION_CHART_COLORS: Record<ReservationStatus, string> = {
+  [ReservationStatus.EN_ATTENTE]: '#d97706',
+  [ReservationStatus.DISPONIBLE]: '#16a34a',
+  [ReservationStatus.ANNULEE]: '#a1a1aa',
+  [ReservationStatus.EXPIREE]: '#dc2626',
+  [ReservationStatus.HONOREE]: '#18181b'
+};
 
 @Component({
     selector: 'app-home',
@@ -36,7 +47,10 @@ export class HomeComponent implements OnInit {
   loading = true;
   stats: DashboardStat[] = [];
   reservationBreakdown: BreakdownItem[] = [];
+  reservationChartGradient = '';
+  reservationChartTotal = 0;
   borrowSummary: BreakdownItem[] = [];
+  borrowChartMax = 1;
 
   constructor(
     private booksService: BooksService,
@@ -111,27 +125,54 @@ export class HomeComponent implements OnInit {
 
       this.stats = stats;
 
-      // Répartition des réservations par statut
+      // Répartition des réservations par statut (donut chart)
       this.reservationBreakdown = Object.values(ReservationStatus).map(status => ({
         label: ReservationStatusLabels[status],
         value: reservations.filter(r => r.status === status).length,
-        colorClass: 'badge-' + ReservationStatusColors[status]
+        colorClass: 'badge-' + ReservationStatusColors[status],
+        color: RESERVATION_CHART_COLORS[status]
       }));
+      this.reservationChartTotal = reservations.length;
+      this.reservationChartGradient = this.buildConicGradient(this.reservationBreakdown, this.reservationChartTotal);
 
-      // Résumé des emprunts (en cours / en retard / rendus)
+      // Résumé des emprunts (dans les délais / en retard / rendus) - bar chart
       const now = new Date();
       const enRetard = borrows.filter(b => !b.returnDate && b.dueDate && new Date(b.dueDate) < now).length;
       const enCours = activeBorrows - enRetard;
       const rendus = borrows.filter(b => !!b.returnDate).length;
 
       this.borrowSummary = [
-        { label: 'Dans les délais', value: enCours, colorClass: 'badge-success' },
-        { label: 'En retard', value: enRetard, colorClass: 'badge-danger' },
-        { label: 'Rendus', value: rendus, colorClass: 'badge-secondary' }
+        { label: 'Dans les délais', value: enCours, colorClass: 'badge-success', color: '#16a34a' },
+        { label: 'En retard', value: enRetard, colorClass: 'badge-danger', color: '#dc2626' },
+        { label: 'Rendus', value: rendus, colorClass: 'badge-secondary', color: '#18181b' }
       ];
+      this.borrowChartMax = Math.max(1, ...this.borrowSummary.map(b => b.value));
 
       this.loading = false;
       this.cdr.detectChanges();
     });
+  }
+
+  barWidth(value: number): number {
+    return this.borrowChartMax > 0 ? Math.round((value / this.borrowChartMax) * 100) : 0;
+  }
+
+  /** Construit un donut chart en CSS pur via conic-gradient, sans dependance externe. */
+  private buildConicGradient(items: BreakdownItem[], total: number): string {
+    if (total === 0) {
+      return 'conic-gradient(var(--border) 0% 100%)';
+    }
+    let cursor = 0;
+    const stops: string[] = [];
+    for (const item of items) {
+      if (item.value === 0) {
+        continue;
+      }
+      const start = cursor;
+      const end = cursor + (item.value / total) * 100;
+      stops.push(`${item.color} ${start}% ${end}%`);
+      cursor = end;
+    }
+    return `conic-gradient(${stops.join(', ')})`;
   }
 }
