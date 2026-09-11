@@ -1,6 +1,10 @@
-<app-header (menuToggle)="toggleSidebar()"></app-header>
-<div class="app-body" [class.sidebar-collapsed]="sidebarCollapsed">
-  <app-sidebar [isOpen]="sidebarOpen" [collapsed]="sidebarCollapsed" (navigate)="closeSidebar()"></app-sidebar>
+@if (!hideChrome) {
+  <app-header (menuToggle)="toggleSidebar()"></app-header>
+}
+<div class="app-body" [class.sidebar-collapsed]="sidebarCollapsed" [class.no-chrome]="hideChrome">
+  @if (!hideChrome) {
+    <app-sidebar [isOpen]="sidebarOpen" [collapsed]="sidebarCollapsed" (navigate)="closeSidebar()"></app-sidebar>
+  }
   <main class="app-main">
     <router-outlet></router-outlet>
   </main>

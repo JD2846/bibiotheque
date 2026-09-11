@@ -72,6 +72,32 @@
         }
       </div>
 
+      <div class="detail-stats">
+        <div class="detail-card">
+          <h3 class="detail-card-title"><i class="fas fa-calendar-check" aria-hidden="true"></i> Réservations par statut</h3>
+          <ul class="detail-list">
+            @for (item of reservationBreakdown; track item.label) {
+              <li class="detail-row">
+                <span class="badge" [ngClass]="item.colorClass">{{ item.label }}</span>
+                <span class="detail-count">{{ item.value }}</span>
+              </li>
+            }
+          </ul>
+        </div>
+
+        <div class="detail-card">
+          <h3 class="detail-card-title"><i class="fas fa-hand-holding-heart" aria-hidden="true"></i> Emprunts</h3>
+          <ul class="detail-list">
+            @for (item of borrowSummary; track item.label) {
+              <li class="detail-row">
+                <span class="badge" [ngClass]="item.colorClass">{{ item.label }}</span>
+                <span class="detail-count">{{ item.value }}</span>
+              </li>
+            }
+          </ul>
+        </div>
+      </div>
+
       <div class="quick-actions">
         <h3 class="quick-actions-title">Actions rapides</h3>
         <div class="quick-actions-grid">

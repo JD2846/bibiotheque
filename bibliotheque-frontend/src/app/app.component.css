@@ -3,6 +3,10 @@
   min-height: calc(100vh - var(--navbar-height, 56px));
 }
 
+.app-body.no-chrome {
+  min-height: 100vh;
+}
+
 .app-main {
   flex: 1;
   min-width: 0;
@@ -17,5 +21,9 @@
 
   .app-body.sidebar-collapsed .app-main {
     margin-left: var(--sidebar-width-collapsed, 76px);
+  }
+
+  .app-body.no-chrome .app-main {
+    margin-left: 0;
   }
 }

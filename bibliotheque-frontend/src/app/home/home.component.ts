@@ -8,7 +8,7 @@ import { UsersService } from '../users/services/users.service';
 import { BorrowService } from '../borrow/services/borrow.service';
 import { ReservationService } from '../reservation/services/reservation.service';
 import { UserAuthService } from '../_service/user-auth.service';
-import { ReservationStatus } from '../_model/reservation-status.enum';
+import { ReservationStatus, ReservationStatusColors, ReservationStatusLabels } from '../_model/reservation-status.enum';
 
 interface DashboardStat {
   label: string;
@@ -16,6 +16,12 @@ interface DashboardStat {
   icon: string;
   colorClass: string;
   link?: string;
+}
+
+interface BreakdownItem {
+  label: string;
+  value: number;
+  colorClass: string;
 }
 
 @Component({
@@ -29,6 +35,8 @@ export class HomeComponent implements OnInit {
 
   loading = true;
   stats: DashboardStat[] = [];
+  reservationBreakdown: BreakdownItem[] = [];
+  borrowSummary: BreakdownItem[] = [];
 
   constructor(
     private booksService: BooksService,
@@ -102,6 +110,26 @@ export class HomeComponent implements OnInit {
       }
 
       this.stats = stats;
+
+      // Répartition des réservations par statut
+      this.reservationBreakdown = Object.values(ReservationStatus).map(status => ({
+        label: ReservationStatusLabels[status],
+        value: reservations.filter(r => r.status === status).length,
+        colorClass: 'badge-' + ReservationStatusColors[status]
+      }));
+
+      // Résumé des emprunts (en cours / en retard / rendus)
+      const now = new Date();
+      const enRetard = borrows.filter(b => !b.returnDate && b.dueDate && new Date(b.dueDate) < now).length;
+      const enCours = activeBorrows - enRetard;
+      const rendus = borrows.filter(b => !!b.returnDate).length;
+
+      this.borrowSummary = [
+        { label: 'Dans les délais', value: enCours, colorClass: 'badge-success' },
+        { label: 'En retard', value: enRetard, colorClass: 'badge-danger' },
+        { label: 'Rendus', value: rendus, colorClass: 'badge-secondary' }
+      ];
+
       this.loading = false;
       this.cdr.detectChanges();
     });
