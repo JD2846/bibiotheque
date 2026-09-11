@@ -28,7 +28,7 @@ export class ReservationService extends ApiBaseService {
   }
 
   cancelReservation(id: number): Observable<Reservation> {
-    return this.patch<Reservation>(`${this.endpoint}/${id}/cancel`, {});
+    return this.patch<Reservation>(`${this.endpoint}/${id}/annuler`, {});
   }
 
   deleteReservation(id: number): Observable<void> {

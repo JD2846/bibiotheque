@@ -32,7 +32,9 @@ export class ErrorHandlerService {
   }
 
   getErrorMessage(status: number, defaultMessage?: string): string {
-    if (defaultMessage && (status === 400 || status === 409 || status === 404)) {
+    // Statuts 0 (reseau) et 500 (erreur serveur) : on garde un message generique
+    // pour ne pas exposer de details techniques a l'utilisateur.
+    if (defaultMessage && status !== 0 && status !== 500) {
       return defaultMessage;
     }
 

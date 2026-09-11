@@ -24,7 +24,7 @@ public class JwtController {
                     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Authentification réussie — token JWT retourné"),
                     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Identifiants invalides")
             })
-    public JwtResponse createJwtToken(@RequestBody JwtRequest jwtRequest) throws Exception {
+    public JwtResponse createJwtToken(@RequestBody JwtRequest jwtRequest) {
         return jwtService.createJwtToken(jwtRequest);
     }
 }
