@@ -11,12 +11,16 @@ import com.ibizabroker.bibliotheque.entity.Users;
 import com.ibizabroker.bibliotheque.exceptions.ConflictException;
 import com.ibizabroker.bibliotheque.exceptions.NotFoundException;
 import com.ibizabroker.bibliotheque.service.impl.ReservationServiceImpl;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -61,6 +65,18 @@ class ReservationServiceUnitTest {
         request = new ReservationRequest();
         request.setBookId(1);
         request.setAdherentId(2);
+
+        // Identite par defaut : BIBLIOTHECAIRE (role Admin), pour ne pas casser les tests
+        // RG-0x existants avec les nouvelles regles RS-0x (ownership / RS-04) - voir
+        // ReservationSecurityUnitTest.java pour les tests dedies aux regles de securite.
+        SecurityContextHolder.getContext().setAuthentication(
+                new UsernamePasswordAuthenticationToken("bibliothecaire-test", null,
+                        List.of(new SimpleGrantedAuthority("ROLE_Admin"))));
+    }
+
+    @AfterEach
+    void clearSecurityContext() {
+        SecurityContextHolder.clearContext();
     }
 
     // ================================================================

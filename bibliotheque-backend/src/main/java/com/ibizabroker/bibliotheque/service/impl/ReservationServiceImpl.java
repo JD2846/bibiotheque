@@ -12,6 +12,9 @@ import com.ibizabroker.bibliotheque.exceptions.ConflictException;
 import com.ibizabroker.bibliotheque.exceptions.NotFoundException;
 import com.ibizabroker.bibliotheque.service.IReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -39,13 +42,18 @@ public class ReservationServiceImpl implements IReservationService {
             throw new IllegalArgumentException("bookId et adherentId sont obligatoires");
         }
 
+        // RS-04 : l'identite du createur vient du token ; un ADHERENT ne peut reserver
+        // que pour lui-meme, seul un BIBLIOTHECAIRE peut reserver au nom d'un autre adherent
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Integer ownerId = isBibliothecaire(auth) ? request.getAdherentId() : getCurrentUser().getUserId();
+
         // Vérifier que le livre existe
         Books book = booksRepository.findById(request.getBookId())
                 .orElseThrow(() -> new NotFoundException("Livre non trouvé avec l'id: " + request.getBookId()));
 
         // Vérifier que l'utilisateur existe
-        Users user = usersRepository.findById(request.getAdherentId())
-                .orElseThrow(() -> new NotFoundException("Utilisateur non trouvé avec l'id: " + request.getAdherentId()));
+        Users user = usersRepository.findById(ownerId)
+                .orElseThrow(() -> new NotFoundException("Utilisateur non trouvé avec l'id: " + ownerId));
 
         // RG-01 : On ne peut réserver qu'un livre indisponible
         if (book.getNoOfCopies() > 0) {
@@ -54,13 +62,13 @@ public class ReservationServiceImpl implements IReservationService {
 
         // RG-02 : Un adhérent ne peut avoir qu'une seule réservation active sur un même livre
         boolean hasActiveReservation = reservationRepository
-                .existsByUserIdAndBookIdAndStatusIn(request.getAdherentId(), request.getBookId(), ACTIVE_STATUSES);
+                .existsByUserIdAndBookIdAndStatusIn(ownerId, request.getBookId(), ACTIVE_STATUSES);
         if (hasActiveReservation) {
             throw new ConflictException("RG-02: Vous avez déjà une réservation active pour ce livre");
         }
 
         // RG-03 : Un adhérent ne peut pas dépasser 3 réservations actives simultanées
-        long activeCount = reservationRepository.countByUserIdAndStatusIn(request.getAdherentId(), ACTIVE_STATUSES);
+        long activeCount = reservationRepository.countByUserIdAndStatusIn(ownerId, ACTIVE_STATUSES);
         if (activeCount >= 3) {
             throw new ConflictException("RG-03: Vous avez atteint le nombre maximum de réservations actives (3)");
         }
@@ -68,7 +76,7 @@ public class ReservationServiceImpl implements IReservationService {
         // Créer la réservation (RG-04 géré par @PrePersist dans l'entité)
         Reservation reservation = new Reservation();
         reservation.setBookId(request.getBookId());
-        reservation.setUserId(request.getAdherentId());
+        reservation.setUserId(ownerId);
         reservation.setStatus(ReservationStatus.EN_ATTENTE);
 
         return reservationRepository.save(reservation);
@@ -76,20 +84,26 @@ public class ReservationServiceImpl implements IReservationService {
 
     @Override
     public List<Reservation> getReservations(ReservationStatus status, Integer userId) {
-        if (status != null && userId != null) {
-            return reservationRepository.findByUserIdAndStatus(userId, status);
+        // RS-05 : un ADHERENT ne voit que ses propres réservations, quel que soit le filtre demandé
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Integer effectiveUserId = isBibliothecaire(auth) ? userId : getCurrentUser().getUserId();
+
+        if (status != null && effectiveUserId != null) {
+            return reservationRepository.findByUserIdAndStatus(effectiveUserId, status);
         } else if (status != null) {
             return reservationRepository.findByStatus(status);
-        } else if (userId != null) {
-            return reservationRepository.findByUserId(userId);
+        } else if (effectiveUserId != null) {
+            return reservationRepository.findByUserId(effectiveUserId);
         }
         return reservationRepository.findAll();
     }
 
     @Override
     public Reservation getReservationById(Integer id) {
-        return reservationRepository.findById(id)
+        Reservation reservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Réservation non trouvée avec l'id: " + id));
+        checkOwnership(reservation);
+        return reservation;
     }
 
     @Override
@@ -117,5 +131,27 @@ public class ReservationServiceImpl implements IReservationService {
         Reservation reservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Réservation non trouvée avec l'id: " + id));
         reservationRepository.delete(reservation);
+    }
+
+    private Users getCurrentUser() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return usersRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("Utilisateur connecté non trouvé"));
+    }
+
+    private boolean isBibliothecaire(Authentication authentication) {
+        return authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_Admin"));
+    }
+
+    private void checkOwnership(Reservation reservation) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (isBibliothecaire(auth)) {
+            return;
+        }
+        Users currentUser = getCurrentUser();
+        if (!currentUser.getUserId().equals(reservation.getUserId())) {
+            throw new AccessDeniedException("RS-03: Vous n'avez pas acces a cette reservation");
+        }
     }
 }
