@@ -119,6 +119,15 @@
   transform: translateY(-2px);
 }
 
+.stat-card-static {
+  cursor: default;
+}
+
+.stat-card-static:hover {
+  box-shadow: var(--shadow-sm);
+  transform: none;
+}
+
 .stat-icon {
   align-items: center;
   border-radius: var(--border-radius-lg);

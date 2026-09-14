@@ -26,6 +26,28 @@ interface BreakdownItem {
   percent?: number;
 }
 
+interface QuickAction {
+  label: string;
+  icon: string;
+  link: string;
+}
+
+// Actions rapides propres a chaque role : un BIBLIOTHECAIRE (Admin) n'a pas
+// acces a /borrow (route reservee au role User), les proposer aurait menes
+// vers la page "Acces refuse".
+const ADHERENT_QUICK_ACTIONS: QuickAction[] = [
+  { label: 'Emprunter un livre', icon: 'fa-hand-holding-heart', link: '/borrow' },
+  { label: 'Rendre un livre', icon: 'fa-undo-alt', link: '/borrow/return' },
+  { label: 'Réserver un livre', icon: 'fa-calendar-check', link: '/reservations' }
+];
+
+const BIBLIOTHECAIRE_QUICK_ACTIONS: QuickAction[] = [
+  { label: 'Ajouter un livre', icon: 'fa-plus', link: '/books/create' },
+  { label: 'Gérer les livres', icon: 'fa-book', link: '/books' },
+  { label: 'Ajouter un utilisateur', icon: 'fa-user-plus', link: '/users/register' },
+  { label: 'Gérer les utilisateurs', icon: 'fa-users', link: '/users' }
+];
+
 // Couleurs "fortes" dediees aux graphiques (distinctes des tons "soft" des badges)
 const RESERVATION_CHART_COLORS: Record<ReservationStatus, string> = {
   [ReservationStatus.EN_ATTENTE]: '#d97706',
@@ -46,6 +68,7 @@ export class HomeComponent implements OnInit {
 
   loading = true;
   stats: DashboardStat[] = [];
+  quickActions: QuickAction[] = [];
   reservationBreakdown: BreakdownItem[] = [];
   reservationChartGradient = '';
   reservationChartTotal = 0;
@@ -76,6 +99,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.isLoggedIn()) {
+      this.quickActions = this.isAdmin() ? BIBLIOTHECAIRE_QUICK_ACTIONS : ADHERENT_QUICK_ACTIONS;
       this.loadDashboard();
     } else {
       this.loading = false;
@@ -108,7 +132,8 @@ export class HomeComponent implements OnInit {
           value: activeBorrows,
           icon: 'fa-hand-holding-heart',
           colorClass: 'stat-warning',
-          link: '/borrow/return'
+          // /borrow/return est reservee au role User : un BIBLIOTHECAIRE n'y a pas acces
+          link: admin ? undefined : '/borrow/return'
         },
         {
           label: admin ? 'Réservations actives' : 'Mes réservations actives',
