@@ -4,43 +4,53 @@
    1. DESIGN TOKENS (Variables CSS)
 ============================================================ */
 :root {
-    /* Couleurs principales — SaaS moderne épuré (type Linear/Notion) :
-       palette neutre quasi-monochrome + UN accent de marque (indigo) utilisé
-       avec parcimonie sur les états interactifs (liens, actif, focus). */
-    --secondary: #18181b;         /* Noir doux - boutons d'action principaux */
-    --secondary-hover: #313135;   /* Gris très foncé - hover des boutons */
-    --accent: #18181b;            /* Alias historique : accent = action noire */
-    --accent-light: #a1a1aa;      /* Gris clair - icônes sur fond sombre (hero) */
-    --accent-soft: #f4f4f5;       /* Fond doux neutre pour halos/badges */
+    /* Couleurs principales — identite pleinement assumee autour de l'indigo :
+       c'est LA couleur de la marque (boutons, sidebar active, liens, focus),
+       pas juste un accent discret sur une base noir/blanc. */
+    --secondary: #27272a;         /* Neutre fonce - actions secondaires/texte fort */
+    --secondary-hover: #3f3f46;
+    --accent: var(--brand);       /* Alias historique, pointe desormais vers l'indigo */
+    --accent-light: #c7d2fe;
+    --accent-soft: #f4f4f5;       /* Fond doux neutre (halos/badges neutres) */
 
-    /* Accent de marque — la touche de couleur qui manquait à l'ancienne
-       palette 100% noir/blanc/gris ; réservé aux états interactifs. */
-    --brand: #6366f1;             /* Indigo - liens, focus, éléments actifs */
+    /* Marque - indigo, utilise sans retenue sur tout ce qui est interactif */
+    --brand: #6366f1;
     --brand-hover: #4f46e5;
-    --brand-soft: #eef2ff;        /* Fond doux indigo (actif sidebar, badges info) */
+    --brand-dark: #4338ca;
+    --brand-soft: #eef2ff;        /* Fond doux indigo (badges info) */
     --brand-text: #4338ca;        /* Texte sur fond --brand-soft */
+    --brand-gradient: linear-gradient(135deg, #818cf8 0%, #6366f1 55%, #4f46e5 100%);
 
-    --success: #16a34a;           /* Vert - Statut disponible */
-    --warning: #d97706;           /* Ambre - Statut en attente */
-    --danger: #dc2626;            /* Rouge - Statut expiré, suppression */
-    --info: #52525b;              /* Gris - Informations */
+    /* Couleurs de statut - versions vives (aplats) + douces (badges) */
+    --success: #16a34a;
+    --success-soft: #dcfce7;
+    --success-text: #166534;
+    --warning: #ea580c;
+    --warning-soft: #ffedd5;
+    --warning-text: #9a3412;
+    --danger: #e11d48;
+    --danger-soft: #ffe4e6;
+    --danger-text: #9f1239;
+    --info: #0284c7;
+    --info-soft: #e0f2fe;
+    --info-text: #075985;
 
     /* Couleurs de fond */
-    --bg-body: #fafafa;           /* Fond général */
+    --bg-body: #f3f4f9;           /* Fond général - legerement teinte, pas gris plat */
     --bg-card: #ffffff;           /* Fond des cartes */
-    --bg-muted: #f4f4f5;          /* Fond atténué */
+    --bg-muted: #f4f4f6;          /* Fond atténué */
 
-    /* Sidebar — claire (à la Linear/Notion), plus de bloc noir plein */
-    --sidebar-bg: #fcfcfd;
-    --sidebar-border: #e4e4e7;
-    --sidebar-text: #52525b;
+    /* Sidebar — claire et flottante, item actif en aplat indigo plein */
+    --sidebar-bg: #ffffff;
+    --sidebar-border: #ececf1;
+    --sidebar-text: #71717a;
     --sidebar-text-hover: #18181b;
-    --sidebar-active-bg: var(--brand-soft);
-    --sidebar-active-text: var(--brand-hover);
+    --sidebar-active-bg: var(--brand);
+    --sidebar-active-text: #ffffff;
 
     /* Layout sidebar */
-    --sidebar-width: 240px;
-    --sidebar-width-collapsed: 76px;
+    --sidebar-width: 252px;
+    --sidebar-width-collapsed: 80px;
 
     /* Couleurs de texte */
     --text-primary: #18181b;      /* Texte principal */
@@ -48,20 +58,22 @@
     --text-light: #ffffff;        /* Texte clair */
 
     /* Bordures */
-    --border: #e4e4e7;
+    --border: #eaeaef;
 
-    /* Ombres — très discrètes : on privilégie les bordures 1px (esprit
-       Linear/Notion) et on ne garde l'ombre que pour les survols/menus. */
-    --shadow-sm: 0 1px 2px rgba(24, 24, 27, 0.04);
-    --shadow-md: 0 2px 6px rgba(24, 24, 27, 0.05), 0 6px 16px rgba(24, 24, 27, 0.06);
-    --shadow-lg: 0 8px 20px rgba(24, 24, 27, 0.08), 0 16px 36px rgba(24, 24, 27, 0.10);
+    /* Ombres — un peu plus de matiere que la version "epuree" precedente,
+       pour que les cartes flottantes se detachent vraiment du fond colore. */
+    --shadow-sm: 0 1px 3px rgba(24, 24, 27, 0.05), 0 1px 2px rgba(24, 24, 27, 0.04);
+    --shadow-md: 0 4px 12px rgba(24, 24, 27, 0.06), 0 8px 24px rgba(24, 24, 27, 0.07);
+    --shadow-lg: 0 12px 28px rgba(24, 24, 27, 0.10), 0 20px 48px rgba(24, 24, 27, 0.12);
+    --shadow-brand: 0 8px 20px rgba(99, 102, 241, 0.28);
 
-    /* Rayons — généreux et arrondis, esprit "cartes flottantes" */
-    --border-radius: 10px;
-    --border-radius-lg: 18px;
+    /* Rayons — généreux, identite "cartes rondes" assumee */
+    --border-radius: 12px;
+    --border-radius-lg: 20px;
+    --border-radius-pill: 999px;
 
     /* Layout */
-    --navbar-height: 56px;
+    --navbar-height: 64px;
 
     /* Espacements harmonieux */
     --spacing-xs: 4px;
@@ -217,30 +229,41 @@ p {
 ============================================================ */
 .btn {
     align-items: center;
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-pill);
     display: inline-flex;
     font-weight: 600;
     gap: var(--spacing-xs);
     justify-content: center;
     min-height: 44px;
     min-width: 44px;
-    padding: var(--spacing-sm) var(--spacing-md);
+    padding: var(--spacing-sm) var(--spacing-lg);
     transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .btn:hover {
-    box-shadow: var(--shadow-sm);
     transform: translateY(-1px);
 }
 
-.btn-primary,
+.btn-primary {
+    background: var(--brand);
+    border-color: var(--brand);
+    box-shadow: var(--shadow-brand);
+    color: var(--text-light);
+}
+
+.btn-primary:hover {
+    background: var(--brand-hover);
+    border-color: var(--brand-hover);
+    box-shadow: 0 10px 24px rgba(99, 102, 241, 0.34);
+    color: var(--text-light);
+}
+
 .btn-info {
     background: var(--secondary);
     border-color: var(--secondary);
     color: var(--text-light);
 }
 
-.btn-primary:hover,
 .btn-info:hover {
     background: var(--secondary-hover);
     border-color: var(--secondary-hover);
@@ -266,32 +289,33 @@ p {
 }
 
 .btn-danger:hover {
-    background: #b91c1c;
-    border-color: #b91c1c;
+    background: #be123c;
+    border-color: #be123c;
     color: var(--text-light);
 }
 
 .btn-warning {
     background: var(--warning);
     border-color: var(--warning);
-    color: #1f2933;
+    color: var(--text-light);
 }
 
 .btn-warning:hover {
-    background: #b45309;
-    border-color: #b45309;
-    color: #1f2933;
+    background: #c2410c;
+    border-color: #c2410c;
+    color: var(--text-light);
 }
 
 .btn-outline {
-    background: transparent;
-    border: 2px solid var(--secondary);
-    color: var(--secondary);
+    background: var(--bg-card);
+    border: 1.5px solid var(--border);
+    color: var(--text-primary);
 }
 
 .btn-outline:hover {
-    background: var(--secondary);
-    color: var(--text-light);
+    background: var(--bg-muted);
+    border-color: var(--secondary);
+    color: var(--text-primary);
 }
 
 /* !important necessaire : le selecteur ".btn:disabled" de Bootstrap est plus
@@ -397,38 +421,45 @@ p {
 }
 
 .table {
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.92rem;
     margin-bottom: 0;
     min-width: 720px;
     width: 100%;
-    border-collapse: collapse;
-    font-size: 0.9rem;
 }
 
 .table th {
-    background: var(--bg-muted);
-    border-bottom: 1px solid var(--border);
+    background: transparent;
+    border-bottom: 1.5px solid var(--border);
     color: var(--text-secondary);
     font-size: 0.78rem;
     font-weight: 700;
-    letter-spacing: 0.03em;
-    padding: var(--spacing-sm) var(--spacing-md);
+    padding: var(--spacing-md);
     text-align: left;
-    text-transform: uppercase;
     white-space: nowrap;
 }
 
 .table td {
-    padding: var(--spacing-sm) var(--spacing-md);
-    vertical-align: middle;
     border-bottom: 1px solid var(--border);
+    padding: var(--spacing-md);
+    vertical-align: middle;
+}
+
+.table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.table tbody tr {
+    transition: background-color 0.15s ease;
 }
 
 .table tbody tr:hover {
-    background: rgba(24, 24, 27, 0.035);
+    background: var(--brand-soft);
 }
 
 .table-striped > tbody > tr:nth-of-type(odd) > * {
-    --bs-table-accent-bg: rgba(24, 24, 27, 0.025);
+    --bs-table-accent-bg: var(--bg-muted);
 }
 
 /* ============================================================
@@ -447,11 +478,11 @@ p {
 /* Badges en style "soft" (fond teinté + texte coloré) plutôt qu'aplat plein,
    plus lisible et plus proche des conventions UI actuelles (statuts/chips). */
 .bg-success,
-.badge-success { background: #dcfce7 !important; color: #166534; }
+.badge-success { background: var(--success-soft) !important; color: var(--success-text); }
 .bg-warning,
-.badge-warning { background: #fef3c7 !important; color: #92400e; }
+.badge-warning { background: var(--warning-soft) !important; color: var(--warning-text); }
 .bg-danger,
-.badge-danger { background: #fee2e2 !important; color: #991b1b; }
+.badge-danger { background: var(--danger-soft) !important; color: var(--danger-text); }
 .bg-info,
 .badge-info { background: var(--brand-soft) !important; color: var(--brand-text); }
 .bg-secondary,
@@ -604,7 +635,7 @@ p {
 }
 
 .icon-btn-delete:hover {
-    background: #fee2e2;
+    background: var(--danger-soft);
     color: var(--danger);
 }
 

@@ -46,6 +46,7 @@
 }
 
 .btn-outline {
+  background: transparent;
   color: var(--text-light);
   border-color: var(--text-light);
 }
@@ -149,15 +150,25 @@
    engageantes (disponibilite / en cours) - le reste des cartes reste neutre
    pour ne pas noyer l'oeil sous la couleur. */
 .stat-card.stat-success {
-  background: linear-gradient(135deg, #22c55e 0%, #15803d 100%);
+  background: linear-gradient(135deg, #34d399 0%, #059669 100%);
   border-color: transparent;
+  box-shadow: 0 10px 24px rgba(5, 150, 105, 0.28);
   color: #ffffff;
 }
 
 .stat-card.stat-warning {
-  background: linear-gradient(135deg, #fb923c 0%, #d97706 100%);
+  background: linear-gradient(135deg, #fb923c 0%, #ea580c 100%);
   border-color: transparent;
+  box-shadow: 0 10px 24px rgba(234, 88, 12, 0.28);
   color: #ffffff;
+}
+
+.stat-card.stat-success:hover {
+  box-shadow: 0 14px 30px rgba(5, 150, 105, 0.34);
+}
+
+.stat-card.stat-warning:hover {
+  box-shadow: 0 14px 30px rgba(234, 88, 12, 0.34);
 }
 
 .stat-card.stat-success .stat-icon,
@@ -183,8 +194,9 @@
 }
 
 .stat-value {
-  font-size: 1.75rem;
+  font-size: 2rem;
   font-weight: 800;
+  letter-spacing: -0.02em;
   line-height: 1.1;
 }
 
@@ -383,15 +395,15 @@
 }
 
 .quick-action-card i {
-  color: var(--secondary);
+  color: var(--brand);
   font-size: 1.5rem;
 }
 
 .quick-action-card:hover {
-  border-color: var(--secondary);
-  box-shadow: var(--shadow-md);
+  border-color: var(--brand);
+  box-shadow: var(--shadow-brand);
   color: var(--text-primary);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
 }
 
 .quick-action-card span {
