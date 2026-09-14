@@ -56,9 +56,9 @@
     --shadow-md: 0 2px 6px rgba(24, 24, 27, 0.05), 0 6px 16px rgba(24, 24, 27, 0.06);
     --shadow-lg: 0 8px 20px rgba(24, 24, 27, 0.08), 0 16px 36px rgba(24, 24, 27, 0.10);
 
-    /* Rayons — sobres, pas trop arrondis */
-    --border-radius: 8px;
-    --border-radius-lg: 12px;
+    /* Rayons — généreux et arrondis, esprit "cartes flottantes" */
+    --border-radius: 10px;
+    --border-radius-lg: 18px;
 
     /* Layout */
     --navbar-height: 56px;
@@ -91,7 +91,13 @@ html {
 }
 
 body {
-    background: var(--bg-body);
+    /* Fond legerement colore (halos indigo/corail) pour que la sidebar
+       flottante et les cartes se detachent, plutot qu'un gris plat. */
+    background:
+        radial-gradient(1100px 700px at -5% -10%, rgba(99, 102, 241, 0.10), transparent 55%),
+        radial-gradient(900px 650px at 105% 105%, rgba(251, 113, 133, 0.08), transparent 55%),
+        var(--bg-body);
+    background-attachment: fixed;
     color: var(--text-primary);
     font-family: var(--font-family);
     line-height: 1.6;

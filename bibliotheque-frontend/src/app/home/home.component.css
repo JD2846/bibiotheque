@@ -143,9 +143,38 @@
 }
 
 .stat-neutral .stat-icon { background: var(--bg-muted); color: var(--text-primary); }
-.stat-success .stat-icon { background: #dcfce7; color: #166534; }
-.stat-warning .stat-icon { background: #fef3c7; color: #92400e; }
-.stat-info .stat-icon { background: var(--accent-soft); color: var(--secondary); }
+.stat-info .stat-icon { background: var(--brand-soft); color: var(--brand-hover); }
+
+/* Cartes "hero" en aplat de couleur pour les 2 statistiques les plus
+   engageantes (disponibilite / en cours) - le reste des cartes reste neutre
+   pour ne pas noyer l'oeil sous la couleur. */
+.stat-card.stat-success {
+  background: linear-gradient(135deg, #22c55e 0%, #15803d 100%);
+  border-color: transparent;
+  color: #ffffff;
+}
+
+.stat-card.stat-warning {
+  background: linear-gradient(135deg, #fb923c 0%, #d97706 100%);
+  border-color: transparent;
+  color: #ffffff;
+}
+
+.stat-card.stat-success .stat-icon,
+.stat-card.stat-warning .stat-icon {
+  background: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+}
+
+.stat-card.stat-success .stat-label,
+.stat-card.stat-warning .stat-label {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.stat-card.stat-success:hover,
+.stat-card.stat-warning:hover {
+  color: #ffffff;
+}
 
 .stat-body {
   display: flex;

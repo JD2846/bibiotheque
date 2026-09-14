@@ -15,12 +15,14 @@
 }
 
 @media (min-width: 992px) {
+  /* +12px : la sidebar flotte desormais avec un espace de 12px de chaque
+     cote (voir sidebar.component.css) au lieu d'etre collee au bord. */
   .app-main {
-    margin-left: var(--sidebar-width, 240px);
+    margin-left: calc(var(--sidebar-width, 240px) + 12px);
   }
 
   .app-body.sidebar-collapsed .app-main {
-    margin-left: var(--sidebar-width-collapsed, 76px);
+    margin-left: calc(var(--sidebar-width-collapsed, 76px) + 12px);
   }
 
   .app-body.no-chrome .app-main {
