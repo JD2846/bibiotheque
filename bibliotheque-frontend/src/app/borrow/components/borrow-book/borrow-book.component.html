@@ -4,6 +4,19 @@
     <p class="page-subtitle">Choisissez un ouvrage disponible dans la bibliothèque.</p>
   </div>
 
+  @if (isBibliothecaire()) {
+    <div class="form-group adherent-picker">
+      <label for="adherentSelect"><i class="fas fa-user" aria-hidden="true"></i> Emprunter pour</label>
+      <select id="adherentSelect" class="form-control" [(ngModel)]="selectedAdherentId" name="adherentSelect">
+        <option [ngValue]="null">Moi-même (bibliothécaire)</option>
+        @for (u of users; track u.userId) {
+          <option [ngValue]="u.userId">{{ u.name }} ({{ u.username }})</option>
+        }
+      </select>
+      <p class="form-hint">Laissez sur "Moi-même" ou choisissez un adhérent pour emprunter en son nom au comptoir.</p>
+    </div>
+  }
+
   @if (loading) {
     <div class="alert alert-info d-flex align-items-center gap-2">
       <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
@@ -43,11 +56,15 @@
               <td data-label="Nom">{{ book.bookName }}</td>
               <td data-label="Auteur">{{ book.bookAuthor }}</td>
               <td data-label="Genre">{{ book.bookGenre }}</td>
-              <td data-label="Copies"><span class="badge badge-info">{{ book.noOfCopies }}</span></td>
+              <td data-label="Copies"><span class="badge" [class.badge-info]="book.noOfCopies > 0" [class.badge-danger]="book.noOfCopies === 0">{{ book.noOfCopies }}</span></td>
               <td data-label="Action">
-                <button (click)="borrowBook(book.bookId)" class="btn btn-success btn-sm" [disabled]="loading">
-                  <i class="fas fa-hand-holding-heart" aria-hidden="true"></i> Emprunter
-                </button>
+                @if (book.noOfCopies > 0) {
+                  <button (click)="borrowBook(book.bookId)" class="btn btn-success btn-sm" [disabled]="loading">
+                    <i class="fas fa-hand-holding-heart" aria-hidden="true"></i> Emprunter
+                  </button>
+                } @else {
+                  <span class="text-muted" title="Aucun exemplaire disponible"><i class="fas fa-ban" aria-hidden="true"></i> Indisponible</span>
+                }
               </td>
             </tr>
           }

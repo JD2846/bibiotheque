@@ -5,8 +5,8 @@ import { BorrowBookComponent } from './components/borrow-book/borrow-book.compon
 import { ReturnBookComponent } from './components/return-book/return-book.component';
 
 const routes: Routes = [
-  { path: '', component: BorrowBookComponent, canActivate: [AuthGuard], data: { roles: ['User'] } },
-  { path: 'return', component: ReturnBookComponent, canActivate: [AuthGuard], data: { roles: ['User'] } }
+  { path: '', component: BorrowBookComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'User'] } },
+  { path: 'return', component: ReturnBookComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'User'] } }
 ];
 
 @NgModule({

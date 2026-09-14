@@ -37,6 +37,12 @@ public class Borrow {
     @JsonSerialize(using = JsonDataSerializer.class)
     LocalDateTime dueDate;
 
+    @Transient
+    String bookTitle;
+
+    @Transient
+    String userName;
+
     @PrePersist
     protected void onCreate() {
         if (issueDate == null) {

@@ -26,7 +26,7 @@ const routes: Routes = [
     path: 'borrow',
     loadChildren: () => import('./borrow/borrow.module').then(m => m.BorrowModule),
     canActivate: [AuthGuard],
-    data: { roles: ['User'] }
+    data: { roles: ['Admin', 'User'] }
   },
   {
     path: 'reservations',

@@ -64,8 +64,9 @@ public class WebSecurityConfiguration {
                 .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/authenticate", "/borrow/**", "/admin/books/", "/actuator/health").permitAll()
+                        .requestMatchers("/authenticate", "/admin/books/", "/actuator/health").permitAll()
                         .requestMatchers("/api/reservations/**").authenticated()
+                        .requestMatchers("/borrow/**").authenticated()
                         .anyRequest().authenticated())
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

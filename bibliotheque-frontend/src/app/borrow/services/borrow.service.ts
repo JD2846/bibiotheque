@@ -24,10 +24,6 @@ export class BorrowService extends ApiBaseService {
     return this.getBorrows();
   }
 
-  getBorrowById(id: number): Observable<Borrow> {
-    return this.get<Borrow>(`${this.endpoint}/${id}`);
-  }
-
   getBorrowsByUser(userId: number): Observable<Borrow[]> {
     return this.get<Borrow[]>(`${this.endpoint}/user/${userId}`);
   }
@@ -44,23 +40,15 @@ export class BorrowService extends ApiBaseService {
     return this.getBorrowsByBook(bookId);
   }
 
-  borrowBook(bookId: number, userId: number): Observable<Borrow>;
-  borrowBook(borrow: Borrow): Observable<Borrow>;
-  borrowBook(bookOrBorrow: number | Borrow, userId?: number): Observable<Borrow> {
-    const payload = typeof bookOrBorrow === 'number'
-      ? { bookId: bookOrBorrow, userId }
-      : bookOrBorrow;
-
-    return this.post<Borrow>(this.endpoint, payload);
+  /**
+   * userId optionnel : absent, le backend infere l'utilisateur depuis le token
+   * (EMP-04). Seul un BIBLIOTHECAIRE peut fournir un userId different du sien.
+   */
+  borrowBook(bookId: number, userId?: number): Observable<Borrow> {
+    return this.post<Borrow>(this.endpoint, { bookId, userId });
   }
 
-  returnBook(bookId: number, userId: number): Observable<Borrow>;
-  returnBook(borrow: Borrow): Observable<Borrow>;
-  returnBook(bookOrBorrow: number | Borrow, userId?: number): Observable<Borrow> {
-    const payload = typeof bookOrBorrow === 'number'
-      ? { bookId: bookOrBorrow, userId }
-      : bookOrBorrow;
-
-    return this.put<Borrow>(this.endpoint, payload);
+  returnBook(borrowId: number): Observable<Borrow> {
+    return this.put<Borrow>(this.endpoint, { borrowId });
   }
 }

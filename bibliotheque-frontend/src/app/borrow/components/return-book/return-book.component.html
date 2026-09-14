@@ -4,6 +4,18 @@
     <p class="page-subtitle">Suivez vos emprunts en cours et signalez les retours.</p>
   </div>
 
+  @if (isBibliothecaire()) {
+    <div class="form-group adherent-picker">
+      <label for="adherentSelect"><i class="fas fa-user" aria-hidden="true"></i> Emprunts de</label>
+      <select id="adherentSelect" class="form-control" [(ngModel)]="selectedAdherentId" name="adherentSelect" (ngModelChange)="onAdherentChange()">
+        <option [ngValue]="null">Moi-même (bibliothécaire)</option>
+        @for (u of users; track u.userId) {
+          <option [ngValue]="u.userId">{{ u.name }} ({{ u.username }})</option>
+        }
+      </select>
+    </div>
+  }
+
   @if (loading) {
     <div class="alert alert-info d-flex align-items-center gap-2">
       <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
@@ -36,12 +48,12 @@
           </tr>
         </thead>
         <tbody>
-          @for (b of borrow; track b) {
+          @for (b of borrow; track b.borrowId) {
             <tr>
-              <td data-label="Livre">{{ b.bookId }}</td>
-              <td data-label="Date emprunt">{{ b.issueDate }}</td>
-              <td data-label="Date retour">{{ b.returnDate || 'Non rendu' }}</td>
-              <td data-label="Date limite">{{ b.dueDate }}</td>
+              <td data-label="Livre">{{ b.bookTitle || b.bookId }}</td>
+              <td data-label="Date emprunt">{{ formatDate(b.issueDate) }}</td>
+              <td data-label="Date retour">{{ b.returnDate ? formatDate(b.returnDate) : 'Non rendu' }}</td>
+              <td data-label="Date limite">{{ formatDate(b.dueDate) }}</td>
               <td data-label="Action">
                 @if (b.returnDate === null) {
                   <button (click)="returnBook(b.borrowId)" class="btn btn-success btn-sm" [disabled]="loading">

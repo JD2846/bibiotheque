@@ -1,8 +1,9 @@
 import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
-import { Books } from '../../../_model/books';
 import { Borrow } from '../../../_model/borrow';
-import { BooksService } from '../../../books/services/books.service';
+import { Users } from '../../../_model/users';
+import { UsersService } from '../../../users/services/users.service';
 import { BorrowService } from '../../services/borrow.service';
 import { UserAuthService } from '../../../_service/user-auth.service';
 
@@ -10,19 +11,24 @@ import { UserAuthService } from '../../../_service/user-auth.service';
     selector: 'app-return-book',
     templateUrl: './return-book.component.html',
     styleUrls: ['./return-book.component.css'],
-    changeDetection: ChangeDetectionStrategy.Eager
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [FormsModule]
 })
 export class ReturnBookComponent implements OnInit {
 
-  books: Books[] = [];
   borrow: Borrow[] = [];
+  users: Users[] = [];
   loading = false;
   error = '';
   success = '';
 
+  // Seul un BIBLIOTHECAIRE choisit l'adherent dont il consulte/rend les
+  // emprunts (service au comptoir) ; un ADHERENT ne voit que les siens (EMP-05).
+  selectedAdherentId: number | null = null;
+
   constructor(
     private borrowService: BorrowService,
-    private booksService: BooksService,
+    private usersService: UsersService,
     private userAuthService: UserAuthService,
     private cdr: ChangeDetectorRef
   ) { }
@@ -30,32 +36,44 @@ export class ReturnBookComponent implements OnInit {
   userId = this.userAuthService.getUserId();
 
   ngOnInit(): void {
-    this.getBooks();
+    if (this.isBibliothecaire()) {
+      this.loadUsers();
+    }
     this.getBooksByUser();
   }
 
-  private getBooks() {
-    this.booksService.getBooks().subscribe({
-      next: data => { this.books = data; this.cdr.detectChanges(); },
+  isBibliothecaire(): boolean {
+    const roles: any[] = this.userAuthService.getRoles() || [];
+    return roles.some(role => role?.roleName === 'Admin' || role === 'Admin');
+  }
+
+  onAdherentChange(): void {
+    this.getBooksByUser();
+  }
+
+  private loadUsers() {
+    this.usersService.getUsers().subscribe({
+      next: data => { this.users = data; this.cdr.detectChanges(); },
       error: error => { this.error = error.message; this.cdr.detectChanges(); }
     });
   }
 
-
   private getBooksByUser() {
-    this.borrowService.getBorrowsByUser(this.userId).subscribe({
+    const targetUserId = this.isBibliothecaire() && this.selectedAdherentId
+      ? this.selectedAdherentId
+      : this.userId;
+
+    this.borrowService.getBorrowsByUser(targetUserId).subscribe({
       next: data => { this.borrow = data; this.cdr.detectChanges(); },
       error: error => { this.error = error.message; this.cdr.detectChanges(); }
     })
   }
 
-  brw: Borrow = new Borrow();
   public returnBook(borrowId: number) {
-    this.brw.borrowId = borrowId;
     this.loading = true;
     this.error = '';
     this.success = '';
-    this.borrowService.returnBook(this.brw).pipe(
+    this.borrowService.returnBook(borrowId).pipe(
       finalize(() => { this.loading = false; this.cdr.detectChanges(); })
     ).subscribe({
       next: () => {
@@ -66,4 +84,7 @@ export class ReturnBookComponent implements OnInit {
     });
   }
 
+  formatDate(value: string | Date): string {
+    return value ? new Date(value).toLocaleDateString('fr-FR') : '';
+  }
 }
