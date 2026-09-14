@@ -63,7 +63,12 @@
                     <i class="fas fa-hand-holding-heart" aria-hidden="true"></i> Emprunter
                   </button>
                 } @else {
-                  <span class="text-muted" title="Aucun exemplaire disponible"><i class="fas fa-ban" aria-hidden="true"></i> Indisponible</span>
+                  <div class="unavailable-action">
+                    <span class="text-muted" title="Aucun exemplaire disponible"><i class="fas fa-ban" aria-hidden="true"></i> Indisponible</span>
+                    <a class="btn btn-outline btn-sm" [routerLink]="['/reservations']" [queryParams]="{ bookId: book.bookId }">
+                      <i class="fas fa-calendar-check" aria-hidden="true"></i> Réserver
+                    </a>
+                  </div>
                 }
               </td>
             </tr>

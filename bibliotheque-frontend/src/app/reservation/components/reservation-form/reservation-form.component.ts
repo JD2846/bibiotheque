@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { Books } from '../../../_model/books';
@@ -15,10 +15,14 @@ import { ReservationService } from '../../services/reservation.service';
     changeDetection: ChangeDetectionStrategy.Eager,
     imports: [FormsModule, ReactiveFormsModule]
 })
-export class ReservationFormComponent implements OnInit {
+export class ReservationFormComponent implements OnInit, OnChanges {
+  @Input() presetBookId: number | null = null;
   @Output() reservationCreated = new EventEmitter<void>();
 
   reservationForm: FormGroup;
+  // RG-01 : on ne peut reserver qu'un livre indisponible, inutile donc de
+  // proposer les livres qui ont encore des exemplaires (evite une soumission
+  // vouee a un 409).
   books: Books[] = [];
   users: Users[] = [];
   loading = false;
@@ -53,6 +57,12 @@ export class ReservationFormComponent implements OnInit {
     }
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['presetBookId'] && !changes['presetBookId'].firstChange) {
+      this.applyPresetBookId();
+    }
+  }
+
   isBibliothecaire(): boolean {
     const roles: any[] = this.userAuthService.getRoles() || [];
     return roles.some(role => role?.roleName === 'Admin' || role === 'Admin');
@@ -81,9 +91,24 @@ export class ReservationFormComponent implements OnInit {
 
   private loadBooks(): void {
     this.booksService.getBooks().subscribe({
-      next: books => { this.books = books; this.cdr.detectChanges(); },
+      next: books => {
+        // RG-01 : seuls les livres sans exemplaire disponible peuvent etre reserves
+        this.books = books.filter(book => book.noOfCopies === 0);
+        this.applyPresetBookId();
+        this.cdr.detectChanges();
+      },
       error: error => { this.serverError = error.message; this.cdr.detectChanges(); }
     });
+  }
+
+  private applyPresetBookId(): void {
+    if (!this.presetBookId) {
+      return;
+    }
+    const bookStillUnavailable = this.books.some(book => book.bookId === this.presetBookId);
+    if (bookStillUnavailable) {
+      this.reservationForm.patchValue({ bookId: this.presetBookId });
+    }
   }
 
   private loadUsers(): void {

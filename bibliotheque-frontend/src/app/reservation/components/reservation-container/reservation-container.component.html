@@ -7,7 +7,7 @@
     <p class="page-subtitle">Gérez les réservations de livres de la bibliothèque.</p>
   </div>
 
-  <app-reservation-form (reservationCreated)="onReservationCreated()"></app-reservation-form>
+  <app-reservation-form [presetBookId]="presetBookId" (reservationCreated)="onReservationCreated()"></app-reservation-form>
 
   <div class="filters-section">
     <div class="filters-wrapper">

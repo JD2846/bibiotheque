@@ -1,0 +1,4 @@
+.adherent-picker {
+  max-width: 420px;
+  margin-bottom: var(--spacing-md, 1rem);
+}

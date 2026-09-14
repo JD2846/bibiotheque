@@ -1,4 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 import { LoadingService } from '../../../_core/services/loading.service';
 import { ReservationFilters } from '../../../_model/reservation.model';
@@ -31,13 +32,21 @@ export class ReservationContainerComponent implements OnInit {
   readonly loading$ = this.reservationDataService.loading$;
   readonly error$ = this.reservationDataService.error$;
 
+  // Pre-selection du livre dans le formulaire quand on arrive depuis la page
+  // "Emprunter" via le lien "Réserver" affiché sur un livre indisponible
+  // (/reservations?bookId=...).
+  presetBookId: number | null = null;
+
   constructor(
     private reservationService: ReservationService,
     private reservationDataService: ReservationDataService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
+    const bookId = Number(this.route.snapshot.queryParamMap.get('bookId'));
+    this.presetBookId = bookId > 0 ? bookId : null;
     this.loadReservations();
   }
 

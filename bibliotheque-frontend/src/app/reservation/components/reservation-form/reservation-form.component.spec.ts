@@ -18,7 +18,10 @@ describe('ReservationFormComponent', () => {
   let usersService: jasmine.SpyObj<UsersService>;
   let userAuthService: jasmine.SpyObj<UserAuthService>;
 
-  const mockBooks: Books[] = [{ bookId: 1, bookName: 'Test Book', bookAuthor: 'Author', bookGenre: 'Roman', noOfCopies: 0 }];
+  const mockBooks: Books[] = [
+    { bookId: 1, bookName: 'Test Book', bookAuthor: 'Author', bookGenre: 'Roman', noOfCopies: 0 },
+    { bookId: 2, bookName: 'Available Book', bookAuthor: 'Author', bookGenre: 'Roman', noOfCopies: 3 }
+  ];
   const mockUsers: Users[] = [Object.assign(new Users(), { userId: 1, username: 'adherent', name: 'Adhérent' })];
 
   beforeEach(() => {
@@ -52,6 +55,35 @@ describe('ReservationFormComponent', () => {
     expect(usersService.getUsers).toHaveBeenCalled();
     expect(component.books.length).toBe(1);
     expect(component.users.length).toBe(1);
+  });
+
+  it('RG-01 : ne propose que les livres indisponibles (sans exemplaire) dans la liste', () => {
+    expect(component.books.some(b => b.bookId === 1)).toBeTrue();
+    expect(component.books.some(b => b.bookId === 2)).toBeFalse();
+  });
+
+  it('pré-sélectionne le livre passé en presetBookId s il est indisponible', () => {
+    booksService.getBooks.and.returnValue(of(mockBooks));
+    const withPreset = new ReservationFormComponent(
+      new FormBuilder(), reservationService, booksService, usersService, userAuthService,
+      jasmine.createSpyObj('ChangeDetectorRef', ['detectChanges']) as ChangeDetectorRef
+    );
+    withPreset.presetBookId = 1;
+    withPreset.ngOnInit();
+
+    expect(withPreset.reservationForm.get('bookId')?.value).toBe(1);
+  });
+
+  it('ignore le presetBookId si le livre est redevenu disponible', () => {
+    booksService.getBooks.and.returnValue(of(mockBooks));
+    const withPreset = new ReservationFormComponent(
+      new FormBuilder(), reservationService, booksService, usersService, userAuthService,
+      jasmine.createSpyObj('ChangeDetectorRef', ['detectChanges']) as ChangeDetectorRef
+    );
+    withPreset.presetBookId = 2;
+    withPreset.ngOnInit();
+
+    expect(withPreset.reservationForm.get('bookId')?.value).toBe('');
   });
 
   it('devrait considérer le formulaire invalide tant que bookId/adherentId ne sont pas renseignés', () => {

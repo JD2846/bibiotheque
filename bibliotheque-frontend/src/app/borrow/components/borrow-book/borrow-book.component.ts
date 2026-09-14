@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 import { Books } from '../../../_model/books';
 import { Users } from '../../../_model/users';
@@ -13,7 +14,7 @@ import { UserAuthService } from '../../../_service/user-auth.service';
     templateUrl: './borrow-book.component.html',
     styleUrls: ['./borrow-book.component.css'],
     changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [FormsModule]
+    imports: [FormsModule, RouterLink]
 })
 export class BorrowBookComponent implements OnInit {
 
