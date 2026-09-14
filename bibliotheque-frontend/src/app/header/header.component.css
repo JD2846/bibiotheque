@@ -8,7 +8,22 @@
   padding-inline: var(--spacing-md);
   position: sticky;
   top: 0;
+  transition: margin-left 0.2s ease;
   z-index: 1050;
+}
+
+/* Desktop : la sidebar occupe toute la hauteur a gauche (voir
+   sidebar.component.css), la navbar ne demarre qu'a sa droite - les deux
+   se croisent exactement au coin au lieu d'etre deux barres separees par
+   un espace. La marque vit alors dans la sidebar, plus dans la navbar. */
+@media (min-width: 992px) {
+  .app-navbar {
+    margin-left: calc(var(--sidebar-width, 252px) + 12px);
+  }
+
+  .app-navbar.sidebar-collapsed {
+    margin-left: calc(var(--sidebar-width-collapsed, 80px) + 12px);
+  }
 }
 
 .menu-toggle {
@@ -48,6 +63,15 @@
   height: 34px;
   justify-content: center;
   width: 34px;
+}
+
+/* Placee apres la regle de base .navbar-brand (a specificite egale, l'ordre
+   dans le fichier tranche) pour bien la masquer en desktop, ou la marque
+   vit desormais dans la sidebar (voir sidebar.component.css). */
+@media (min-width: 992px) {
+  .navbar-brand {
+    display: none;
+  }
 }
 
 .navbar-spacer {
@@ -93,7 +117,7 @@
   align-items: center;
   background: var(--brand-gradient);
   border-radius: 999px;
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.35);
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.35);
   color: var(--text-light);
   display: flex;
   font-size: 0.85rem;

@@ -1,5 +1,5 @@
 @if (!hideChrome) {
-  <app-header (menuToggle)="toggleSidebar()"></app-header>
+  <app-header [sidebarCollapsed]="sidebarCollapsed" (menuToggle)="toggleSidebar()"></app-header>
 }
 <div class="app-body" [class.sidebar-collapsed]="sidebarCollapsed" [class.no-chrome]="hideChrome">
   @if (!hideChrome) {

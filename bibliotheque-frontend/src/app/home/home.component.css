@@ -3,7 +3,7 @@
   /* Degrade noir -> indigo fonce : reprend l'accent de marque meme sur la
      page d'accueil publique, au lieu d'un noir plat sans lien avec le reste
      de la palette. */
-  background: linear-gradient(135deg, #18181b 0%, #312e81 100%);
+  background: linear-gradient(135deg, #18181b 0%, #4c1d95 100%);
   color: var(--text-light);
   min-height: calc(100vh - var(--navbar-height, 56px));
   display: flex;
@@ -95,6 +95,10 @@
 ============================================================ */
 .dashboard {
   padding-top: var(--spacing-lg);
+  /* Le dashboard respire davantage que les autres pages (formulaires,
+     tableaux) : plus large pour laisser aux graphiques la place d'etre
+     lisibles, plutot que le meme conteneur etroit partout. */
+  max-width: 1600px;
 }
 
 .stat-grid {
@@ -209,8 +213,8 @@
 
 .detail-stats {
   display: grid;
-  gap: var(--spacing-md);
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
   margin-bottom: var(--spacing-xl);
 }
 
@@ -219,15 +223,16 @@
   border: 1px solid var(--border);
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-sm);
-  padding: var(--spacing-lg);
+  padding: var(--spacing-xl);
 }
 
 .detail-card-title {
   align-items: center;
   display: flex;
-  font-size: 1rem;
+  font-size: 1.1rem;
+  font-weight: 700;
   gap: var(--spacing-sm);
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
 }
 
 .detail-card-title i {
@@ -251,9 +256,9 @@
 .donut-chart {
   border-radius: 50%;
   flex-shrink: 0;
-  height: 140px;
+  height: 190px;
   position: relative;
-  width: 140px;
+  width: 190px;
 }
 
 .donut-chart-hole {
@@ -262,17 +267,17 @@
   border-radius: 50%;
   display: flex;
   flex-direction: column;
-  height: 88px;
+  height: 122px;
   justify-content: center;
   left: 50%;
   position: absolute;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 88px;
+  width: 122px;
 }
 
 .donut-chart-total {
-  font-size: 1.4rem;
+  font-size: 1.8rem;
   font-weight: 800;
   line-height: 1.1;
 }
@@ -322,27 +327,31 @@
 .bar-chart {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: var(--spacing-lg);
   padding-top: var(--spacing-xs);
 }
 
 .bar-row {
   align-items: center;
   display: flex;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-md);
 }
 
 .bar-label {
   color: var(--text-secondary);
-  flex: 0 0 110px;
-  font-size: 0.85rem;
+  flex: 0 0 120px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .bar-track {
   background: var(--bg-muted);
   border-radius: 999px;
   flex: 1;
-  height: 12px;
+  height: 16px;
   overflow: hidden;
 }
 
@@ -353,7 +362,8 @@
 }
 
 .bar-value {
-  flex: 0 0 24px;
+  flex: 0 0 28px;
+  font-size: 0.95rem;
   font-weight: 700;
   text-align: right;
 }

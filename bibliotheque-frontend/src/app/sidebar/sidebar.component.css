@@ -17,6 +17,34 @@
   z-index: 1040;
 }
 
+/* Marque en tete de la sidebar : visible uniquement en desktop (>=992px),
+   ou la sidebar occupe toute la hauteur et "croise" la navbar - qui elle
+   garde sa propre marque sur mobile/tablette ou la sidebar est un tiroir. */
+.sidebar-brand {
+  align-items: center;
+  color: var(--text-primary);
+  display: none;
+  font-size: 1.1rem;
+  font-weight: 800;
+  gap: var(--spacing-sm);
+  letter-spacing: -0.01em;
+  padding: var(--spacing-lg) var(--spacing-md) var(--spacing-md);
+  white-space: nowrap;
+}
+
+.sidebar-brand-icon {
+  align-items: center;
+  background: var(--brand-soft);
+  border-radius: var(--border-radius);
+  color: var(--brand);
+  display: flex;
+  flex-shrink: 0;
+  font-size: 1.05rem;
+  height: 36px;
+  justify-content: center;
+  width: 36px;
+}
+
 .sidebar-nav {
   padding: var(--spacing-md);
 }
@@ -94,8 +122,9 @@
 }
 
 /* Desktop : sidebar toujours visible, pousse le contenu principal.
-   Detachee des bords en un panneau flottant arrondi (au lieu d'une barre
-   pleine hauteur collee au bord), avec un peu d'air tout autour. */
+   Occupe toute la hauteur (au lieu de commencer sous la navbar) : elle
+   "croise" la navbar, qui elle ne demarre qu'a droite de la sidebar
+   (voir header.component.css) - les deux se rejoignent sans coupure. */
 @media (min-width: 992px) {
   .app-sidebar {
     border: 1px solid var(--sidebar-border);
@@ -103,7 +132,7 @@
     bottom: 12px;
     box-shadow: var(--shadow-md);
     left: 12px;
-    top: calc(var(--navbar-height, 56px) + 12px);
+    top: 12px;
     transform: translateX(0);
   }
 
@@ -111,9 +140,22 @@
     display: none;
   }
 
+  .sidebar-brand {
+    display: flex;
+  }
+
   /* Mode reduit : icones seules, sans les libelles */
   .app-sidebar.collapsed {
-    width: var(--sidebar-width-collapsed, 76px);
+    width: var(--sidebar-width-collapsed, 80px);
+  }
+
+  .app-sidebar.collapsed .sidebar-brand {
+    justify-content: center;
+    padding-inline: var(--spacing-sm);
+  }
+
+  .app-sidebar.collapsed .sidebar-brand-text {
+    display: none;
   }
 
   .app-sidebar.collapsed .sidebar-section-label {

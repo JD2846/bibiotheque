@@ -126,6 +126,25 @@
             }
           </div>
         </div>
+
+        <div class="detail-card">
+          <h3 class="detail-card-title"><i class="fas fa-layer-group" aria-hidden="true"></i> Livres par genre</h3>
+          @if (genreBreakdown.length === 0) {
+            <p class="chart-empty">Aucun livre au catalogue pour le moment.</p>
+          } @else {
+            <div class="bar-chart">
+              @for (item of genreBreakdown; track item.label) {
+                <div class="bar-row">
+                  <span class="bar-label">{{ item.label }}</span>
+                  <div class="bar-track">
+                    <div class="bar-fill" [style.width.%]="genreBarWidth(item.value)" [style.background]="item.color"></div>
+                  </div>
+                  <span class="bar-value">{{ item.value }}</span>
+                </div>
+              }
+            </div>
+          }
+        </div>
       </div>
 
       <div class="quick-actions">

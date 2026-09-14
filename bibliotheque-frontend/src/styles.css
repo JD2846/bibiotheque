@@ -13,13 +13,13 @@
     --accent-light: #c7d2fe;
     --accent-soft: #f4f4f5;       /* Fond doux neutre (halos/badges neutres) */
 
-    /* Marque - indigo, utilise sans retenue sur tout ce qui est interactif */
-    --brand: #6366f1;
-    --brand-hover: #4f46e5;
-    --brand-dark: #4338ca;
-    --brand-soft: #eef2ff;        /* Fond doux indigo (badges info) */
-    --brand-text: #4338ca;        /* Texte sur fond --brand-soft */
-    --brand-gradient: linear-gradient(135deg, #818cf8 0%, #6366f1 55%, #4f46e5 100%);
+    /* Marque - violet, utilise sans retenue sur tout ce qui est interactif */
+    --brand: #8b5cf6;
+    --brand-hover: #7c3aed;
+    --brand-dark: #6d28d9;
+    --brand-soft: #f5f3ff;        /* Fond doux violet (badges info) */
+    --brand-text: #6d28d9;        /* Texte sur fond --brand-soft */
+    --brand-gradient: linear-gradient(135deg, #c4b5fd 0%, #8b5cf6 55%, #7c3aed 100%);
 
     /* Couleurs de statut - versions vives (aplats) + douces (badges) */
     --success: #16a34a;
@@ -65,7 +65,7 @@
     --shadow-sm: 0 1px 3px rgba(24, 24, 27, 0.05), 0 1px 2px rgba(24, 24, 27, 0.04);
     --shadow-md: 0 4px 12px rgba(24, 24, 27, 0.06), 0 8px 24px rgba(24, 24, 27, 0.07);
     --shadow-lg: 0 12px 28px rgba(24, 24, 27, 0.10), 0 20px 48px rgba(24, 24, 27, 0.12);
-    --shadow-brand: 0 8px 20px rgba(99, 102, 241, 0.28);
+    --shadow-brand: 0 8px 20px rgba(139, 92, 246, 0.28);
 
     /* Rayons — généreux, identite "cartes rondes" assumee */
     --border-radius: 12px;
@@ -106,8 +106,8 @@ body {
     /* Fond legerement colore (halos indigo/corail) pour que la sidebar
        flottante et les cartes se detachent, plutot qu'un gris plat. */
     background:
-        radial-gradient(1100px 700px at -5% -10%, rgba(99, 102, 241, 0.10), transparent 55%),
-        radial-gradient(900px 650px at 105% 105%, rgba(251, 113, 133, 0.08), transparent 55%),
+        radial-gradient(1100px 700px at -5% -10%, rgba(139, 92, 246, 0.12), transparent 55%),
+        radial-gradient(900px 650px at 105% 105%, rgba(232, 121, 249, 0.09), transparent 55%),
         var(--bg-body);
     background-attachment: fixed;
     color: var(--text-primary);
@@ -254,7 +254,7 @@ p {
 .btn-primary:hover {
     background: var(--brand-hover);
     border-color: var(--brand-hover);
-    box-shadow: 0 10px 24px rgba(99, 102, 241, 0.34);
+    box-shadow: 0 10px 24px rgba(139, 92, 246, 0.34);
     color: var(--text-light);
 }
 
@@ -371,11 +371,19 @@ p {
     margin-top: var(--spacing-xs);
 }
 
-/* Grille de formulaire reutilisable (creation/edition livre, utilisateur...) */
+/* Disposition de formulaire reutilisable (creation/edition livre, utilisateur...) :
+   un champ par ligne, en bloc, plutot qu'une grille/flex qui alignait
+   plusieurs champs cote a cote. */
 .form-grid {
-    display: grid;
-    gap: var(--spacing-lg);
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    display: block;
+}
+
+.form-grid .form-group {
+    margin-bottom: var(--spacing-lg);
+}
+
+.form-grid .form-group:last-child {
+    margin-bottom: 0;
 }
 
 .form-group {

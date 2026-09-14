@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Output, ChangeDetectionStrategy } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, Output, ChangeDetectionStrategy } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { UserAuthService } from '../_service/user-auth.service';
 import { NgClass } from '@angular/common';
@@ -11,6 +11,7 @@ import { NgClass } from '@angular/common';
     imports: [RouterLink, NgClass]
 })
 export class HeaderComponent {
+  @Input() sidebarCollapsed = false;
   @Output() menuToggle = new EventEmitter<void>();
 
   isDropdownOpen = false;

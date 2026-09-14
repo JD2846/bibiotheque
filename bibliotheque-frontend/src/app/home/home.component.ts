@@ -57,6 +57,10 @@ const RESERVATION_CHART_COLORS: Record<ReservationStatus, string> = {
   [ReservationStatus.HONOREE]: '#18181b'
 };
 
+// Palette tournante pour le graphique "Livres par genre" (nombre de genres
+// variable et non connu a l'avance, contrairement aux statuts de reservation)
+const GENRE_CHART_COLORS = ['#8b5cf6', '#0ea5e9', '#f59e0b', '#22c55e', '#ec4899', '#14b8a6', '#f97316', '#6366f1'];
+
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
@@ -74,6 +78,8 @@ export class HomeComponent implements OnInit {
   reservationChartTotal = 0;
   borrowSummary: BreakdownItem[] = [];
   borrowChartMax = 1;
+  genreBreakdown: BreakdownItem[] = [];
+  genreChartMax = 1;
 
   constructor(
     private booksService: BooksService,
@@ -173,6 +179,23 @@ export class HomeComponent implements OnInit {
       ];
       this.borrowChartMax = Math.max(1, ...this.borrowSummary.map(b => b.value));
 
+      // Répartition des livres par genre - bar chart
+      const genreCounts = new Map<string, number>();
+      books.forEach(book => {
+        const genre = book.bookGenre?.trim() || 'Autre';
+        genreCounts.set(genre, (genreCounts.get(genre) || 0) + 1);
+      });
+      this.genreBreakdown = Array.from(genreCounts.entries())
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 6)
+        .map(([label, value], index) => ({
+          label,
+          value,
+          colorClass: '',
+          color: GENRE_CHART_COLORS[index % GENRE_CHART_COLORS.length]
+        }));
+      this.genreChartMax = Math.max(1, ...this.genreBreakdown.map(g => g.value));
+
       this.loading = false;
       this.cdr.detectChanges();
     });
@@ -180,6 +203,10 @@ export class HomeComponent implements OnInit {
 
   barWidth(value: number): number {
     return this.borrowChartMax > 0 ? Math.round((value / this.borrowChartMax) * 100) : 0;
+  }
+
+  genreBarWidth(value: number): number {
+    return this.genreChartMax > 0 ? Math.round((value / this.genreChartMax) * 100) : 0;
   }
 
   /** Construit un donut chart en CSS pur via conic-gradient, sans dependance externe. */

@@ -1,4 +1,8 @@
 <aside class="app-sidebar" [class.open]="isOpen" [class.collapsed]="collapsed">
+  <a class="sidebar-brand" routerLink="/home" [title]="collapsed ? 'Bibliothèque' : ''">
+    <i class="fas fa-book-open sidebar-brand-icon" aria-hidden="true"></i>
+    <span class="sidebar-brand-text">Bibliothèque</span>
+  </a>
   <nav class="sidebar-nav" aria-label="Navigation principale">
     <ul class="sidebar-list">
       <li class="sidebar-item">
