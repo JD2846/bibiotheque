@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { NgClass } from '@angular/common';
+import { DecimalPipe, NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -48,25 +48,27 @@ const BIBLIOTHECAIRE_QUICK_ACTIONS: QuickAction[] = [
   { label: 'Gérer les utilisateurs', icon: 'fa-users', link: '/users' }
 ];
 
-// Couleurs "fortes" dediees aux graphiques (distinctes des tons "soft" des badges)
+// Charte du dashboard restreinte a violet/noir/blanc (+ gris neutres) : pas
+// de vert/orange/rouge, chaque statut se distingue par une nuance de violet
+// ou de noir plutot que par une couleur semantique differente.
 const RESERVATION_CHART_COLORS: Record<ReservationStatus, string> = {
-  [ReservationStatus.EN_ATTENTE]: '#d97706',
-  [ReservationStatus.DISPONIBLE]: '#16a34a',
-  [ReservationStatus.ANNULEE]: '#a1a1aa',
-  [ReservationStatus.EXPIREE]: '#dc2626',
-  [ReservationStatus.HONOREE]: '#18181b'
+  [ReservationStatus.EN_ATTENTE]: '#8b5cf6',
+  [ReservationStatus.DISPONIBLE]: '#18181b',
+  [ReservationStatus.ANNULEE]: '#d4d4d8',
+  [ReservationStatus.EXPIREE]: '#c4b5fd',
+  [ReservationStatus.HONOREE]: '#4c1d95'
 };
 
 // Palette tournante pour le graphique "Livres par genre" (nombre de genres
-// variable et non connu a l'avance, contrairement aux statuts de reservation)
-const GENRE_CHART_COLORS = ['#8b5cf6', '#0ea5e9', '#f59e0b', '#22c55e', '#ec4899', '#14b8a6', '#f97316', '#6366f1'];
+// variable et non connu a l'avance) - meme charte violet/noir/blanc.
+const GENRE_CHART_COLORS = ['#8b5cf6', '#18181b', '#a78bfa', '#52525b', '#6d28d9', '#d4d4d8', '#c4b5fd', '#27272a'];
 
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css'],
     changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [RouterLink, NgClass]
+    imports: [RouterLink, NgClass, DecimalPipe]
 })
 export class HomeComponent implements OnInit {
 
@@ -173,9 +175,9 @@ export class HomeComponent implements OnInit {
       const rendus = borrows.filter(b => !!b.returnDate).length;
 
       this.borrowSummary = [
-        { label: 'Dans les délais', value: enCours, colorClass: 'badge-success', color: '#16a34a' },
-        { label: 'En retard', value: enRetard, colorClass: 'badge-danger', color: '#dc2626' },
-        { label: 'Rendus', value: rendus, colorClass: 'badge-secondary', color: '#18181b' }
+        { label: 'Dans les délais', value: enCours, colorClass: 'badge-success', color: '#8b5cf6' },
+        { label: 'En retard', value: enRetard, colorClass: 'badge-danger', color: '#18181b' },
+        { label: 'Rendus', value: rendus, colorClass: 'badge-secondary', color: '#d4d4d8' }
       ];
       this.borrowChartMax = Math.max(1, ...this.borrowSummary.map(b => b.value));
 

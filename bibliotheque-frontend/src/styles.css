@@ -40,12 +40,14 @@
     --bg-card: #ffffff;           /* Fond des cartes */
     --bg-muted: #f4f4f6;          /* Fond atténué */
 
-    /* Sidebar — claire et flottante, item actif en aplat indigo plein */
-    --sidebar-bg: #ffffff;
-    --sidebar-border: #ececf1;
-    --sidebar-text: #71717a;
-    --sidebar-text-hover: #18181b;
-    --sidebar-active-bg: var(--brand);
+    /* Sidebar — violet plein (pas de degrade), plaquee au bord sur toute
+       la hauteur ; item actif en noir pour rester dans la charte
+       violet/noir/blanc. */
+    --sidebar-bg: var(--brand);
+    --sidebar-border: rgba(255, 255, 255, 0.14);
+    --sidebar-text: rgba(255, 255, 255, 0.78);
+    --sidebar-text-hover: #ffffff;
+    --sidebar-active-bg: #18181b;
     --sidebar-active-text: #ffffff;
 
     /* Layout sidebar */

@@ -18,11 +18,11 @@
    un espace. La marque vit alors dans la sidebar, plus dans la navbar. */
 @media (min-width: 992px) {
   .app-navbar {
-    margin-left: calc(var(--sidebar-width, 252px) + 12px);
+    margin-left: var(--sidebar-width, 252px);
   }
 
   .app-navbar.sidebar-collapsed {
-    margin-left: calc(var(--sidebar-width-collapsed, 80px) + 12px);
+    margin-left: var(--sidebar-width-collapsed, 80px);
   }
 }
 
@@ -115,7 +115,7 @@
 
 .profile-avatar {
   align-items: center;
-  background: var(--brand-gradient);
+  background: var(--brand);
   border-radius: 999px;
   box-shadow: 0 2px 8px rgba(139, 92, 246, 0.35);
   color: var(--text-light);

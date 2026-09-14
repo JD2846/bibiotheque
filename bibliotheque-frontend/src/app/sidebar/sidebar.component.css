@@ -4,11 +4,11 @@
 
 .app-sidebar {
   background: var(--sidebar-bg);
-  border-right: 1px solid var(--sidebar-border);
   bottom: 0;
   left: 0;
   overflow-x: hidden;
   overflow-y: auto;
+  padding: var(--spacing-sm);
   position: fixed;
   top: var(--navbar-height, 56px);
   transform: translateX(-100%);
@@ -22,7 +22,7 @@
    garde sa propre marque sur mobile/tablette ou la sidebar est un tiroir. */
 .sidebar-brand {
   align-items: center;
-  color: var(--text-primary);
+  color: #ffffff;
   display: none;
   font-size: 1.1rem;
   font-weight: 800;
@@ -34,9 +34,9 @@
 
 .sidebar-brand-icon {
   align-items: center;
-  background: var(--brand-soft);
+  background: rgba(255, 255, 255, 0.18);
   border-radius: var(--border-radius);
-  color: var(--brand);
+  color: #ffffff;
   display: flex;
   flex-shrink: 0;
   font-size: 1.05rem;
@@ -92,20 +92,18 @@
 }
 
 .sidebar-link:hover {
-  background: var(--bg-muted);
+  background: rgba(255, 255, 255, 0.14);
   color: var(--sidebar-text-hover);
 }
 
 .sidebar-link.active {
   background: var(--sidebar-active-bg);
-  box-shadow: var(--shadow-brand);
   color: var(--sidebar-active-text);
   font-weight: 700;
-  transform: translateX(2px);
 }
 
 .sidebar-link.active:hover {
-  background: var(--brand-hover);
+  background: var(--sidebar-active-bg);
   color: var(--sidebar-active-text);
 }
 
@@ -122,17 +120,15 @@
 }
 
 /* Desktop : sidebar toujours visible, pousse le contenu principal.
-   Occupe toute la hauteur (au lieu de commencer sous la navbar) : elle
-   "croise" la navbar, qui elle ne demarre qu'a droite de la sidebar
-   (voir header.component.css) - les deux se rejoignent sans coupure. */
+   Occupe toute la hauteur, plaquee au bord (pas de panneau flottant/
+   arrondi : ni bordure, ni radius, ni ombre, ni marge) - elle "croise"
+   la navbar, qui elle ne demarre qu'a droite de la sidebar (voir
+   header.component.css) - les deux se rejoignent sans coupure. */
 @media (min-width: 992px) {
   .app-sidebar {
-    border: 1px solid var(--sidebar-border);
-    border-radius: var(--border-radius-lg);
-    bottom: 12px;
-    box-shadow: var(--shadow-md);
-    left: 12px;
-    top: 12px;
+    bottom: 0;
+    left: 0;
+    top: 0;
     transform: translateX(0);
   }
 

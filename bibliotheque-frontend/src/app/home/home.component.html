@@ -114,16 +114,27 @@
 
         <div class="detail-card">
           <h3 class="detail-card-title"><i class="fas fa-hand-holding-heart" aria-hidden="true"></i> Emprunts</h3>
-          <div class="bar-chart">
-            @for (item of borrowSummary; track item.label) {
-              <div class="bar-row">
-                <span class="bar-label">{{ item.label }}</span>
-                <div class="bar-track">
-                  <div class="bar-fill" [style.width.%]="barWidth(item.value)" [style.background]="item.color"></div>
-                </div>
-                <span class="bar-value">{{ item.value }}</span>
+          <div class="vchart">
+            <div class="vchart-axis">
+              <span>{{ borrowChartMax }}</span>
+              <span>{{ borrowChartMax / 2 | number:'1.0-0' }}</span>
+              <span>0</span>
+            </div>
+            <div class="vchart-body">
+              <div class="vchart-plot">
+                @for (item of borrowSummary; track item.label) {
+                  <div class="vchart-col">
+                    <span class="vchart-value">{{ item.value }}</span>
+                    <div class="vchart-bar" [style.height.%]="barWidth(item.value)" [style.background]="item.color"></div>
+                  </div>
+                }
               </div>
-            }
+              <div class="vchart-labels">
+                @for (item of borrowSummary; track item.label) {
+                  <span class="vchart-label">{{ item.label }}</span>
+                }
+              </div>
+            </div>
           </div>
         </div>
 
@@ -132,16 +143,27 @@
           @if (genreBreakdown.length === 0) {
             <p class="chart-empty">Aucun livre au catalogue pour le moment.</p>
           } @else {
-            <div class="bar-chart">
-              @for (item of genreBreakdown; track item.label) {
-                <div class="bar-row">
-                  <span class="bar-label">{{ item.label }}</span>
-                  <div class="bar-track">
-                    <div class="bar-fill" [style.width.%]="genreBarWidth(item.value)" [style.background]="item.color"></div>
-                  </div>
-                  <span class="bar-value">{{ item.value }}</span>
+            <div class="vchart">
+              <div class="vchart-axis">
+                <span>{{ genreChartMax }}</span>
+                <span>{{ genreChartMax / 2 | number:'1.0-0' }}</span>
+                <span>0</span>
+              </div>
+              <div class="vchart-body">
+                <div class="vchart-plot">
+                  @for (item of genreBreakdown; track item.label) {
+                    <div class="vchart-col">
+                      <span class="vchart-value">{{ item.value }}</span>
+                      <div class="vchart-bar" [style.height.%]="genreBarWidth(item.value)" [style.background]="item.color"></div>
+                    </div>
+                  }
                 </div>
-              }
+                <div class="vchart-labels">
+                  @for (item of genreBreakdown; track item.label) {
+                    <span class="vchart-label">{{ item.label }}</span>
+                  }
+                </div>
+              </div>
             </div>
           }
         </div>

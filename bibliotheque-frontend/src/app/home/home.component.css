@@ -151,28 +151,29 @@
 .stat-info .stat-icon { background: var(--brand-soft); color: var(--brand-hover); }
 
 /* Cartes "hero" en aplat de couleur pour les 2 statistiques les plus
-   engageantes (disponibilite / en cours) - le reste des cartes reste neutre
-   pour ne pas noyer l'oeil sous la couleur. */
+   engageantes (disponibilite / en cours) - le reste des cartes reste neutre.
+   Charte du dashboard limitee a violet/noir/blanc : aplats pleins, sans
+   degrade. */
 .stat-card.stat-success {
-  background: linear-gradient(135deg, #34d399 0%, #059669 100%);
+  background: var(--brand);
   border-color: transparent;
-  box-shadow: 0 10px 24px rgba(5, 150, 105, 0.28);
+  box-shadow: var(--shadow-brand);
   color: #ffffff;
 }
 
 .stat-card.stat-warning {
-  background: linear-gradient(135deg, #fb923c 0%, #ea580c 100%);
+  background: #18181b;
   border-color: transparent;
-  box-shadow: 0 10px 24px rgba(234, 88, 12, 0.28);
+  box-shadow: 0 10px 24px rgba(24, 24, 27, 0.28);
   color: #ffffff;
 }
 
 .stat-card.stat-success:hover {
-  box-shadow: 0 14px 30px rgba(5, 150, 105, 0.34);
+  box-shadow: 0 14px 30px rgba(139, 92, 246, 0.38);
 }
 
 .stat-card.stat-warning:hover {
-  box-shadow: 0 14px 30px rgba(234, 88, 12, 0.34);
+  box-shadow: 0 14px 30px rgba(24, 24, 27, 0.36);
 }
 
 .stat-card.stat-success .stat-icon,
@@ -323,49 +324,97 @@
   font-weight: 700;
 }
 
-/* Bar chart (emprunts) - CSS pur */
-.bar-chart {
+/* Graphique en barres verticales (emprunts, livres par genre) - CSS pur,
+   inspire des composants "chart" shadcn/Recharts : plan avec grille
+   horizontale, axe des valeurs a gauche, barres a coins arrondis ancrees
+   sur une ligne de base, etiquette de categorie sous chaque barre. */
+.vchart {
   display: flex;
-  flex-direction: column;
-  gap: var(--spacing-lg);
-  padding-top: var(--spacing-xs);
+  gap: var(--spacing-sm);
+  height: 220px;
 }
 
-.bar-row {
-  align-items: center;
+.vchart-axis {
   display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  /* margin-bottom = hauteur de .vchart-labels, pour que le repere "0" de
+     l'axe s'aligne exactement sur la ligne de base des barres (border-bottom
+     de .vchart-plot) plutot que sur le bas de la rangee d'etiquettes. */
+  justify-content: space-between;
+  margin-bottom: 34px;
+  text-align: right;
+  width: 28px;
+}
+
+.vchart-axis span {
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.vchart-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.vchart-plot {
+  background-image: repeating-linear-gradient(
+    to top,
+    var(--border) 0,
+    var(--border) 1px,
+    transparent 1px,
+    transparent 25%
+  );
+  border-bottom: 1.5px solid var(--border);
+  display: flex;
+  flex: 1;
   gap: var(--spacing-md);
 }
 
-.bar-label {
-  color: var(--text-secondary);
-  flex: 0 0 120px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.bar-track {
-  background: var(--bg-muted);
-  border-radius: 999px;
+.vchart-col {
+  align-items: center;
+  display: flex;
   flex: 1;
-  height: 16px;
-  overflow: hidden;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-width: 0;
 }
 
-.bar-fill {
-  border-radius: 999px;
-  height: 100%;
-  transition: width 0.4s ease;
-}
-
-.bar-value {
-  flex: 0 0 28px;
-  font-size: 0.95rem;
+.vchart-value {
+  font-size: 0.8rem;
   font-weight: 700;
-  text-align: right;
+  margin-bottom: var(--spacing-xs);
+}
+
+.vchart-bar {
+  border-radius: 6px 6px 0 0;
+  min-height: 3px;
+  transition: height 0.4s ease;
+  width: 60%;
+}
+
+.vchart-labels {
+  display: flex;
+  gap: var(--spacing-sm);
+  height: 34px;
+  padding-top: 6px;
+}
+
+.vchart-label {
+  color: var(--text-secondary);
+  flex: 1;
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.15;
+  min-width: 0;
+  overflow: hidden;
+  text-align: center;
+  white-space: normal;
+  word-break: break-word;
 }
 
 @media (max-width: 480px) {
