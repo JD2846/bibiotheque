@@ -5,8 +5,8 @@
   justify-content: center;
   padding: var(--spacing-md);
   background:
-    radial-gradient(720px 420px at 15% 8%, var(--accent-soft), transparent 65%),
-    radial-gradient(560px 360px at 88% 92%, var(--accent-soft), transparent 60%);
+    radial-gradient(720px 420px at 15% 8%, var(--brand-soft), transparent 65%),
+    radial-gradient(560px 360px at 88% 92%, var(--brand-soft), transparent 60%);
 }
 
 .login-card {
@@ -25,9 +25,9 @@
 
 .login-logo {
   align-items: center;
-  background: var(--accent-soft);
+  background: var(--brand-soft);
   border-radius: 999px;
-  color: var(--secondary);
+  color: var(--brand);
   display: flex;
   font-size: 1.6rem;
   height: 56px;

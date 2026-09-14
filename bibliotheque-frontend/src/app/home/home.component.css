@@ -1,6 +1,9 @@
 .home-hero {
   padding: var(--spacing-xxl) 0;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  /* Degrade noir -> indigo fonce : reprend l'accent de marque meme sur la
+     page d'accueil publique, au lieu d'un noir plat sans lien avec le reste
+     de la palette. */
+  background: linear-gradient(135deg, #18181b 0%, #312e81 100%);
   color: var(--text-light);
   min-height: calc(100vh - var(--navbar-height, 56px));
   display: flex;
@@ -49,7 +52,7 @@
 
 .btn-outline:hover {
   background: var(--text-light);
-  color: var(--primary);
+  color: #18181b;
 }
 
 /* Grille de fonctionnalités */
