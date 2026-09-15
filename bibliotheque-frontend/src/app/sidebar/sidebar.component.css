@@ -54,6 +54,12 @@
   flex-direction: column;
   gap: 4px;
   list-style: none;
+  /* Bootstrap (reboot.css) impose "ul, ol { padding-left: 2rem }" - un
+     selecteur d'element qui, en specificite, l'emporte sur notre reset
+     universel "* { padding: 0 }". Invisible en mode etendu (juste un
+     leger decalage), mais en mode reduit (80px) ces 32px en trop
+     grignotaient presque toute la largeur disponible pour l'icone. */
+  padding: 0;
 }
 
 .sidebar-section-label {
@@ -145,9 +151,18 @@
     width: var(--sidebar-width-collapsed, 80px);
   }
 
+  /* En mode reduit, les paddings horizontaux cumules (sidebar + nav + lien)
+     laissaient moins de place que la largeur de l'icone elle-meme, qui se
+     retrouvait donc coupee par l'overflow:hidden et paraissait decentree.
+     On reduit ces paddings pour que l'icone dispose d'assez d'espace pour
+     etre reellement centree. */
+  .app-sidebar.collapsed .sidebar-nav {
+    padding-inline: var(--spacing-xs);
+  }
+
   .app-sidebar.collapsed .sidebar-brand {
     justify-content: center;
-    padding-inline: var(--spacing-sm);
+    padding-inline: var(--spacing-xs);
   }
 
   .app-sidebar.collapsed .sidebar-brand-text {
@@ -162,6 +177,7 @@
 
   .app-sidebar.collapsed .sidebar-link {
     justify-content: center;
+    padding-inline: 0;
   }
 
   .app-sidebar.collapsed .sidebar-link span {
