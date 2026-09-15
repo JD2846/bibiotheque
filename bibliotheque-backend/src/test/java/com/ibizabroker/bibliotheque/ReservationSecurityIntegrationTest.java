@@ -30,6 +30,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -149,11 +150,12 @@ class ReservationSecurityIntegrationTest {
     }
 
     @Test
-    @DisplayName("RS-03 : un ADHERENT qui consulte la reservation d'un autre recoit 403")
+    @DisplayName("RS-03 : un ADHERENT qui consulte la reservation d'un autre recoit 403 avec un message explicite")
     @WithMockUser(username = "adherent2", roles = "User")
     void shouldReturn403WhenAdherentAccessesAnotherUsersReservationById() throws Exception {
         mockMvc.perform(get("/api/reservations/" + reservationAdherent1.getReservationId()))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("consulter cette réservation")));
     }
 
     @Test
@@ -189,7 +191,7 @@ class ReservationSecurityIntegrationTest {
     }
 
     @Test
-    @DisplayName("RS-04 : un ADHERENT qui fournit l'id d'un autre adherent recoit 403")
+    @DisplayName("RS-04 : un ADHERENT qui fournit l'id d'un autre adherent recoit 403 avec un message explicite")
     @WithMockUser(username = "adherent1", roles = "User")
     void shouldReturn403WhenAdherentCreatesReservationForAnotherAdherent() throws Exception {
         String body = objectMapper.writeValueAsString(new ReservationRequestBody(freeBook.getBookId(), adherent2.getUserId()));
@@ -197,7 +199,19 @@ class ReservationSecurityIntegrationTest {
         mockMvc.perform(post("/api/reservations")
                         .contentType("application/json")
                         .content(body))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("au nom d'un autre adhérent")));
+    }
+
+    @Test
+    @DisplayName("RS-01 : DELETE /api/reservations/{id} sans token renvoie 401, pas 403")
+    void shouldReturn401NotForbiddenWhenNoTokenOnDelete() throws Exception {
+        // Verifie l'ordre des controles : l'absence d'authentification doit etre
+        // detectee avant meme que la regle @PreAuthorize("hasRole('Admin')") ne
+        // s'evalue - sinon un anonyme recevrait a tort un 403 (droits insuffisants)
+        // au lieu d'un 401 (identite inconnue).
+        mockMvc.perform(delete("/api/reservations/" + reservationAdherent1.getReservationId()))
+                .andExpect(status().isUnauthorized());
     }
 
     @Test

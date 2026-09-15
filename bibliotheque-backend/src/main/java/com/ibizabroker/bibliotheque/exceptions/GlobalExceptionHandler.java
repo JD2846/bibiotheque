@@ -52,6 +52,17 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<String> handleAccessDenied(AccessDeniedException e, HttpServletRequest request) {
         log.warn("Acces refuse (403) sur {} {} : {}", request.getMethod(), request.getRequestURI(), e.getMessage());
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Vous n'avez pas les droits necessaires pour effectuer cette action.");
+
+        // Les refus leves explicitement dans nos services (RS-03, RS-04, RS-05,
+        // EMP-05...) portent un message precis destine a etre affiche tel quel
+        // au frontend. Les refus issus directement de @PreAuthorize (ex: RS-02
+        // sur DELETE) n'ont pas de message personnalisable et remontent le
+        // "Access Denied" generique de Spring Security : dans ce cas seulement,
+        // on retombe sur un message generique en francais plutot que d'exposer
+        // ce texte technique en anglais.
+        String message = (e.getMessage() == null || "Access Denied".equalsIgnoreCase(e.getMessage()))
+                ? "Vous n'avez pas les droits necessaires pour effectuer cette action."
+                : e.getMessage();
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(message);
     }
 }

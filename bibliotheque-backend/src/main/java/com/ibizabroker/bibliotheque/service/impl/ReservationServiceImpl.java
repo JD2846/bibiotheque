@@ -60,7 +60,7 @@ public class ReservationServiceImpl implements IReservationService {
             if (!currentUser.getUserId().equals(request.getAdherentId())) {
                 log.warn("RS-04 : acces refuse - l'utilisateur '{}' (id={}) a tente de reserver au nom de l'utilisateur id={}",
                         currentUser.getUsername(), currentUser.getUserId(), request.getAdherentId());
-                throw new AccessDeniedException("RS-04: Vous ne pouvez pas reserver au nom d'un autre adherent");
+                throw new AccessDeniedException("RS-04: Vous ne disposez pas des droits pour réserver un livre au nom d'un autre adhérent.");
             }
             ownerId = currentUser.getUserId();
         }
@@ -122,15 +122,15 @@ public class ReservationServiceImpl implements IReservationService {
 
     @Override
     public Reservation getReservationById(Integer id) {
-        Reservation reservation = reservationRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Réservation non trouvée avec l'id: " + id));
-        checkOwnership(reservation);
+        Reservation reservation = findReservationOrThrow(id);
+        checkOwnership(reservation, "consulter cette réservation");
         return enrich(reservation);
     }
 
     @Override
     public Reservation annulerReservation(Integer id) {
-        Reservation reservation = getReservationById(id);
+        Reservation reservation = findReservationOrThrow(id);
+        checkOwnership(reservation, "annuler cette réservation");
 
         // RG-06 : Une réservation ANNULEE, EXPIREE ou HONOREE ne peut plus changer d'état
         // RG-05 : Une réservation ne peut être annulée que si son statut est EN_ATTENTE ou DISPONIBLE
@@ -162,9 +162,13 @@ public class ReservationServiceImpl implements IReservationService {
 
     @Override
     public void deleteReservation(Integer id) {
-        Reservation reservation = reservationRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Réservation non trouvée avec l'id: " + id));
+        Reservation reservation = findReservationOrThrow(id);
         reservationRepository.delete(reservation);
+    }
+
+    private Reservation findReservationOrThrow(Integer id) {
+        return reservationRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Réservation non trouvée avec l'id: " + id));
     }
 
     private Users getCurrentUser() {
@@ -178,16 +182,16 @@ public class ReservationServiceImpl implements IReservationService {
                 .anyMatch(a -> a.getAuthority().equals("ROLE_Admin"));
     }
 
-    private void checkOwnership(Reservation reservation) {
+    private void checkOwnership(Reservation reservation, String action) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (isBibliothecaire(auth)) {
             return;
         }
         Users currentUser = getCurrentUser();
         if (!currentUser.getUserId().equals(reservation.getUserId())) {
-            log.warn("RS-03 : acces refuse - l'utilisateur '{}' (id={}) a tente d'acceder a la reservation {} appartenant a l'utilisateur id={}",
-                    currentUser.getUsername(), currentUser.getUserId(), reservation.getReservationId(), reservation.getUserId());
-            throw new AccessDeniedException("RS-03: Vous n'avez pas acces a cette reservation");
+            log.warn("RS-03 : acces refuse - l'utilisateur '{}' (id={}) a tente de {} ({}), appartenant a l'utilisateur id={}",
+                    currentUser.getUsername(), currentUser.getUserId(), action, reservation.getReservationId(), reservation.getUserId());
+            throw new AccessDeniedException("RS-03: Vous n'avez pas les droits pour " + action + " : elle appartient à un autre adhérent.");
         }
     }
 }
