@@ -189,10 +189,22 @@ class ReservationSecurityIntegrationTest {
     }
 
     @Test
-    @DisplayName("RS-04 : un ADHERENT qui cree une reservation voit son adherentId fourni ignore")
+    @DisplayName("RS-04 : un ADHERENT qui fournit l'id d'un autre adherent recoit 403")
     @WithMockUser(username = "adherent1", roles = "User")
-    void shouldReturn201AndIgnoreProvidedAdherentIdWhenAdherentCreatesReservation() throws Exception {
+    void shouldReturn403WhenAdherentCreatesReservationForAnotherAdherent() throws Exception {
         String body = objectMapper.writeValueAsString(new ReservationRequestBody(freeBook.getBookId(), adherent2.getUserId()));
+
+        mockMvc.perform(post("/api/reservations")
+                        .contentType("application/json")
+                        .content(body))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @DisplayName("RS-04 : un ADHERENT qui fournit son propre id peut creer une reservation")
+    @WithMockUser(username = "adherent1", roles = "User")
+    void shouldReturn201WhenAdherentCreatesReservationForSelf() throws Exception {
+        String body = objectMapper.writeValueAsString(new ReservationRequestBody(freeBook.getBookId(), adherent1.getUserId()));
 
         mockMvc.perform(post("/api/reservations")
                         .contentType("application/json")

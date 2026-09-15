@@ -151,8 +151,22 @@ class ReservationSecurityUnitTest {
     // ================================================================
 
     @Test
-    @DisplayName("RS-04 : l'adherentId fourni par un ADHERENT est ignore, l'identite vient du token")
-    void RS04_shouldForceOwnerIdToAuthenticatedAdherentIgnoringProvidedAdherentId() {
+    @DisplayName("RS-04 : un ADHERENT qui fournit l'id d'un autre adherent recoit AccessDeniedException")
+    void RS04_shouldThrowAccessDeniedWhenAdherentCreatesReservationForAnotherAdherent() {
+        authenticateAs(adherent1, "User");
+
+        ReservationRequest request = new ReservationRequest();
+        request.setBookId(1);
+        request.setAdherentId(adherent2.getUserId()); // tentative d'usurpation
+
+        assertThrows(AccessDeniedException.class, () -> reservationService.createReservation(request));
+        verify(reservationRepository, never()).save(any(Reservation.class));
+        verify(usersRepository, never()).findById(adherent2.getUserId());
+    }
+
+    @Test
+    @DisplayName("RS-04 : un ADHERENT qui fournit son propre id peut reserver")
+    void RS04_shouldAllowAdherentToCreateReservationForSelf() {
         authenticateAs(adherent1, "User");
 
         Books book = new Books();
@@ -167,12 +181,11 @@ class ReservationSecurityUnitTest {
 
         ReservationRequest request = new ReservationRequest();
         request.setBookId(1);
-        request.setAdherentId(adherent2.getUserId()); // tentative d'usurpation
+        request.setAdherentId(adherent1.getUserId());
 
         Reservation result = reservationService.createReservation(request);
 
         assertEquals(adherent1.getUserId(), result.getUserId());
-        verify(usersRepository, never()).findById(adherent2.getUserId());
     }
 
     @Test

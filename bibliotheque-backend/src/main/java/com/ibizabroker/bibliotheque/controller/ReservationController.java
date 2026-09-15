@@ -31,10 +31,13 @@ public class ReservationController {
             description = "Réserve un livre indisponible pour un adhérent. " +
                     "RG-01 : le livre doit être indisponible. " +
                     "RG-02 : une seule réservation active par livre/adhérent. " +
-                    "RG-03 : max 3 réservations actives.",
+                    "RG-03 : max 3 réservations actives. " +
+                    "RS-04 : un ADHERENT ne peut fournir que son propre id (403 sinon) ; " +
+                    "seul un BIBLIOTHECAIRE peut réserver au nom d'un autre adhérent.",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Réservation créée avec succès"),
                     @ApiResponse(responseCode = "400", description = "bookId ou adherentId manquant"),
+                    @ApiResponse(responseCode = "403", description = "Un ADHERENT a fourni l'id d'un autre adhérent (RS-04)"),
                     @ApiResponse(responseCode = "404", description = "Livre ou utilisateur non trouvé"),
                     @ApiResponse(responseCode = "409", description = "Règle de gestion violée (RG-01, RG-02, RG-03)")
             })

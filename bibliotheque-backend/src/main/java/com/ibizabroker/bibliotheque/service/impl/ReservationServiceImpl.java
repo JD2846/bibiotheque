@@ -48,9 +48,22 @@ public class ReservationServiceImpl implements IReservationService {
         }
 
         // RS-04 : l'identite du createur vient du token ; un ADHERENT ne peut reserver
-        // que pour lui-meme, seul un BIBLIOTHECAIRE peut reserver au nom d'un autre adherent
+        // que pour lui-meme, seul un BIBLIOTHECAIRE peut reserver au nom d'un autre adherent.
+        // Un ADHERENT qui fournit explicitement l'id de quelqu'un d'autre est refuse (403)
+        // plutot que d'etre silencieusement rabattu sur sa propre identite.
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Integer ownerId = isBibliothecaire(auth) ? request.getAdherentId() : getCurrentUser().getUserId();
+        Integer ownerId;
+        if (isBibliothecaire(auth)) {
+            ownerId = request.getAdherentId();
+        } else {
+            Users currentUser = getCurrentUser();
+            if (!currentUser.getUserId().equals(request.getAdherentId())) {
+                log.warn("RS-04 : acces refuse - l'utilisateur '{}' (id={}) a tente de reserver au nom de l'utilisateur id={}",
+                        currentUser.getUsername(), currentUser.getUserId(), request.getAdherentId());
+                throw new AccessDeniedException("RS-04: Vous ne pouvez pas reserver au nom d'un autre adherent");
+            }
+            ownerId = currentUser.getUserId();
+        }
 
         // Vérifier que le livre existe
         Books book = booksRepository.findById(request.getBookId())

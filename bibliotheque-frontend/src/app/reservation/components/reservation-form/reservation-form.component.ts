@@ -42,11 +42,14 @@ export class ReservationFormComponent implements OnInit, OnChanges {
       adherentId: ['']
     });
 
-    // Seul un BIBLIOTHECAIRE choisit l'adherent : le backend impose de toute
-    // facon l'identite du token pour un ADHERENT (RS-04), inutile de lui
-    // demander de se choisir lui-meme dans une liste.
+    // Seul un BIBLIOTHECAIRE choisit l'adherent dans une liste ; un ADHERENT
+    // n'a pas le champ a l'ecran mais le backend exige desormais que
+    // adherentId corresponde exactement a son propre id (RS-04 : sinon 403),
+    // donc on le pre-remplit nous-memes avec son id tire du token.
     if (this.isBibliothecaire()) {
       this.reservationForm.get('adherentId')?.addValidators(Validators.required);
+    } else {
+      this.reservationForm.patchValue({ adherentId: this.userAuthService.getUserId() });
     }
   }
 
@@ -82,6 +85,9 @@ export class ReservationFormComponent implements OnInit, OnChanges {
     ).subscribe({
       next: () => {
         this.reservationForm.reset();
+        if (!this.isBibliothecaire()) {
+          this.reservationForm.patchValue({ adherentId: this.userAuthService.getUserId() });
+        }
         this.successMessage = 'Réservation créée avec succès.';
         this.reservationCreated.emit();
       },
