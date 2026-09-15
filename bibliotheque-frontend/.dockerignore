@@ -1,0 +1,9 @@
+node_modules/
+dist/
+out-tsc/
+coverage/
+.git/
+.gitignore
+*.log
+.vscode/
+.idea/

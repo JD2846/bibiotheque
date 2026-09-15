@@ -1,0 +1,33 @@
+<main class="page-shell">
+  <div class="page-header">
+    <h2 class="page-title"><i class="fas fa-user-edit" aria-hidden="true"></i> Modifier l'utilisateur</h2>
+    <p class="page-subtitle">Mettez à jour les informations de ce compte.</p>
+  </div>
+
+  <section class="form-card">
+    <form (ngSubmit)="onSubmit()" autocomplete="off">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label" for="name"><i class="fas fa-user" aria-hidden="true"></i> Nom complet</label>
+          <input type="text" class="form-control" id="name" [(ngModel)]="user.name" name="name">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="username"><i class="fas fa-at" aria-hidden="true"></i> Nom d'utilisateur</label>
+          <input type="text" class="form-control" id="username" [(ngModel)]="user.username" name="username">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="role"><i class="fas fa-user-tag" aria-hidden="true"></i> Rôle</label>
+          <select class="form-select" id="role" [(ngModel)]="user.role[0].roleName" name="role">
+            <option value="Admin">Bibliothécaire (Admin)</option>
+            <option value="User">Adhérent (User)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <a class="btn btn-outline" routerLink="/users"><i class="fas fa-arrow-left" aria-hidden="true"></i> Annuler</a>
+        <button class="btn btn-primary" type="submit"><i class="fas fa-save" aria-hidden="true"></i> Mettre à jour</button>
+      </div>
+    </form>
+  </section>
+</main>

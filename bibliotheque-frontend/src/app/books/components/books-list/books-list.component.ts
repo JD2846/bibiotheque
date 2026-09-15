@@ -1,0 +1,54 @@
+import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { finalize } from 'rxjs/operators';
+import { Books } from '../../../_model/books'
+import { BooksService } from '../../services/books.service';
+
+@Component({
+    selector: 'app-books-list',
+    templateUrl: './books-list.component.html',
+    styleUrls: ['./books-list.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [RouterLink]
+})
+export class BooksListComponent implements OnInit {
+
+  books: Books[] = [];
+  loading = false;
+  error = '';
+
+  constructor(private booksService: BooksService,
+    private router: Router,
+    private cdr: ChangeDetectorRef) { }
+
+  ngOnInit(): void {
+    this.getBooks();
+  }
+
+  getBooks() {
+    this.loading = true;
+    this.error = '';
+    this.booksService.getBooks().pipe(
+      finalize(() => { this.loading = false; this.cdr.detectChanges(); })
+    ).subscribe({
+      next: data => this.books = data,
+      error: error => this.error = error.message
+    });
+  }
+
+  updateBook(bookId: number) {
+    this.router.navigate(['/books/update', bookId ]);
+  }
+
+  deleteBook(bookId: number) {
+    this.booksService.deleteBook(bookId).subscribe({
+      next: () => this.getBooks(),
+      error: error => { this.error = error.message; this.cdr.detectChanges(); }
+    });
+  }
+
+  bookDetails(bookId: number) {
+    this.router.navigate(['/books/details', bookId ]);
+  }
+
+}

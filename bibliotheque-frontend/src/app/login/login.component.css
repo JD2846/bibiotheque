@@ -1,0 +1,82 @@
+.login-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md);
+  background:
+    radial-gradient(720px 420px at 15% 8%, var(--brand-soft), transparent 65%),
+    radial-gradient(560px 360px at 88% 92%, var(--brand-soft), transparent 60%);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  padding: var(--spacing-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.login-logo {
+  align-items: center;
+  background: var(--brand-soft);
+  border-radius: 999px;
+  color: var(--brand);
+  display: flex;
+  font-size: 1.6rem;
+  height: 56px;
+  justify-content: center;
+  margin: 0 auto var(--spacing-md);
+  width: 56px;
+}
+
+.login-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: var(--spacing-xs);
+}
+
+.login-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 0;
+}
+
+.login-card .form-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.login-card .form-label i {
+  margin-right: var(--spacing-xs);
+  color: var(--secondary);
+}
+
+.login-btn {
+  margin-top: var(--spacing-sm);
+  font-weight: 600;
+  min-height: 48px;
+}
+
+/* Smartphones */
+@media (max-width: 480px) {
+  .login-wrapper {
+    padding: var(--spacing-sm);
+    align-items: flex-start;
+    padding-top: var(--spacing-xl);
+  }
+
+  .login-card {
+    padding: var(--spacing-lg);
+  }
+
+  .login-logo {
+    font-size: 2rem;
+  }
+}

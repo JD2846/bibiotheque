@@ -1,0 +1,199 @@
+:host {
+  display: contents;
+}
+
+.app-sidebar {
+  background: var(--sidebar-bg);
+  bottom: 0;
+  left: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: var(--spacing-sm);
+  position: fixed;
+  top: var(--navbar-height, 56px);
+  transform: translateX(-100%);
+  transition: transform 0.25s ease, width 0.2s ease;
+  width: var(--sidebar-width, 240px);
+  z-index: 1040;
+}
+
+/* Marque en tete de la sidebar : visible uniquement en desktop (>=992px),
+   ou la sidebar occupe toute la hauteur et "croise" la navbar - qui elle
+   garde sa propre marque sur mobile/tablette ou la sidebar est un tiroir. */
+.sidebar-brand {
+  align-items: center;
+  color: #ffffff;
+  display: none;
+  font-size: 1.1rem;
+  font-weight: 800;
+  gap: var(--spacing-sm);
+  letter-spacing: -0.01em;
+  padding: var(--spacing-lg) var(--spacing-md) var(--spacing-md);
+  white-space: nowrap;
+}
+
+.sidebar-brand-icon {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: var(--border-radius);
+  color: #ffffff;
+  display: flex;
+  flex-shrink: 0;
+  font-size: 1.05rem;
+  height: 36px;
+  justify-content: center;
+  width: 36px;
+}
+
+.sidebar-nav {
+  padding: var(--spacing-md);
+}
+
+.sidebar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  list-style: none;
+  /* Bootstrap (reboot.css) impose "ul, ol { padding-left: 2rem }" - un
+     selecteur d'element qui, en specificite, l'emporte sur notre reset
+     universel "* { padding: 0 }". Invisible en mode etendu (juste un
+     leger decalage), mais en mode reduit (80px) ces 32px en trop
+     grignotaient presque toute la largeur disponible pour l'icone. */
+  padding: 0;
+}
+
+.sidebar-section-label {
+  color: var(--sidebar-text);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin: var(--spacing-md) var(--spacing-sm) var(--spacing-xs);
+  opacity: 0.75;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.sidebar-section-label:first-child {
+  margin-top: 0;
+}
+
+.sidebar-link {
+  align-items: center;
+  border-radius: var(--border-radius);
+  color: var(--sidebar-text);
+  display: flex;
+  font-size: 0.92rem;
+  font-weight: 600;
+  gap: var(--spacing-sm);
+  min-height: 44px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  transition: background-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease, transform 0.15s ease;
+  white-space: nowrap;
+}
+
+.sidebar-link i {
+  font-size: 1rem;
+  min-width: 20px;
+  text-align: center;
+}
+
+.sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--sidebar-text-hover);
+}
+
+.sidebar-link.active {
+  background: var(--sidebar-active-bg);
+  color: var(--sidebar-active-text);
+  font-weight: 700;
+}
+
+.sidebar-link.active:hover {
+  background: var(--sidebar-active-bg);
+  color: var(--sidebar-active-text);
+}
+
+.sidebar-backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  border: 0;
+  bottom: 0;
+  cursor: pointer;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: var(--navbar-height, 56px);
+  z-index: 1030;
+}
+
+/* Desktop : sidebar toujours visible, pousse le contenu principal.
+   Occupe toute la hauteur, plaquee au bord (pas de panneau flottant/
+   arrondi : ni bordure, ni radius, ni ombre, ni marge) - elle "croise"
+   la navbar, qui elle ne demarre qu'a droite de la sidebar (voir
+   header.component.css) - les deux se rejoignent sans coupure. */
+@media (min-width: 992px) {
+  .app-sidebar {
+    bottom: 0;
+    left: 0;
+    top: 0;
+    transform: translateX(0);
+  }
+
+  .sidebar-backdrop {
+    display: none;
+  }
+
+  .sidebar-brand {
+    display: flex;
+  }
+
+  /* Mode reduit : icones seules, sans les libelles */
+  .app-sidebar.collapsed {
+    width: var(--sidebar-width-collapsed, 80px);
+  }
+
+  /* En mode reduit, les paddings horizontaux cumules (sidebar + nav + lien)
+     laissaient moins de place que la largeur de l'icone elle-meme, qui se
+     retrouvait donc coupee par l'overflow:hidden et paraissait decentree.
+     On reduit ces paddings pour que l'icone dispose d'assez d'espace pour
+     etre reellement centree. */
+  .app-sidebar.collapsed .sidebar-nav {
+    padding-inline: var(--spacing-xs);
+  }
+
+  .app-sidebar.collapsed .sidebar-brand {
+    justify-content: center;
+    padding-inline: var(--spacing-xs);
+  }
+
+  .app-sidebar.collapsed .sidebar-brand-text {
+    display: none;
+  }
+
+  .app-sidebar.collapsed .sidebar-section-label {
+    height: 0;
+    margin: var(--spacing-sm) 0;
+    overflow: hidden;
+  }
+
+  .app-sidebar.collapsed .sidebar-link {
+    justify-content: center;
+    padding-inline: 0;
+  }
+
+  .app-sidebar.collapsed .sidebar-link span {
+    display: none;
+  }
+
+  .app-sidebar.collapsed .sidebar-link i {
+    font-size: 1.15rem;
+    min-width: auto;
+  }
+}
+
+/* Mobile/tablette : sidebar en tiroir (off-canvas) */
+@media (max-width: 991.98px) {
+  .app-sidebar.open {
+    box-shadow: var(--shadow-lg);
+    transform: translateX(0);
+  }
+}

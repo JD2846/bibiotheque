@@ -1,32 +1,60 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, EventEmitter, HostListener, Input, Output, ChangeDetectionStrategy } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { UserAuthService } from '../_service/user-auth.service';
-import { UsersService } from '../_service/users.service';
+import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+    selector: 'app-header',
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [RouterLink, NgClass]
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
+  @Input() sidebarCollapsed = false;
+  @Output() menuToggle = new EventEmitter<void>();
+
+  isDropdownOpen = false;
 
   constructor(
-    private userAuthService: UserAuthService, 
-    private router: Router,
-    public userService: UsersService,
+    private userAuthService: UserAuthService,
+    private router: Router
   ) { }
 
-  name = this.userAuthService.getName();
-  ngOnInit(): void {
+  onMenuToggle(): void {
+    this.menuToggle.emit();
   }
 
-  public isLoggedIn() {
-    console.log(this.name);
-    return this.userAuthService.isLoggedIn();
+  toggleDropdown(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDropdownOpen = !this.isDropdownOpen;
   }
 
-  public logout() {
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.dropdown')) {
+      this.isDropdownOpen = false;
+    }
+  }
+
+  isLoggedIn(): boolean {
+    return !!this.userAuthService.isLoggedIn();
+  }
+
+  getUserName(): string {
+    return this.userAuthService.getName() || 'Utilisateur';
+  }
+
+  getUserInitial(): string {
+    const name = this.getUserName();
+    return name.charAt(0).toUpperCase();
+  }
+
+  logout(): void {
     this.userAuthService.clear();
-    this.router.navigate(['/']);
+    this.isDropdownOpen = false;
+    this.router.navigate(['/login']);
   }
 }

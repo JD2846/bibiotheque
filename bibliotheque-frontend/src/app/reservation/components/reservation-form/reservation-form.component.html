@@ -1,0 +1,100 @@
+<form class="reservation-form card" [formGroup]="reservationForm" (ngSubmit)="submit()">
+  <div class="card-header">
+    <h5 class="card-title mb-0">
+      <i class="fas fa-plus-circle text-primary" aria-hidden="true"></i>
+      Nouvelle réservation
+    </h5>
+  </div>
+
+  <div class="card-body">
+    @if (books.length === 0) {
+      <div class="alert alert-info mb-3">
+        <i class="fas fa-info-circle" aria-hidden="true"></i>
+        Aucun livre indisponible pour le moment : tous les ouvrages ont au moins un exemplaire en stock, il n'y a donc rien à réserver.
+      </div>
+    }
+    <div class="form-row">
+      <div class="form-group">
+        <label for="bookId" class="form-label">
+          <i class="fas fa-book" aria-hidden="true"></i> Livre
+        </label>
+        <select
+          id="bookId"
+          formControlName="bookId"
+          class="form-control"
+          [class.is-invalid]="reservationForm.get('bookId')?.invalid && reservationForm.get('bookId')?.touched">
+          <option value="">-- Sélectionnez un livre indisponible --</option>
+          @for (book of books; track book) {
+            <option [value]="book.bookId">
+              {{ book.bookName }} ({{ book.bookAuthor }})
+            </option>
+          }
+        </select>
+        <p class="form-hint">Seuls les livres sans exemplaire disponible peuvent être réservés.</p>
+        @if (reservationForm.get('bookId')?.invalid && reservationForm.get('bookId')?.touched) {
+          <div class="invalid-feedback">
+            <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+            Le livre est obligatoire.
+          </div>
+        }
+      </div>
+
+      @if (isBibliothecaire()) {
+        <div class="form-group">
+          <label for="adherentId" class="form-label">
+            <i class="fas fa-user" aria-hidden="true"></i> Adhérent
+          </label>
+          <select
+            id="adherentId"
+            formControlName="adherentId"
+            class="form-control"
+            [class.is-invalid]="reservationForm.get('adherentId')?.invalid && reservationForm.get('adherentId')?.touched">
+            <option value="">-- Sélectionnez un adhérent --</option>
+            @for (user of users; track user) {
+              <option [value]="user.userId">
+                {{ user.name }} ({{ user.username }})
+              </option>
+            }
+          </select>
+          @if (reservationForm.get('adherentId')?.invalid && reservationForm.get('adherentId')?.touched) {
+            <div class="invalid-feedback">
+              <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+              L'adhérent est obligatoire.
+            </div>
+          }
+        </div>
+      }
+
+      <div class="form-actions">
+        <button
+          type="submit"
+          class="btn btn-primary btn-submit"
+          [disabled]="reservationForm.invalid || loading">
+          @if (loading) {
+            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+          }
+          @if (!loading) {
+            <span><i class="fas fa-save" aria-hidden="true"></i> Créer</span>
+          }
+          @if (loading) {
+            <span>Création...</span>
+          }
+        </button>
+      </div>
+    </div>
+
+    @if (successMessage) {
+      <div class="alert alert-success mt-3 mb-0">
+        <i class="fas fa-check-circle" aria-hidden="true"></i>
+        {{ successMessage }}
+      </div>
+    }
+
+    @if (serverError) {
+      <div class="alert alert-danger mt-3 mb-0">
+        <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+        {{ serverError }}
+      </div>
+    }
+  </div>
+</form>

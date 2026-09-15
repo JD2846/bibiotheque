@@ -1,0 +1,73 @@
+<main class="page-shell">
+  <div class="page-header">
+    <h2 class="page-title"><i class="fas fa-undo-alt" aria-hidden="true"></i> Rendre un livre</h2>
+    <p class="page-subtitle">Suivez vos emprunts en cours et signalez les retours.</p>
+  </div>
+
+  @if (isBibliothecaire()) {
+    <div class="form-group adherent-picker">
+      <label for="adherentSelect"><i class="fas fa-user" aria-hidden="true"></i> Emprunts de</label>
+      <select id="adherentSelect" class="form-control" [(ngModel)]="selectedAdherentId" name="adherentSelect" (ngModelChange)="onAdherentChange()">
+        <option [ngValue]="null">Moi-même (bibliothécaire)</option>
+        @for (u of users; track u.userId) {
+          <option [ngValue]="u.userId">{{ u.name }} ({{ u.username }})</option>
+        }
+      </select>
+    </div>
+  }
+
+  @if (loading) {
+    <div class="alert alert-info d-flex align-items-center gap-2">
+      <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+      Traitement du retour...
+    </div>
+  }
+  @if (error) {
+    <div class="alert alert-danger"><i class="fas fa-exclamation-circle" aria-hidden="true"></i> {{ error }}</div>
+  }
+  @if (success) {
+    <div class="alert alert-success"><i class="fas fa-check-circle" aria-hidden="true"></i> {{ success }}</div>
+  }
+  @if (!loading && !error && borrow.length === 0) {
+    <div class="empty-state">
+      <i class="fas fa-check-circle empty-icon" aria-hidden="true"></i>
+      Aucun emprunt en cours.
+    </div>
+  }
+
+  @if (borrow.length > 0) {
+    <div class="table-container">
+      <table class="table table-striped responsive-table-card">
+        <thead>
+          <tr>
+            <th>Livre</th>
+            <th>Date emprunt</th>
+            <th>Date retour</th>
+            <th>Date limite</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (b of borrow; track b.borrowId) {
+            <tr>
+              <td data-label="Livre">{{ b.bookTitle || b.bookId }}</td>
+              <td data-label="Date emprunt">{{ formatDate(b.issueDate) }}</td>
+              <td data-label="Date retour">{{ b.returnDate ? formatDate(b.returnDate) : 'Non rendu' }}</td>
+              <td data-label="Date limite">{{ formatDate(b.dueDate) }}</td>
+              <td data-label="Action">
+                @if (b.returnDate === null) {
+                  <button (click)="returnBook(b.borrowId)" class="btn btn-success btn-sm" [disabled]="loading">
+                    <i class="fas fa-undo-alt" aria-hidden="true"></i> Rendre
+                  </button>
+                }
+                @if (b.returnDate !== null) {
+                  <span class="text-muted"><i class="fas fa-check" aria-hidden="true"></i> Terminé</span>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</main>

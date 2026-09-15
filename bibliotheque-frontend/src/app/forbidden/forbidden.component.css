@@ -1,4 +1,37 @@
-.forbidden {
-    margin-top: 200px;
-    font-size: 50px;
+.forbidden-wrapper {
+  min-height: calc(100vh - var(--navbar-height, 56px));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md);
+}
+
+.forbidden-card {
+  flex-direction: column;
+  max-width: 480px;
+  width: 100%;
+}
+
+.forbidden-icon {
+  align-items: center;
+  background: #fee2e2;
+  border-radius: 999px;
+  color: var(--danger);
+  display: flex;
+  font-size: 2rem;
+  height: 72px;
+  justify-content: center;
+  margin: 0 auto var(--spacing-md);
+  width: 72px;
+}
+
+.forbidden-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: var(--spacing-xs);
+}
+
+.forbidden-text {
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-lg);
 }

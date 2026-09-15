@@ -1,4 +1,499 @@
-.home {
-    margin-top: 200px;
-    font-size: 80px;
+.home-hero {
+  padding: var(--spacing-xxl) 0;
+  /* Degrade noir -> indigo fonce : reprend l'accent de marque meme sur la
+     page d'accueil publique, au lieu d'un noir plat sans lien avec le reste
+     de la palette. */
+  background: linear-gradient(135deg, #18181b 0%, #4c1d95 100%);
+  color: var(--text-light);
+  min-height: calc(100vh - var(--navbar-height, 56px));
+  display: flex;
+  align-items: center;
+}
+
+.hero-content {
+  max-width: 720px;
+  margin: 0 auto var(--spacing-xxl);
+}
+
+.hero-logo {
+  font-size: 3.5rem;
+  color: var(--accent-light);
+  margin-bottom: var(--spacing-md);
+}
+
+.hero-title {
+  color: var(--text-light);
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: var(--spacing-sm);
+}
+
+.hero-subtitle {
+  font-size: 1.15rem;
+  opacity: 0.9;
+  margin-bottom: var(--spacing-lg);
+}
+
+.hero-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero-actions .btn {
+  min-width: 180px;
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--text-light);
+  border-color: var(--text-light);
+}
+
+.btn-outline:hover {
+  background: var(--text-light);
+  color: #18181b;
+}
+
+/* Grille de fonctionnalités */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--spacing-lg);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  text-align: center;
+  padding: var(--spacing-xl) var(--spacing-lg);
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+
+.feature-icon {
+  font-size: 2.25rem;
+  color: var(--secondary);
+  margin-bottom: var(--spacing-md);
+}
+
+.feature-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: var(--spacing-xs);
+}
+
+.feature-text {
+  color: var(--text-secondary);
+  margin-bottom: 0;
+  font-size: 0.95rem;
+}
+
+/* ============================================================
+   DASHBOARD (utilisateur connecté)
+============================================================ */
+.dashboard {
+  padding-top: var(--spacing-lg);
+  /* Le dashboard respire davantage que les autres pages (formulaires,
+     tableaux) : plus large pour laisser aux graphiques la place d'etre
+     lisibles, plutot que le meme conteneur etroit partout. */
+  max-width: 1600px;
+}
+
+.stat-grid {
+  display: grid;
+  gap: var(--spacing-md);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  margin-bottom: var(--spacing-xl);
+}
+
+.stat-card {
+  align-items: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  color: var(--text-primary);
+  display: flex;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.stat-card:hover {
+  box-shadow: var(--shadow-md);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+}
+
+.stat-card-static {
+  cursor: default;
+}
+
+.stat-card-static:hover {
+  box-shadow: var(--shadow-sm);
+  transform: none;
+}
+
+.stat-icon {
+  align-items: center;
+  border-radius: var(--border-radius-lg);
+  display: flex;
+  flex-shrink: 0;
+  font-size: 1.3rem;
+  height: 52px;
+  justify-content: center;
+  width: 52px;
+}
+
+.stat-neutral .stat-icon { background: var(--bg-muted); color: var(--text-primary); }
+.stat-info .stat-icon { background: var(--brand-soft); color: var(--brand-hover); }
+
+/* Cartes "hero" en aplat de couleur pour les 2 statistiques les plus
+   engageantes (disponibilite / en cours) - le reste des cartes reste neutre.
+   Charte du dashboard limitee a violet/noir/blanc : aplats pleins, sans
+   degrade. */
+.stat-card.stat-success {
+  background: var(--brand);
+  border-color: transparent;
+  box-shadow: var(--shadow-brand);
+  color: #ffffff;
+}
+
+.stat-card.stat-warning {
+  background: #18181b;
+  border-color: transparent;
+  box-shadow: 0 10px 24px rgba(24, 24, 27, 0.28);
+  color: #ffffff;
+}
+
+.stat-card.stat-success:hover {
+  box-shadow: 0 14px 30px rgba(139, 92, 246, 0.38);
+}
+
+.stat-card.stat-warning:hover {
+  box-shadow: 0 14px 30px rgba(24, 24, 27, 0.36);
+}
+
+.stat-card.stat-success .stat-icon,
+.stat-card.stat-warning .stat-icon {
+  background: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+}
+
+.stat-card.stat-success .stat-label,
+.stat-card.stat-warning .stat-label {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.stat-card.stat-success:hover,
+.stat-card.stat-warning:hover {
+  color: #ffffff;
+}
+
+.stat-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.stat-label {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.detail-stats {
+  display: grid;
+  gap: var(--spacing-lg);
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  margin-bottom: var(--spacing-xl);
+}
+
+.detail-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-xl);
+}
+
+.detail-card-title {
+  align-items: center;
+  display: flex;
+  font-size: 1.1rem;
+  font-weight: 700;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+.detail-card-title i {
+  color: var(--secondary);
+}
+
+.chart-empty {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  padding: var(--spacing-lg) 0;
+  text-align: center;
+}
+
+/* Donut chart (reservations par statut) - CSS pur via conic-gradient */
+.donut-chart-wrapper {
+  align-items: center;
+  display: flex;
+  gap: var(--spacing-lg);
+}
+
+.donut-chart {
+  border-radius: 50%;
+  flex-shrink: 0;
+  height: 190px;
+  position: relative;
+  width: 190px;
+}
+
+.donut-chart-hole {
+  align-items: center;
+  background: var(--bg-card);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  height: 122px;
+  justify-content: center;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 122px;
+}
+
+.donut-chart-total {
+  font-size: 1.8rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.donut-chart-label {
+  color: var(--text-secondary);
+  font-size: 0.68rem;
+}
+
+.chart-legend {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  list-style: none;
+  min-width: 0;
+}
+
+.legend-row {
+  align-items: center;
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.legend-dot {
+  border-radius: 50%;
+  flex-shrink: 0;
+  height: 10px;
+  width: 10px;
+}
+
+.legend-label {
+  color: var(--text-secondary);
+  flex: 1;
+  font-size: 0.85rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.legend-value {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+/* Graphique en barres verticales (emprunts, livres par genre) - CSS pur,
+   inspire des composants "chart" shadcn/Recharts : plan avec grille
+   horizontale, axe des valeurs a gauche, barres a coins arrondis ancrees
+   sur une ligne de base, etiquette de categorie sous chaque barre. */
+.vchart {
+  display: flex;
+  gap: var(--spacing-sm);
+  height: 220px;
+}
+
+.vchart-axis {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  /* margin-bottom = hauteur de .vchart-labels, pour que le repere "0" de
+     l'axe s'aligne exactement sur la ligne de base des barres (border-bottom
+     de .vchart-plot) plutot que sur le bas de la rangee d'etiquettes. */
+  justify-content: space-between;
+  margin-bottom: 34px;
+  text-align: right;
+  width: 28px;
+}
+
+.vchart-axis span {
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.vchart-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.vchart-plot {
+  background-image: repeating-linear-gradient(
+    to top,
+    var(--border) 0,
+    var(--border) 1px,
+    transparent 1px,
+    transparent 25%
+  );
+  border-bottom: 1.5px solid var(--border);
+  display: flex;
+  flex: 1;
+  gap: var(--spacing-md);
+}
+
+.vchart-col {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.vchart-value {
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: var(--spacing-xs);
+}
+
+.vchart-bar {
+  border-radius: 6px 6px 0 0;
+  min-height: 3px;
+  transition: height 0.4s ease;
+  width: 60%;
+}
+
+.vchart-labels {
+  display: flex;
+  gap: var(--spacing-sm);
+  height: 34px;
+  padding-top: 6px;
+}
+
+.vchart-label {
+  color: var(--text-secondary);
+  flex: 1;
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.15;
+  min-width: 0;
+  overflow: hidden;
+  text-align: center;
+  white-space: normal;
+  word-break: break-word;
+}
+
+@media (max-width: 480px) {
+  .donut-chart-wrapper {
+    flex-direction: column;
+  }
+
+  .bar-label {
+    flex-basis: 90px;
+    font-size: 0.78rem;
+  }
+}
+
+.quick-actions-title {
+  font-size: 1.1rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.quick-actions-grid {
+  display: grid;
+  gap: var(--spacing-md);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.quick-action-card {
+  align-items: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius-lg);
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-lg);
+  text-align: center;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.quick-action-card i {
+  color: var(--brand);
+  font-size: 1.5rem;
+}
+
+.quick-action-card:hover {
+  border-color: var(--brand);
+  box-shadow: var(--shadow-brand);
+  color: var(--text-primary);
+  transform: translateY(-3px);
+}
+
+.quick-action-card span {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* Smartphones */
+@media (max-width: 480px) {
+  .home-hero {
+    padding: var(--spacing-xl) 0;
+  }
+
+  .hero-logo {
+    font-size: 2.75rem;
+  }
+
+  .hero-title {
+    font-size: 1.8rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+  }
 }

@@ -1,33 +1,62 @@
 package com.ibizabroker.bibliotheque.entity;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
-@Entity @EntityListeners(AuditingEntityListener.class)
-@Table(name = "Borrow")
+@Entity
+@EntityListeners(AuditingEntityListener.class)
+@Table(name = "borrow")
 public class Borrow {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "borrow_seq", sequenceName = "borrow_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "borrow_seq")
+    @Column(name = "borrow_id")
     Integer borrowId;
+
+    @Column(name = "book_id")
     Integer bookId;
+
+    @Column(name = "user_id")
     Integer userId;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonSerialize(using=JsonDataSerializer.class)
-    Date issueDate;
+    @Column(name = "issue_date")
+    @JsonSerialize(using = JsonDataSerializer.class)
+    LocalDateTime issueDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonSerialize(using=JsonDataSerializer.class)
-    Date returnDate;
+    @Column(name = "return_date")
+    @JsonSerialize(using = JsonDataSerializer.class)
+    LocalDateTime returnDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonSerialize(using=JsonDataSerializer.class)
-    Date dueDate;
+    @Column(name = "due_date")
+    @JsonSerialize(using = JsonDataSerializer.class)
+    LocalDateTime dueDate;
 
+    @Transient
+    String bookTitle;
+
+    @Transient
+    String userName;
+
+    @PrePersist
+    protected void onCreate() {
+        if (issueDate == null) {
+            issueDate = LocalDateTime.now();
+        }
+        if (dueDate == null) {
+            dueDate = LocalDateTime.now().plusDays(7);
+        }
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        if (returnDate == null) {
+            returnDate = LocalDateTime.now();
+        }
+    }
 }
